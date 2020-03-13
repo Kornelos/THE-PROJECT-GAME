@@ -1,3 +1,5 @@
+https://docs.google.com/document/d/1dJzUCVYb56wBSdI20cfzxHWx2U_7LwoloqktRT7iTwE/edit?fbclid=IwAR1m99CNnG1dG0PfW96dHn_mElT_ZyLfaOCSFsL1GGWYYHV4hFxyOW3EN5E
+
 **Edit a file, create a new file, and clone from Bitbucket in under 2 minutes**
 
 When you're done, you can delete the content in this README and update the file with details for others getting started with your repository.
