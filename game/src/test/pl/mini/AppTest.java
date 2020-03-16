@@ -1,4 +1,4 @@
-package java.pl.mini;
+package pl.mini;
 
 import static org.junit.Assert.assertTrue;
 
