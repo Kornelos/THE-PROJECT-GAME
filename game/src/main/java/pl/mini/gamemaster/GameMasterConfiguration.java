@@ -1,5 +1,7 @@
+package java.pl.mini.gamemaster;
+
 import java.awt.Point;
-package pl.mini.gamemaster;
+
 public class GameMasterConfiguration {
     public static double shamProbability;
     public static int maxTeamSize;
