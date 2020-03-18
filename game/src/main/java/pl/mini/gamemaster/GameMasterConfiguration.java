@@ -1,11 +1,11 @@
-package java.pl.mini.gamemaster;
+package pl.mini.gamemaster;
 
 import java.awt.Point;
 
 public class GameMasterConfiguration {
-    public static double shamProbability;
-    public static int maxTeamSize;
-    public static int maxPieces;
+    public double shamProbability;
+    public int maxTeamSize;
+    public int maxPieces;
     public Point[] predefinedGoalPositions;
     public int boardWidth;
     public int boardTaskHeight;
