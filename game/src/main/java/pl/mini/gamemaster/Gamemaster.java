@@ -21,7 +21,7 @@ public class Gamemaster {
     @Setter
     private GameMasterStatus status;
 
-    //private GameMasterConfiguration configuration;
+    private GameMasterConfiguration configuration;
 
     public Gamemaster()
     {
