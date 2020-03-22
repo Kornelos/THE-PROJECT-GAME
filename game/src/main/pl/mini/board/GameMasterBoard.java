@@ -7,10 +7,10 @@ public class GameMasterBoard extends Board {
     //IMPLEMENT POSITION CLASS
     //@Getter @Setter private ISet<Position> piecesPosition;
 
-    /* Location???
-    public Location playerMove(PlayerDto player, Direction direction)
+    /* PlayerDto,Direction,Position
+    public Position playerMove(PlayerDto player, Direction direction)
     {
-        return location;
+        return position;
     }
     */
 
@@ -35,7 +35,7 @@ public class GameMasterBoard extends Board {
     }
     */
 
-    /* PlacementResult???
+    /* PlayerDto
     public PlacementResult placePiece(PlayerDto player)
     {
         return result;
