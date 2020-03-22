@@ -40,6 +40,16 @@ public class Gamemaster {
 
     }
 
+    public void StartGame()
+    {
+
+    }
+
+    public void listen()
+    {
+
+    }
+
     public GameMasterConfiguration loadConfigurationFromJson(String path)
     {
         GameMasterConfiguration finalConf = new GameMasterConfiguration();
@@ -49,7 +59,6 @@ public class Gamemaster {
 
         try (FileReader reader = new FileReader(path))
         {
-            //Read JSON file
             JSONObject conf = (JSONObject) jsonParser.parse(reader);
 
             finalConf.shamProbability = (double)conf.get("shamProbability");
@@ -77,6 +86,7 @@ public class Gamemaster {
             finalConf.DelayDiscover = (int)conf.get("DelayDiscover");
             finalConf.DelayTest = (int)conf.get("DelayTest");
             finalConf.DelayPick = (int)conf.get("DelayPick");
+            finalConf.DelayPlace = (int)conf.get("DelayPlace");
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -116,6 +126,7 @@ public class Gamemaster {
         conf.put("DelayDiscover", configuration.DelayDiscover);
         conf.put("DelayTest", configuration.DelayTest);
         conf.put("DelayPick", configuration.DelayPick);
+        conf.put("DelayPlace", configuration.DelayPlace);
 
         JSONObject gmConf = new JSONObject();
         gmConf.put("GameMasterConfiguration", conf);

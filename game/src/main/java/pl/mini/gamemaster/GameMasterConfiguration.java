@@ -1,4 +1,4 @@
-package pl.mini.gamemaster;
+package java.pl.mini.gamemaster;
 
 import java.awt.Point;
 
@@ -6,6 +6,7 @@ public class GameMasterConfiguration {
     public double shamProbability;
     public int maxTeamSize;
     public int maxPieces;
+    // current (?)
     public Point[] predefinedGoalPositions;
     public int boardWidth;
     public int boardTaskHeight;
@@ -16,6 +17,7 @@ public class GameMasterConfiguration {
     public int DelayDiscover;
     public int DelayTest;
     public int DelayPick;
+    public int DelayPlace;
     /*
     * Constructor
     */
