@@ -2,53 +2,54 @@ package pl.mini.player;
 
 import lombok.Getter;
 import lombok.Setter;
+import pl.mini.position.Direction;
+import pl.mini.position.Position;
+import pl.mini.team.Team;
 
-import java.awt.geom.Point2D;
-import java.util.UUID;
+import java.net.InetAddress;
 
-public class Player {
+public class Player extends PlayerDTO {
     @Getter
     private final String playerName;
     // private Board board;
-    private final UUID playerUuid;
     @Getter
     @Setter
     private Team team;
-    // TODO: what is action type?
-    // private ActionType lastAction
+    private ActionType lastAction;
+    private Direction lastDirection;
     private boolean piece;
-    private Point2D position;
-    // private PlayerState playerState;
-    @Getter
-    @Setter
-    private TeamRole teamRole;
-
+    private Position position;
+    private PlayerState playerState;
+    private int portNumber;
+    private InetAddress ipAddress;
 
     public Player(String playerName) {
+        super();
         this.playerName = playerName;
         piece = false;
-        //TODO: player position
-        playerUuid = UUID.randomUUID();
-        teamRole = TeamRole.Member;
+    }
+
+    public void listen() {
+
     }
 
     public void makeAction() {
     }
 
-    public void discover() {
+    private void discover() {
     }
 
-    public void move() {
+    private void move() {
     }
 
-    public void takePiece() {
+    private void takePiece() {
         piece = true;
     }
 
-    public void testPiece() {
+    private void testPiece() {
     }
 
-    public void placePiece() {
+    private void placePiece() {
     }
 
 

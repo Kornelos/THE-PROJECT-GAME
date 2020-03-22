@@ -1,7 +1,8 @@
-package pl.mini.player;
+package pl.mini.team;
 
 import lombok.Getter;
 import lombok.Setter;
+import pl.mini.player.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +12,7 @@ public class Team {
 
     @Getter
     private final String teamName;
+    //NOTE:  field below is not in class diagram
     private final List<Player> teamMembers = new ArrayList<>();
     @Getter
     @Setter
@@ -29,7 +31,7 @@ public class Team {
     }
 
     public Player getLeader() {
-        return teamMembers.stream().filter(player -> TeamRole.Leader.equals(player.getTeamRole()))
+        return teamMembers.stream().filter(player -> TeamRole.Leader.equals(player.getPlayerTeamRole()))
                 .findAny()
                 .orElse(null);
     }

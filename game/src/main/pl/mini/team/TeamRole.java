@@ -1,4 +1,4 @@
-package pl.mini.player;
+package pl.mini.team;
 
 public enum TeamRole {
     Leader,
