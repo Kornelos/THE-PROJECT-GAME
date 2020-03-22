@@ -1,4 +1,4 @@
-package java.pl.mini;
+package pl.mini.gamemaster.;
 
 /**
  * Hello world!

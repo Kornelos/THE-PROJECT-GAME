@@ -1,4 +1,4 @@
-package java.pl.mini.gamemaster;
+package pl.mini.gamemaster;
 
 public enum GameMasterStatus {
     Active,
