@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.UUID;
 import java.net.InetAddress;
 
-public class Gamemaster {
+public class GameMaster {
     private int portNumber;
     private InetAddress ipAddress;
     private List<UUID> teamRedGuids;
@@ -35,7 +35,7 @@ public class Gamemaster {
 
     private GameMasterConfiguration configuration;
 
-    public Gamemaster()
+    public GameMaster()
     {
 
     }
