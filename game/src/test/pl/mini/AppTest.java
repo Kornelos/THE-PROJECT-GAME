@@ -1,8 +1,8 @@
-package java.pl.mini;
-
-import static org.junit.Assert.assertTrue;
+package pl.mini;
 
 import org.junit.Test;
+
+import static org.junit.Assert.assertTrue;
 
 public class AppTest 
 {
