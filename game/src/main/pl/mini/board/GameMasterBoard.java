@@ -4,63 +4,55 @@ import lombok.Getter;
 import lombok.Setter;
 
 public class GameMasterBoard extends Board {
-    //IMPLEMENT POSITION CLASS
-    //@Getter @Setter private ISet<Position> piecesPosition;
+    // #todo implement Position class
+    // @Getter @Setter private ISet<Position> piecesPosition;
 
-    /* PlayerDto,Direction,Position
-    public Position playerMove(PlayerDto player, Direction direction)
-    {
-        return position;
-    }
-    */
+//    #todo implement PlayerDto, Direction, Position
+//    public Position playerMove(PlayerDto player, Direction direction)
+//    {
+//        return position;
+//    }
 
-    /* IMPLEMENT CELL CLASS
-    public CellState takePiece(Position position)
-    {
-        return state;
-    }
-    */
+//    #todo implement CELL CLASS
+//    public CellState takePiece(Position position)
+//    {
+//        return state;
+//    }
 
-    /* IMPLEMENT POSITION CLASS
-    public Position generatePiece(double chance)
-    {
-        return position;
-    }
-    */
+//    #todo implement POSITION CLASS
+//    public Position generatePiece(double chance)
+//    {
+//        return position;
+//    }
 
-    /* IMPLEMENT POSITION CLASS
-    public void setGoal(Position position)
-    {
+//    #todo implement POSITION CLASS
+//    public void setGoal(Position position)
+//    {
+//
+//    }
 
-    }
-    */
+//    #todo PlayerDto
+//    public PlacementResult placePiece(PlayerDto player)
+//    {
+//        return result;
+//    }
 
-    /* PlayerDto
-    public PlacementResult placePiece(PlayerDto player)
-    {
-        return result;
-    }
-    */
+//    #todo IMPLEMENT POSITION CLASS
+//    public Position placePlayer(PlayerDto player)
+//    {
+//        return position;
+//    }
 
-    /* IMPLEMENT POSITION CLASS
-    public Position placePlayer(PlayerDto player)
-    {
-        return position;
-    }
-    */
+//    #todo IMPLEMENT TEAMCOLOR CLASS
+//    public void checkWinCondition(TeamColor teamColor)
+//    {
+//
+//    }
 
-    /* IMPLEMENT TEAMCOLOR CLASS
-    public void checkWinCondition(TeamColor teamColor)
-    {
-
-    }
-    */
-
-    /* IMPLEMENT FIELD CLASS
-    public List<Field> discover(Position position)
-    {
-        return list;
-    }
-    */
+//    #todo IMPLEMENT FIELD CLASS
+//    public List<Field> discover(Position position)
+//    {
+//        return list;
+//    }
 
 }
