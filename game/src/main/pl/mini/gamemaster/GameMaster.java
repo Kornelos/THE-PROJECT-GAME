@@ -35,6 +35,14 @@ public class GameMaster {
 
     private GameMasterConfiguration configuration;
 
+    public GameMasterConfiguration getConfiguration(){
+        return configuration;
+    }
+
+    public void setConfiguration(GameMasterConfiguration gc){
+        configuration = gc;
+    }
+
     public GameMaster()
     {
 
