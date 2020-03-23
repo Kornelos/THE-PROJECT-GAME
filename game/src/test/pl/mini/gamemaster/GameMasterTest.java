@@ -4,9 +4,6 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import java.pl.mini.gamemaster.GameMaster;
-import java.pl.mini.gamemaster.GameMasterConfiguration;
-
 public class GameMasterTest
 {
     @Test
