@@ -1,4 +1,4 @@
-package pl.mini.gamemaster;
+package java.pl.mini.gamemaster;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -80,13 +80,13 @@ public class GameMaster {
             finalConf.boardWidth = (int)conf.get("boardWidth");
             finalConf.boardTaskHeight = (int)conf.get("boardTaskHeight");
             finalConf.boardGoalHeight = (int)conf.get("boardGoalHeight");
-            finalConf.DelayDestroyPiece = (int)conf.get("DelayDestroyPiece");
-            finalConf.DelayNextPiecePlace = (int)conf.get("DelayNextPiecePlace");
-            finalConf.DelayMove = (int)conf.get("DelayMove");
-            finalConf.DelayDiscover = (int)conf.get("DelayDiscover");
-            finalConf.DelayTest = (int)conf.get("DelayTest");
-            finalConf.DelayPick = (int)conf.get("DelayPick");
-            finalConf.DelayPlace = (int)conf.get("DelayPlace");
+            finalConf.delayDestroyPiece = (int)conf.get("delayDestroyPiece");
+            finalConf.delayNextPiecePlace = (int)conf.get("delayNextPiecePlace");
+            finalConf.delayMove = (int)conf.get("delayMove");
+            finalConf.delayDiscover = (int)conf.get("delayDiscover");
+            finalConf.delayTest = (int)conf.get("delayTest");
+            finalConf.delayPick = (int)conf.get("delayPick");
+            finalConf.delayPlace = (int)conf.get("delayPlace");
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -120,13 +120,13 @@ public class GameMaster {
         conf.put("boardWidth", configuration.boardWidth);
         conf.put("boardTaskHeight", configuration.boardTaskHeight);
         conf.put("boardGoalHeight", configuration.boardGoalHeight);
-        conf.put("DelayDestroyPiece", configuration.DelayDestroyPiece);
-        conf.put("DelayNextPiecePlace", configuration.DelayNextPiecePlace);
-        conf.put("DelayMove", configuration.DelayMove);
-        conf.put("DelayDiscover", configuration.DelayDiscover);
-        conf.put("DelayTest", configuration.DelayTest);
-        conf.put("DelayPick", configuration.DelayPick);
-        conf.put("DelayPlace", configuration.DelayPlace);
+        conf.put("delayDestroyPiece", configuration.delayDestroyPiece);
+        conf.put("delayNextPiecePlace", configuration.delayNextPiecePlace);
+        conf.put("delayMove", configuration.delayMove);
+        conf.put("delayDiscover", configuration.delayDiscover);
+        conf.put("delayTest", configuration.delayTest);
+        conf.put("delayPick", configuration.delayPick);
+        conf.put("delayPlace", configuration.delayPlace);
 
         JSONObject gmConf = new JSONObject();
         gmConf.put("GameMasterConfiguration", conf);
