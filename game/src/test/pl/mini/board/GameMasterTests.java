@@ -1,4 +1,4 @@
-package pl.mini.tests;
+package pl.mini.board;
 
 public class GameMasterTests {
 
