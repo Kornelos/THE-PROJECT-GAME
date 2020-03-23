@@ -3,12 +3,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 public class Position {
-    public enum Direction{
-        Up,
-        Down,
-        Left,
-        Right
-    }
     @Getter @Setter private int x;
     @Getter @Setter private int y;
     public Direction direction;
