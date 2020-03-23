@@ -1,4 +1,4 @@
-package pl.mini;
+package java.pl.mini;
 
 import org.junit.Test;
 
