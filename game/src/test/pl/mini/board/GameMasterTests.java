@@ -1,5 +1,8 @@
 package pl.mini.board;
 
+
+import org.junit.Test;
+
 public class GameMasterTests {
 
     @Test
