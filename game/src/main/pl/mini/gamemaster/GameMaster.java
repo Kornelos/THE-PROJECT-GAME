@@ -70,31 +70,31 @@ public class GameMaster {
             JSONObject conf = (JSONObject) jsonParser.parse(reader);
 
             finalConf.shamProbability = (double)conf.get("shamProbability");
-            finalConf.maxTeamSize = (int)conf.get("maxTeamSize");
-            finalConf.maxPieces = (int)conf.get("maxPieces");
+            finalConf.maxTeamSize = ((Long)conf.get("maxTeamSize")).intValue();
+            finalConf.maxPieces = ((Long)conf.get("maxPieces")).intValue();
 
             JSONArray pointList = (JSONArray) conf.get("predefinedGoalPositions");
             for(Object obj : pointList){
                 if(obj instanceof JSONObject){
                     tmp = new Point();
-                    tmp.x = (int)((JSONObject) obj).get("x");
-                    tmp.y = (int)((JSONObject) obj).get("y");
+                    tmp.x = ((Long)((JSONObject) obj).get("x")).intValue();
+                    tmp.y = ((Long)((JSONObject) obj).get("y")).intValue();
                     points.add(tmp);
                 }
             }
             finalConf.predefinedGoalPositions = new Point[points.size()];
             points.toArray(finalConf.predefinedGoalPositions);
 
-            finalConf.boardWidth = (int)conf.get("boardWidth");
-            finalConf.boardTaskHeight = (int)conf.get("boardTaskHeight");
-            finalConf.boardGoalHeight = (int)conf.get("boardGoalHeight");
-            finalConf.delayDestroyPiece = (int)conf.get("delayDestroyPiece");
-            finalConf.delayNextPiecePlace = (int)conf.get("delayNextPiecePlace");
-            finalConf.delayMove = (int)conf.get("delayMove");
-            finalConf.delayDiscover = (int)conf.get("delayDiscover");
-            finalConf.delayTest = (int)conf.get("delayTest");
-            finalConf.delayPick = (int)conf.get("delayPick");
-            finalConf.delayPlace = (int)conf.get("delayPlace");
+            finalConf.boardWidth = ((Long)conf.get("boardWidth")).intValue();
+            finalConf.boardTaskHeight = ((Long)conf.get("boardTaskHeight")).intValue();
+            finalConf.boardGoalHeight = ((Long)conf.get("boardGoalHeight")).intValue();
+            finalConf.delayDestroyPiece = ((Long)conf.get("delayDestroyPiece")).intValue();
+            finalConf.delayNextPiecePlace = ((Long)conf.get("delayNextPiecePlace")).intValue();
+            finalConf.delayMove = ((Long)conf.get("delayMove")).intValue();
+            finalConf.delayDiscover = ((Long)conf.get("delayDiscover")).intValue();
+            finalConf.delayTest = ((Long)conf.get("delayTest")).intValue();
+            finalConf.delayPick = ((Long)conf.get("delayPick")).intValue();
+            finalConf.delayPlace = ((Long)conf.get("delayPlace")).intValue();
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
