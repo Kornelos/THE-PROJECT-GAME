@@ -12,6 +12,8 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import pl.mini.board.GameMasterBoard;
+
 import java.awt.Point;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -24,11 +26,11 @@ public class GameMaster {
     private InetAddress ipAddress;
     private List<UUID> teamRedGuids;
     private List<UUID> teamBlueGuids;
-    /*
+
     @Getter
     @Setter
     private GameMasterBoard board;
-    */
+
     @Getter
     @Setter
     private GameMasterStatus status;
@@ -149,14 +151,36 @@ public class GameMaster {
         }
     }
 
-    private void putNewPiece()
+    public void putNewPiece()
     {
 
     }
 
-    private void printBoard()
+    public void printBoard()
     {
+        int row = this.board.getBoardWidth();
+        int col = this.board.getBoardHeight();
+        int task = this.board.getTaskAreaHeight();
+        int goal = this.board.getGoalAreaHeight();
+        System.out.println(row + " " + col + " " + task + " " + goal);
+        String pos;
 
+        for (int i = 0; i < row; i++)
+        {
+            if (i < goal || i > goal + task - 1)
+                pos = "G";
+            else
+                pos = "T";
+            System.out.println(" " + "######".repeat(col) + "#");
+            System.out.println(" " + "|     ".repeat(col) + "|");
+            for (int j = 0; j < col; j++)
+            {
+                pos += "|     ";
+            }
+            System.out.println(pos + "|");
+            System.out.println(" " + "|     ".repeat(col) + "|");
+        }
+        System.out.println(" " + "######".repeat(col) + "#");
     }
 
     public void messageHandler(String message)
