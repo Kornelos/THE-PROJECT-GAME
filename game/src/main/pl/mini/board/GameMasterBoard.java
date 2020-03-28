@@ -3,56 +3,110 @@ package pl.mini.board;
 import lombok.Getter;
 import lombok.Setter;
 
+import pl.mini.player.*;
+import pl.mini.position.*;
+import pl.mini.cell.CellState;
+import pl.mini.cell.Field;
+
+
+import java.util.*;
+
+
 public class GameMasterBoard extends Board {
-    // #todo implement Position class
-    // @Getter @Setter private ISet<Position> piecesPosition;
 
-//    #todo implement PlayerDto, Direction, Position
-//    public Position playerMove(PlayerDto player, Direction direction)
-//    {
-//        return position;
-//    }
+     @Getter
+     @Setter private Set<Position> piecesPosition;
 
-//    #todo implement CELL CLASS
-//    public CellState takePiece(Position position)
-//    {
-//        return state;
-//    }
+    public GameMasterBoard(int boardWidth, int goalAreaHeight, int taskAreaHeight) {
+        super(boardWidth, goalAreaHeight, taskAreaHeight);
+    }
 
-//    #todo implement POSITION CLASS
-//    public Position generatePiece(double chance)
-//    {
-//        return position;
-//    }
 
-//    #todo implement POSITION CLASS
-//    public void setGoal(Position position)
-//    {
-//
-//    }
+    public Position playerMove(PlayerDTO player, Direction direction)
+    {
+        Position position = player.getPosition();
+        int x = position.getX();
+        int y = position.getY();
+        position.changePosition(direction);
+        position.setX(x);
+        position.setY(y);
+        return position;
+    }
 
-//    #todo PlayerDto
-//    public PlacementResult placePiece(PlayerDto player)
-//    {
-//        return result;
-//    }
 
-//    #todo IMPLEMENT POSITION CLASS
-//    public Position placePlayer(PlayerDto player)
-//    {
-//        return position;
-//    }
+    public CellState takePiece(Position position)
+    {
+        int x = position.getX();
+        int y = position.getY();
+        return getCellsGrid()[x][y].cellState;
+    }
 
-//    #todo IMPLEMENT TEAMCOLOR CLASS
+    //generate piece on random position in the TaskArea
+    public Position generatePiece(double chance)
+    {
+        Random randomX = new Random();
+        Random randomY = new Random();
+        int x = randomX.nextInt(getBoardWidth());
+        int y = getGoalAreaHeight() + randomY.nextInt(getTaskAreaHeight());
+        return new Position(x,y);
+    }
+
+
+    public void setGoal(Position position)
+    {
+        int x = position.getX();
+        int y = position.getY();
+        getCellsGrid()[x][y].cellState = CellState.Goal;
+    }
+
+
+    public PlacementResult placePiece(PlayerDTO player)
+    {
+        Position position = player.getPosition();
+        int x = position.getX();
+        int y = position.getY();
+        if (getCellsGrid()[x][y].cellState == CellState.Goal)
+            return PlacementResult.Correct;
+
+        return PlacementResult.Pointless;
+    }
+
+//  #todo IMPLEMENT FIELD COLOR
+    public Position placePlayer(PlayerDTO player)
+    {   Position position = new Position(0,0);
+        return position;
+    }
+
+//    #todo IMPLEMENT FIELD COLOR
 //    public void checkWinCondition(TeamColor teamColor)
 //    {
 //
 //    }
 
-//    #todo IMPLEMENT FIELD CLASS
-//    public List<Field> discover(Position position)
+
+    public List<Field> discover(Position position)
+    {
+        //#todo boundary
+        int x = position.getX();
+        int y = position.getY();
+        List<Field> list = new ArrayList<>();
+        for(int i = x - 1; i < x + 1; i++)
+        {
+            for(int j = y - 1; j < y + 1; j++)
+            {
+                Position position1 = new Position (j, i);
+                Field field = new Field(position1, getCellsGrid()[j][i]);
+                list.add(field);
+            }
+        }
+        return list;
+    }
+
+//    point?
+
+//    private int manhattanDistanceTwoPoints(Point pointA, Point pointB)
 //    {
-//        return list;
+//        return dist;
 //    }
 
 }
