@@ -13,12 +13,11 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import pl.mini.board.GameMasterBoard;
+import pl.mini.position.Position;
 
 import java.awt.Point;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.net.InetAddress;
 
 public class GameMaster {
@@ -158,26 +157,39 @@ public class GameMaster {
 
     public void printBoard()
     {
-        int row = this.board.getBoardWidth();
-        int col = this.board.getBoardHeight();
+        int col = this.board.getBoardWidth();
+        int row = this.board.getBoardHeight();
         int task = this.board.getTaskAreaHeight();
         int goal = this.board.getGoalAreaHeight();
-        System.out.println(row + " " + col + " " + task + " " + goal);
-        String pos;
+        Set<Position> positions = this.board.getPiecesPosition();
+        String fld;
+        Position pos;
+        boolean check;
 
         for (int i = 0; i < row; i++)
         {
             if (i < goal || i > goal + task - 1)
-                pos = "G";
+                fld = "G";
             else
-                pos = "T";
+                fld = "T";
             System.out.println(" " + "######".repeat(col) + "#");
             System.out.println(" " + "|     ".repeat(col) + "|");
             for (int j = 0; j < col; j++)
             {
-                pos += "|     ";
+                pos = new Position(j+1, i+1);
+                check = false;
+                for(int k=0;k<positions.size();k++)
+                {
+                    if(Objects.equals(pos.getX(), ((Position)positions.toArray()[k]).getX())
+                    && Objects.equals(pos.getY(), ((Position)positions.toArray()[k]).getY()))
+                        check = true;
+                }
+                if (check)
+                    fld += "|  P  ";
+                else
+                    fld += "|     ";
             }
-            System.out.println(pos + "|");
+            System.out.println(fld + "|");
             System.out.println(" " + "|     ".repeat(col) + "|");
         }
         System.out.println(" " + "######".repeat(col) + "#");
