@@ -150,9 +150,23 @@ public class GameMaster {
         }
     }
 
-    public void putNewPiece()
+    public void putNewPiece(int x, int y)
     {
+        Random r = new Random();
+        Position pos = new Position(r.nextInt(this.board.getBoardWidth()) + 1,
+                r.nextInt(this.board.getBoardHeight()) + 1);
+        Set<Position> tmp_positions = this.board.getPiecesPosition();
 
+        for(int k=0;k<tmp_positions.size();k++)
+        {
+            if(Objects.equals(pos.getX(), ((Position)tmp_positions.toArray()[k]).getX())
+                    && Objects.equals(pos.getY(), ((Position)tmp_positions.toArray()[k]).getY()))
+                {
+                    pos = new Position(r.nextInt(this.board.getBoardWidth()) + 1,
+                            r.nextInt(this.board.getBoardHeight()) + 1);
+                    k = -1;
+                }
+        }
     }
 
     public void printBoard()
@@ -178,7 +192,7 @@ public class GameMaster {
             {
                 pos = new Position(j+1, i+1);
                 check = false;
-                for(int k=0;k<positions.size();k++)
+                for(int k = 0; k < positions.size(); k++)
                 {
                     if(Objects.equals(pos.getX(), ((Position)positions.toArray()[k]).getX())
                     && Objects.equals(pos.getY(), ((Position)positions.toArray()[k]).getY()))
