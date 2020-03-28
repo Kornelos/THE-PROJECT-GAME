@@ -12,6 +12,8 @@ import pl.mini.cell.Field;
 import java.util.*;
 
 
+
+
 public class GameMasterBoard extends Board {
 
      @Getter
@@ -71,13 +73,29 @@ public class GameMasterBoard extends Board {
         return PlacementResult.Pointless;
     }
 
-//  #todo IMPLEMENT FIELD COLOR
+
     public Position placePlayer(PlayerDTO player)
-    {   Position position = new Position(0,0);
-        return position;
+    {   //#todo other players boundaries
+        Random randomX = new Random();
+        Random randomY = new Random();
+        int x = randomX.nextInt(getBoardWidth());
+        switch(player.getPlayerTeamColor())
+        {
+            case Red:
+            {
+                int y = randomY.nextInt(getGoalAreaHeight());
+                return new Position(x,y);
+            }
+            case Blue:
+            {
+                int y = getGoalAreaHeight() + getTaskAreaHeight() + randomY.nextInt(getGoalAreaHeight());
+                return new Position(x,y);
+            }
+        }
+        return null;
     }
 
-//    #todo IMPLEMENT FIELD COLOR
+//    #todo ticket how complete goals should be marked
 //    public void checkWinCondition(TeamColor teamColor)
 //    {
 //
@@ -102,11 +120,11 @@ public class GameMasterBoard extends Board {
         return list;
     }
 
-//    point?
 
-//    private int manhattanDistanceTwoPoints(Point pointA, Point pointB)
-//    {
-//        return dist;
-//    }
+
+    private int manhattanDistanceTwoPoints(Position pointA, Position pointB)
+    {
+        return Math.abs(pointA.getX() - pointB.getX()) + Math.abs(pointA.getY() - pointB.getY());
+    }
 
 }
