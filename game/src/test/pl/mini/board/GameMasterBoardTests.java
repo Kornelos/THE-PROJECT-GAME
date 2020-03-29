@@ -1,9 +1,17 @@
 package pl.mini.board;
 
 
+import org.junit.Before;
 import org.junit.Test;
 
-public class GameMasterTests {
+public class GameMasterBoardTests {
+
+    GameMasterBoard testGameMasterBoard;
+
+    @Before
+    public void prepareGameMasterBoardTests() {
+        testGameMasterBoard = new GameMasterBoard(30, 15, 15);
+    }
 
     @Test
     public void testGameMasterBoardPlayerMove_Correct() {
