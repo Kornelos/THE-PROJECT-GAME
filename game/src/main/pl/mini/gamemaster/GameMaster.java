@@ -13,6 +13,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import pl.mini.board.GameMasterBoard;
+import pl.mini.cell.CellState;
 import pl.mini.position.Position;
 
 import java.awt.Point;
@@ -21,28 +22,13 @@ import java.util.*;
 import java.net.InetAddress;
 
 public class GameMaster {
-    private int portNumber;
-    private InetAddress ipAddress;
-    private List<UUID> teamRedGuids;
-    private List<UUID> teamBlueGuids;
-
-    @Getter
-    @Setter
-    private GameMasterBoard board;
-
-    @Getter
-    @Setter
-    private GameMasterStatus status;
-
-    private GameMasterConfiguration configuration;
-
-    public GameMasterConfiguration getConfiguration(){
-        return configuration;
-    }
-
-    public void setConfiguration(GameMasterConfiguration gc){
-        configuration = gc;
-    }
+    @Getter @Setter private int portNumber;
+    @Getter @Setter private InetAddress ipAddress;
+    @Getter @Setter private List<UUID> teamRedGuids;
+    @Getter @Setter private List<UUID> teamBlueGuids;
+    @Getter @Setter private GameMasterBoard board;
+    @Getter @Setter private GameMasterStatus status;
+    @Getter @Setter private GameMasterConfiguration configuration;
 
     public GameMaster()
     {
@@ -154,7 +140,8 @@ public class GameMaster {
     {
         Random r = new Random();
         Position pos = new Position(r.nextInt(this.board.getBoardWidth()) + 1,
-                r.nextInt(this.board.getBoardHeight()) + 1);
+                r.nextInt(this.board.getGoalAreaHeight() + this.board.getTaskAreaHeight() - 1)
+                        + this.board.getGoalAreaHeight() - 1);
         Set<Position> tmp_positions = this.board.getPiecesPosition();
 
         for(int k=0;k<tmp_positions.size();k++)
@@ -163,7 +150,8 @@ public class GameMaster {
                     && Objects.equals(pos.getY(), ((Position)tmp_positions.toArray()[k]).getY()))
                 {
                     pos = new Position(r.nextInt(this.board.getBoardWidth()) + 1,
-                            r.nextInt(this.board.getBoardHeight()) + 1);
+                            r.nextInt(this.board.getGoalAreaHeight() + this.board.getTaskAreaHeight() - 1)
+                                    + this.board.getGoalAreaHeight() - 1);
                     k = -1;
                 }
         }
@@ -177,8 +165,7 @@ public class GameMaster {
         int goal = this.board.getGoalAreaHeight();
         Set<Position> positions = this.board.getPiecesPosition();
         String fld;
-        Position pos;
-        boolean check;
+        CellState cState;
 
         for (int i = 0; i < row; i++)
         {
@@ -190,18 +177,16 @@ public class GameMaster {
             System.out.println(" " + "|     ".repeat(col) + "|");
             for (int j = 0; j < col; j++)
             {
-                pos = new Position(j+1, i+1);
-                check = false;
-                for(int k = 0; k < positions.size(); k++)
-                {
-                    if(Objects.equals(pos.getX(), ((Position)positions.toArray()[k]).getX())
-                    && Objects.equals(pos.getY(), ((Position)positions.toArray()[k]).getY()))
-                        check = true;
-                }
-                if (check)
+                cState = this.board.getCellsGrid()[i][j].cellState;
+                if(cState == CellState.Piece || cState == CellState.Sham || cState == CellState.Valid)
                     fld += "|  P  ";
-                else
+                else if(cState == CellState.Goal)
+                    fld += "|  G  ";
+                else if(cState == CellState.Unknown)
+                    fld += "|  U  ";
+                else if(cState == CellState.Empty)
                     fld += "|     ";
+
             }
             System.out.println(fld + "|");
             System.out.println(" " + "|     ".repeat(col) + "|");
