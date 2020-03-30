@@ -1,8 +1,16 @@
 package pl.mini.board;
 
+import org.junit.Before;
 import org.junit.Test;
 
 public class BoardTests {
+
+    Board testBoard;
+
+    @Before
+    public void prepareBoardTests() {
+        testBoard = new Board(30, 15, 15);
+    }
 
     @Test
     public void testBoardGetField() {
