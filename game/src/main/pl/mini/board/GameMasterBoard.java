@@ -3,6 +3,7 @@ package pl.mini.board;
 import lombok.Getter;
 import lombok.Setter;
 
+
 import pl.mini.player.*;
 import pl.mini.position.*;
 import pl.mini.cell.CellState;
@@ -112,4 +113,17 @@ public class GameMasterBoard extends Board {
         return Math.abs(pointA.getX( ) - pointB.getX( )) + Math.abs(pointA.getY( ) - pointB.getY( ));
     }
 
+    private int manhattanDistanceToClosestPiece(Position position)
+    {
+        int min = 0;
+        int id = 0;
+        Position[] positions = piecesPosition.toArray(new Position[piecesPosition.size()]);
+        for(int i = 0; i < positions.length; i++)
+        {
+            if(manhattanDistanceTwoPoints(position, positions[i]) >= min)
+                min = manhattanDistanceTwoPoints(position, positions[i]);
+                id = i;
+        }
+        return manhattanDistanceTwoPoints(position, positions[id]);
+    }
 }
