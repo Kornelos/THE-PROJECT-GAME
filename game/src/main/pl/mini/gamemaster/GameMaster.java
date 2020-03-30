@@ -136,25 +136,23 @@ public class GameMaster {
         }
     }
 
-    public void putNewPiece(int x, int y)
+    public void putNewPiece()
     {
         Random r = new Random();
-        Position pos = new Position(r.nextInt(this.board.getBoardWidth()) + 1,
-                r.nextInt(this.board.getGoalAreaHeight() + this.board.getTaskAreaHeight() - 1)
-                        + this.board.getGoalAreaHeight() - 1);
         Set<Position> tmp_positions = this.board.getPiecesPosition();
-
-        for(int k=0;k<tmp_positions.size();k++)
-        {
-            if(Objects.equals(pos.getX(), ((Position)tmp_positions.toArray()[k]).getX())
-                    && Objects.equals(pos.getY(), ((Position)tmp_positions.toArray()[k]).getY()))
-                {
-                    pos = new Position(r.nextInt(this.board.getBoardWidth()) + 1,
-                            r.nextInt(this.board.getGoalAreaHeight() + this.board.getTaskAreaHeight() - 1)
-                                    + this.board.getGoalAreaHeight() - 1);
-                    k = -1;
-                }
+        /**
+         *   Taking all the pieces off the board
+         */
+        for(int i=0;i<this.board.getBoardWidth();i++){
+            for(int j=0;j<this.board.getBoardHeight();j++){
+                this.board.takePiece(new Position(i,j));
+            }
         }
+
+        Position placed = this.board.generatePiece(r.nextDouble());
+        tmp_positions.add(placed);
+        this.board.getCellsGrid()[placed.getX()][ placed.getY()].cellState = CellState.Piece;
+
     }
 
     public void printBoard()
