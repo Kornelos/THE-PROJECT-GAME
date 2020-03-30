@@ -40,20 +40,17 @@ public class Board {
         return field;
     }
 
-    // #todo ticket
-    // #todo update field class to ver. 1.1.7
-    // #probably update field color
-    public void updateField(Field field) {
-        Position position = field.getPosition( );
-        int x = position.getX( );
-        int y = position.getY( );
-        field.setCell(cellsGrid[ x ][ y ]);
+
+    public void updateField(Field field)
+    {
+        updateCell(field.getCell(), field.getPosition());
     }
 
-    // #todo ticket
-    // #todo update cell class to ver. 1.1.7
-    private void updateCell(Cell cell, Position position) {
 
+
+    private void updateCell(Cell cell, Position position)
+    {
+        cellsGrid[position.getX()][position.getY()] = cell;
     }
 
 
