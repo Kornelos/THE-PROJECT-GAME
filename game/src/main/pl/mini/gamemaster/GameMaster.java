@@ -2,33 +2,32 @@ package pl.mini.gamemaster;
 
 import lombok.Getter;
 import lombok.Setter;
-
-import java.io.FileWriter;
-import java.io.FileReader;
-import java.io.FileNotFoundException;
-
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import pl.mini.board.GameMasterBoard;
 
-import java.awt.Point;
+import java.awt.*;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.net.InetAddress;
 
 public class GameMaster {
     private int portNumber;
     private InetAddress ipAddress;
     private List<UUID> teamRedGuids;
     private List<UUID> teamBlueGuids;
-    /*
+
     @Getter
     @Setter
     private GameMasterBoard board;
-    */
+
     @Getter
     @Setter
     private GameMasterStatus status;
