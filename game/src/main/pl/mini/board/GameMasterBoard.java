@@ -19,6 +19,7 @@ public class GameMasterBoard extends Board {
     @Setter
     private Set<Position> piecesPosition;
 
+
     public GameMasterBoard(int boardWidth, int goalAreaHeight, int taskAreaHeight) {
         super(boardWidth, goalAreaHeight, taskAreaHeight);
     }
@@ -117,13 +118,20 @@ public class GameMasterBoard extends Board {
     {
         int min = 0;
         int id = 0;
-        Position[] positions = piecesPosition.toArray(new Position[piecesPosition.size()]);
-        for(int i = 0; i < positions.length; i++)
-        {
-            if(manhattanDistanceTwoPoints(position, positions[i]) >= min)
-                min = manhattanDistanceTwoPoints(position, positions[i]);
+        try {
+            Position[] positions = piecesPosition.toArray(new Position[piecesPosition.size()]);
+
+
+            for (int i = 0; i < positions.length; i++) {
+                if (manhattanDistanceTwoPoints(position, positions[i]) >= min)
+                    min = manhattanDistanceTwoPoints(position, positions[i]);
                 id = i;
+            }
+            return manhattanDistanceTwoPoints(position, positions[id]);
         }
-        return manhattanDistanceTwoPoints(position, positions[id]);
+        catch(NullPointerException e)
+        {
+            return -1;
+        }
     }
 }
