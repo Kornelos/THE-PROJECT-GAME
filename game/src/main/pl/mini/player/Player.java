@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import pl.mini.CommServerMockSingleton;
 import pl.mini.board.Board;
+import pl.mini.board.PlacementResult;
 import pl.mini.cell.CellState;
 import pl.mini.cell.Field;
 import pl.mini.cell.FieldColor;
@@ -18,7 +19,7 @@ import java.util.List;
 public class Player extends PlayerDTO {
     @Getter
     private final String playerName;
-    private Board board;
+    private final Board board;
     @Getter
     @Setter
     private Team team;
@@ -30,9 +31,12 @@ public class Player extends PlayerDTO {
     private int portNumber;
     private InetAddress ipAddress;
 
-    public Player(String playerName) {
+    public Player(String playerName, Board board, Team team) {
         super();
         this.playerName = playerName;
+        this.board = board;
+        this.team = team;
+        playerTeamColor = team.getColor();
         piece = false;
     }
 
@@ -41,9 +45,9 @@ public class Player extends PlayerDTO {
     }
 
     public void makeAction() {
+        //NOTE: this is a temporary player game logic
         if (piece) {
             // goes to base (how?)
-            // TODO: figure out how player should know where his goal area is
             // places piece in the base
             Direction baseDirection;
             if (team.getColor() == TeamColor.Blue)
@@ -114,8 +118,7 @@ public class Player extends PlayerDTO {
 
     private int askForMDist() {
         // asks for manhattan distance
-        return 0;
-
+        return CommServerMockSingleton.INSTANCE.requestClosestPieceManhattan(this);
     }
 
     private void move(Direction direction) {
@@ -131,7 +134,10 @@ public class Player extends PlayerDTO {
     }
 
     private void placePiece() {
-        CommServerMockSingleton.INSTANCE.requestPlacePiece(this);
+        PlacementResult placementResult = CommServerMockSingleton.INSTANCE.requestPlacePiece(this);
+        if (placementResult == PlacementResult.Correct) {
+            // TODO: update player board
+        }
         piece = false;
     }
 

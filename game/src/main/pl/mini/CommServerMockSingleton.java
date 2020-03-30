@@ -1,6 +1,7 @@
 package pl.mini;
 
 import pl.mini.board.GameMasterBoard;
+import pl.mini.board.PlacementResult;
 import pl.mini.cell.CellState;
 import pl.mini.cell.Field;
 import pl.mini.gamemaster.GameMaster;
@@ -71,8 +72,14 @@ public class CommServerMockSingleton {
         return gmb.discover(player.getPosition());
     }
 
-    public void requestPlacePiece(Player player) {
+    public int requestClosestPieceManhattan(Player player) {
+        GameMasterBoard gmb = gameMaster.getBoard();
+        return gmb.manhattanDistanceToClosestPiece(player.getPosition());
+    }
 
+    public PlacementResult requestPlacePiece(Player player) {
+        GameMasterBoard gmb = gameMaster.getBoard();
+        return gmb.placePiece(player);
     }
 
 
