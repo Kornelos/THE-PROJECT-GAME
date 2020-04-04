@@ -29,9 +29,9 @@ public class CommServerMockSingleton {
         this.gameMaster = gameMaster;
     }
 
-    public void requestPlayerMove(Player player, Direction direction) {
+    public Position requestPlayerMove(Player player, Direction direction) {
         GameMasterBoard gmb = gameMaster.getBoard();
-        gmb.playerMove(player, direction);
+        return gmb.playerMove(player, direction);
     }
 
     public boolean requestPlayerPickPiece(Player player) {

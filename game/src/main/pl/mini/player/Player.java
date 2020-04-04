@@ -54,51 +54,45 @@ public class Player extends PlayerDTO {
                 baseDirection = Direction.Down;
             else
                 baseDirection = Direction.Up;
-            while (true) {
-                List<Field> fieldList = discover();
-                if (((fieldList.get(4).getFieldColor() == FieldColor.Blue) && (team.getColor() == TeamColor.Blue)) || ((fieldList.get(4).getFieldColor() == FieldColor.Red) && (team.getColor() == TeamColor.Red))) {
-                    placePiece();
-                    break;
-                } else move(baseDirection);
-            }
+            List<Field> fieldList = discover();
+            if (((fieldList.get(4).getFieldColor() == FieldColor.Blue) && (team.getColor() == TeamColor.Blue)) || ((fieldList.get(4).getFieldColor() == FieldColor.Red) && (team.getColor() == TeamColor.Red))) {
+                placePiece();
+            } else
+                move(baseDirection);
         } else {
             // looks for piece
             // ask for manhattan distance
             int mDist = askForMDist();
             int initMDist = mDist;
             boolean up = true, left = true, right = true, down = true;
-            while (mDist != 1) {
-                if (up) {
-                    move(Direction.Up);
-                    mDist = askForMDist();
-                    if (mDist >= initMDist) {
-                        up = false;
-                    }
-                    continue;
+            if (up) {
+                move(Direction.Up);
+                mDist = askForMDist();
+                if (mDist >= initMDist) {
+                    up = false;
                 }
-                if (down) {
-                    move(Direction.Down);
-                    mDist = askForMDist();
-                    if (mDist >= initMDist) {
-                        down = false;
-                    }
-                    continue;
+
+            } else if (down) {
+                move(Direction.Down);
+                mDist = askForMDist();
+                if (mDist >= initMDist) {
+                    down = false;
                 }
-                if (left) {
-                    move(Direction.Left);
-                    mDist = askForMDist();
-                    if (mDist >= initMDist) {
-                        left = false;
-                    }
-                    continue;
+
+            } else if (left) {
+                move(Direction.Left);
+                mDist = askForMDist();
+                if (mDist >= initMDist) {
+                    left = false;
                 }
-                if (right) {
-                    move(Direction.Up);
-                    mDist = askForMDist();
-                    if (mDist >= initMDist) {
-                        right = false;
-                    }
+
+            } else if (right) {
+                move(Direction.Up);
+                mDist = askForMDist();
+                if (mDist >= initMDist) {
+                    right = false;
                 }
+
             }
             // proceed to the target
 
@@ -109,6 +103,7 @@ public class Player extends PlayerDTO {
             if (testPiece())
                 piece = takePiece();
         }
+        System.out.println("Player location:" + position.toString());
     }
 
     private List<Field> discover() {
@@ -122,7 +117,7 @@ public class Player extends PlayerDTO {
     }
 
     private void move(Direction direction) {
-        CommServerMockSingleton.INSTANCE.requestPlayerMove(this, direction);
+        position = CommServerMockSingleton.INSTANCE.requestPlayerMove(this, direction);
     }
 
     private boolean takePiece() {

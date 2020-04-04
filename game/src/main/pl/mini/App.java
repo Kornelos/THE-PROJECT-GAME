@@ -1,5 +1,6 @@
 package pl.mini;
 
+import lombok.SneakyThrows;
 import pl.mini.board.Board;
 import pl.mini.board.GameMasterBoard;
 import pl.mini.gamemaster.GameMaster;
@@ -11,11 +12,12 @@ import pl.mini.team.TeamColor;
  * Hello world!
  */
 public class App {
+    @SneakyThrows
     public static void main(String[] args) {
         // temporary game init
         System.out.println("Game is initializing..");
         GameMaster gm = new GameMaster();
-        gm.setBoard(new GameMasterBoard(8, 2, 5));
+        gm.setBoard(new GameMasterBoard(8, 2, 2));
         CommServerMockSingleton.INSTANCE.registerGameMaster(gm);
 
         // teams
@@ -30,10 +32,16 @@ public class App {
         blue_player.setPosition(gm.getBoard().placePlayer(blue_player));
 
         // game loop
+        System.out.println("Game loop starting..");
+        gm.printBoard();
         int i = 0;
-        while (i < 100) {
+        while (i < 120) {
+            if (i % 30 == 0)
+                gm.putNewPiece();
             red_player.makeAction();
             blue_player.makeAction();
+            Thread.sleep(3000);
+            gm.printBoard();
             i += 1;
         }
     }

@@ -3,7 +3,9 @@ package pl.mini.board;
 
 import lombok.Getter;
 import lombok.Setter;
-import pl.mini.cell.*;
+import pl.mini.cell.Cell;
+import pl.mini.cell.CellState;
+import pl.mini.cell.Field;
 import pl.mini.position.Position;
 
 
@@ -62,11 +64,11 @@ public class Board {
     }
 
     private void initializeCellsGrid() {
-        cellsGrid = new Cell[ boardWidth ][ boardHeight ];
-        for (Cell[] u : cellsGrid){
-            for (Cell elem : u)
-            {
-                elem = new Cell(CellState.Empty);
+        cellsGrid = new Cell[boardWidth][boardHeight];
+
+        for (int i = 0; i < boardWidth; i++) {
+            for (int j = 0; j < boardHeight; j++) {
+                cellsGrid[i][j] = new Cell(CellState.Empty);
             }
         }
     }

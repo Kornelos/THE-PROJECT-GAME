@@ -2,13 +2,11 @@ package pl.mini.board;
 
 import lombok.Getter;
 import lombok.Setter;
-
-
-import pl.mini.player.*;
-import pl.mini.position.*;
 import pl.mini.cell.CellState;
 import pl.mini.cell.Field;
-
+import pl.mini.player.PlayerDTO;
+import pl.mini.position.Direction;
+import pl.mini.position.Position;
 
 import java.util.*;
 
@@ -17,7 +15,7 @@ public class GameMasterBoard extends Board {
 
     @Getter
     @Setter
-    private Set<Position> piecesPosition;
+    private Set<Position> piecesPosition = new HashSet<>();
 
 
     public GameMasterBoard(int boardWidth, int goalAreaHeight, int taskAreaHeight) {
@@ -114,8 +112,7 @@ public class GameMasterBoard extends Board {
         return Math.abs(pointA.getX( ) - pointB.getX( )) + Math.abs(pointA.getY( ) - pointB.getY( ));
     }
 
-    private int manhattanDistanceToClosestPiece(Position position)
-    {
+    public int manhattanDistanceToClosestPiece(Position position) {
         int min = 0;
         int id = 0;
         try {

@@ -2,24 +2,22 @@ package pl.mini.gamemaster;
 
 import lombok.Getter;
 import lombok.Setter;
-
-import java.io.FileWriter;
-import java.io.FileReader;
-import java.io.FileNotFoundException;
-
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-
 import pl.mini.board.GameMasterBoard;
 import pl.mini.cell.CellState;
 import pl.mini.position.Position;
 
-import java.awt.Point;
+import java.awt.*;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.util.*;
 import java.net.InetAddress;
+import java.util.List;
+import java.util.*;
 
 public class GameMaster {
     @Getter @Setter private int portNumber;
@@ -167,7 +165,7 @@ public class GameMaster {
             System.out.println(" " + "|     ".repeat(col) + "|");
             for (int j = 0; j < col; j++)
             {
-                cState = this.board.getCellsGrid()[i][j].cellState;
+                cState = this.board.getCellsGrid()[j][i].cellState;
                 if(cState == CellState.Piece || cState == CellState.Sham || cState == CellState.Valid)
                     fld += "|  P  ";
                 else if(cState == CellState.Goal)
