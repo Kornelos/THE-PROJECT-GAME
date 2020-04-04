@@ -2,45 +2,33 @@ package pl.mini.gamemaster;
 
 import lombok.Getter;
 import lombok.Setter;
+
+import java.io.FileWriter;
+import java.io.FileReader;
+import java.io.FileNotFoundException;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import pl.mini.board.GameMasterBoard;
 
-import java.awt.*;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
+import pl.mini.board.GameMasterBoard;
+import pl.mini.cell.CellState;
+import pl.mini.position.Position;
+
+import java.awt.Point;
 import java.io.IOException;
+import java.util.*;
 import java.net.InetAddress;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
 public class GameMaster {
-    private int portNumber;
-    private InetAddress ipAddress;
-    private List<UUID> teamRedGuids;
-    private List<UUID> teamBlueGuids;
-
-    @Getter
-    @Setter
-    private GameMasterBoard board;
-
-    @Getter
-    @Setter
-    private GameMasterStatus status;
-
-    private GameMasterConfiguration configuration;
-
-    public GameMasterConfiguration getConfiguration(){
-        return configuration;
-    }
-
-    public void setConfiguration(GameMasterConfiguration gc){
-        configuration = gc;
-    }
+    @Getter @Setter private int portNumber;
+    @Getter @Setter private InetAddress ipAddress;
+    @Getter @Setter private List<UUID> teamRedGuids;
+    @Getter @Setter private List<UUID> teamBlueGuids;
+    @Getter @Setter private GameMasterBoard board;
+    @Getter @Setter private GameMasterStatus status;
+    @Getter @Setter private GameMasterConfiguration configuration;
 
     public GameMaster()
     {
@@ -69,31 +57,31 @@ public class GameMaster {
             JSONObject conf = (JSONObject) jsonParser.parse(reader);
 
             finalConf.shamProbability = (double)conf.get("shamProbability");
-            finalConf.maxTeamSize = (int)conf.get("maxTeamSize");
-            finalConf.maxPieces = (int)conf.get("maxPieces");
+            finalConf.maxTeamSize = ((Long)conf.get("maxTeamSize")).intValue();
+            finalConf.maxPieces = ((Long)conf.get("maxPieces")).intValue();
 
             JSONArray pointList = (JSONArray) conf.get("predefinedGoalPositions");
             for(Object obj : pointList){
                 if(obj instanceof JSONObject){
                     tmp = new Point();
-                    tmp.x = (int)((JSONObject) obj).get("x");
-                    tmp.y = (int)((JSONObject) obj).get("y");
+                    tmp.x = ((Long)((JSONObject) obj).get("x")).intValue();
+                    tmp.y = ((Long)((JSONObject) obj).get("y")).intValue();
                     points.add(tmp);
                 }
             }
             finalConf.predefinedGoalPositions = new Point[points.size()];
             points.toArray(finalConf.predefinedGoalPositions);
 
-            finalConf.boardWidth = (int)conf.get("boardWidth");
-            finalConf.boardTaskHeight = (int)conf.get("boardTaskHeight");
-            finalConf.boardGoalHeight = (int)conf.get("boardGoalHeight");
-            finalConf.delayDestroyPiece = (int)conf.get("delayDestroyPiece");
-            finalConf.delayNextPiecePlace = (int)conf.get("delayNextPiecePlace");
-            finalConf.delayMove = (int)conf.get("delayMove");
-            finalConf.delayDiscover = (int)conf.get("delayDiscover");
-            finalConf.delayTest = (int)conf.get("delayTest");
-            finalConf.delayPick = (int)conf.get("delayPick");
-            finalConf.delayPlace = (int)conf.get("delayPlace");
+            finalConf.boardWidth = ((Long)conf.get("boardWidth")).intValue();
+            finalConf.boardTaskHeight = ((Long)conf.get("boardTaskHeight")).intValue();
+            finalConf.boardGoalHeight = ((Long)conf.get("boardGoalHeight")).intValue();
+            finalConf.delayDestroyPiece = ((Long)conf.get("delayDestroyPiece")).intValue();
+            finalConf.delayNextPiecePlace = ((Long)conf.get("delayNextPiecePlace")).intValue();
+            finalConf.delayMove = ((Long)conf.get("delayMove")).intValue();
+            finalConf.delayDiscover = ((Long)conf.get("delayDiscover")).intValue();
+            finalConf.delayTest = ((Long)conf.get("delayTest")).intValue();
+            finalConf.delayPick = ((Long)conf.get("delayPick")).intValue();
+            finalConf.delayPlace = ((Long)conf.get("delayPlace")).intValue();
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -148,14 +136,52 @@ public class GameMaster {
         }
     }
 
-    private void putNewPiece()
+    public void putNewPiece()
     {
-
+        Random r = new Random();
+        Set<Position> tmp_positions = new HashSet<>();
+        tmp_positions = this.board.getPiecesPosition();
+        Position placed = this.board.generatePiece(r.nextDouble());
+        tmp_positions.add(placed);
+        this.board.setPiecesPosition(tmp_positions);
+        this.board.getCellsGrid()[placed.getX()][ placed.getY()].cellState = CellState.Piece;
     }
 
-    private void printBoard()
+    public void printBoard()
     {
+        int col = this.board.getBoardWidth();
+        int row = this.board.getBoardHeight();
+        int task = this.board.getTaskAreaHeight();
+        int goal = this.board.getGoalAreaHeight();
+        Set<Position> positions = this.board.getPiecesPosition();
+        String fld;
+        CellState cState;
 
+        for (int i = 0; i < row; i++)
+        {
+            if (i < goal || i > goal + task - 1)
+                fld = "G";
+            else
+                fld = "T";
+            System.out.println(" " + "######".repeat(col) + "#");
+            System.out.println(" " + "|     ".repeat(col) + "|");
+            for (int j = 0; j < col; j++)
+            {
+                cState = this.board.getCellsGrid()[i][j].cellState;
+                if(cState == CellState.Piece || cState == CellState.Sham || cState == CellState.Valid)
+                    fld += "|  P  ";
+                else if(cState == CellState.Goal)
+                    fld += "|  G  ";
+                else if(cState == CellState.Unknown)
+                    fld += "|  U  ";
+                else if(cState == CellState.Empty)
+                    fld += "|     ";
+
+            }
+            System.out.println(fld + "|");
+            System.out.println(" " + "|     ".repeat(col) + "|");
+        }
+        System.out.println(" " + "######".repeat(col) + "#");
     }
 
     public void messageHandler(String message)
