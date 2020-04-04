@@ -2,15 +2,16 @@ package pl.mini.board;
 
 import lombok.Getter;
 import lombok.Setter;
-
-
-import pl.mini.player.*;
-import pl.mini.position.*;
 import pl.mini.cell.CellState;
 import pl.mini.cell.Field;
+import pl.mini.player.PlayerDTO;
+import pl.mini.position.Direction;
+import pl.mini.position.Position;
 
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.Set;
 
 
 public class GameMasterBoard extends Board {
@@ -18,7 +19,6 @@ public class GameMasterBoard extends Board {
     @Getter
     @Setter
     private Set<Position> piecesPosition;
-
 
     public GameMasterBoard(int boardWidth, int goalAreaHeight, int taskAreaHeight) {
         super(boardWidth, goalAreaHeight, taskAreaHeight);
@@ -114,24 +114,15 @@ public class GameMasterBoard extends Board {
         return Math.abs(pointA.getX( ) - pointB.getX( )) + Math.abs(pointA.getY( ) - pointB.getY( ));
     }
 
-    private int manhattanDistanceToClosestPiece(Position position)
-    {
+    public int manhattanDistanceToClosestPiece(Position position) {
         int min = 0;
         int id = 0;
-        try {
-            Position[] positions = piecesPosition.toArray(new Position[piecesPosition.size()]);
-
-
-            for (int i = 0; i < positions.length; i++) {
-                if (manhattanDistanceTwoPoints(position, positions[i]) >= min)
-                    min = manhattanDistanceTwoPoints(position, positions[i]);
-                id = i;
-            }
-            return manhattanDistanceTwoPoints(position, positions[id]);
+        Position[] positions = piecesPosition.toArray(new Position[piecesPosition.size()]);
+        for (int i = 0; i < positions.length; i++) {
+            if (manhattanDistanceTwoPoints(position, positions[i]) >= min)
+                min = manhattanDistanceTwoPoints(position, positions[i]);
+            id = i;
         }
-        catch(NullPointerException e)
-        {
-            return -1;
-        }
+        return manhattanDistanceTwoPoints(position, positions[id]);
     }
 }

@@ -2,16 +2,24 @@ package pl.mini.player;
 
 import lombok.Getter;
 import lombok.Setter;
+import pl.mini.CommServerMockSingleton;
+import pl.mini.board.Board;
+import pl.mini.board.PlacementResult;
+import pl.mini.cell.CellState;
+import pl.mini.cell.Field;
+import pl.mini.cell.FieldColor;
 import pl.mini.position.Direction;
 import pl.mini.position.Position;
 import pl.mini.team.Team;
+import pl.mini.team.TeamColor;
 
 import java.net.InetAddress;
+import java.util.List;
 
 public class Player extends PlayerDTO {
     @Getter
     private final String playerName;
-    // private Board board;
+    private final Board board;
     @Getter
     @Setter
     private Team team;
@@ -23,9 +31,12 @@ public class Player extends PlayerDTO {
     private int portNumber;
     private InetAddress ipAddress;
 
-    public Player(String playerName) {
+    public Player(String playerName, Board board, Team team) {
         super();
         this.playerName = playerName;
+        this.board = board;
+        this.team = team;
+        playerTeamColor = team.getColor();
         piece = false;
     }
 
@@ -34,22 +45,100 @@ public class Player extends PlayerDTO {
     }
 
     public void makeAction() {
+        //NOTE: this is a temporary player game logic
+        if (piece) {
+            // goes to base (how?)
+            // places piece in the base
+            Direction baseDirection;
+            if (team.getColor() == TeamColor.Blue)
+                baseDirection = Direction.Down;
+            else
+                baseDirection = Direction.Up;
+            while (true) {
+                List<Field> fieldList = discover();
+                if (((fieldList.get(4).getFieldColor() == FieldColor.Blue) && (team.getColor() == TeamColor.Blue)) || ((fieldList.get(4).getFieldColor() == FieldColor.Red) && (team.getColor() == TeamColor.Red))) {
+                    placePiece();
+                    break;
+                } else move(baseDirection);
+            }
+        } else {
+            // looks for piece
+            // ask for manhattan distance
+            int mDist = askForMDist();
+            int initMDist = mDist;
+            boolean up = true, left = true, right = true, down = true;
+            while (mDist != 1) {
+                if (up) {
+                    move(Direction.Up);
+                    mDist = askForMDist();
+                    if (mDist >= initMDist) {
+                        up = false;
+                    }
+                    continue;
+                }
+                if (down) {
+                    move(Direction.Down);
+                    mDist = askForMDist();
+                    if (mDist >= initMDist) {
+                        down = false;
+                    }
+                    continue;
+                }
+                if (left) {
+                    move(Direction.Left);
+                    mDist = askForMDist();
+                    if (mDist >= initMDist) {
+                        left = false;
+                    }
+                    continue;
+                }
+                if (right) {
+                    move(Direction.Up);
+                    mDist = askForMDist();
+                    if (mDist >= initMDist) {
+                        right = false;
+                    }
+                }
+            }
+            // proceed to the target
+
+
+            // if mdist == 1
+            // test piece
+            // grab piece or not if sham
+            if (testPiece())
+                piece = takePiece();
+        }
     }
 
-    private void discover() {
+    private List<Field> discover() {
+        // scan local area
+        return CommServerMockSingleton.INSTANCE.requestDiscover(this);
     }
 
-    private void move() {
+    private int askForMDist() {
+        // asks for manhattan distance
+        return CommServerMockSingleton.INSTANCE.requestClosestPieceManhattan(this);
     }
 
-    private void takePiece() {
-        piece = true;
+    private void move(Direction direction) {
+        CommServerMockSingleton.INSTANCE.requestPlayerMove(this, direction);
     }
 
-    private void testPiece() {
+    private boolean takePiece() {
+        return CommServerMockSingleton.INSTANCE.requestPlayerPickPiece(this);
+    }
+
+    private boolean testPiece() {
+        return CommServerMockSingleton.INSTANCE.requestPieceTest(this) == CellState.Piece;
     }
 
     private void placePiece() {
+        PlacementResult placementResult = CommServerMockSingleton.INSTANCE.requestPlacePiece(this);
+        if (placementResult == PlacementResult.Correct) {
+            // TODO: update player board
+        }
+        piece = false;
     }
 
 
