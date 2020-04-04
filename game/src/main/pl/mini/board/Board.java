@@ -68,7 +68,10 @@ public class Board {
 
         for (int i = 0; i < boardWidth; i++) {
             for (int j = 0; j < boardHeight; j++) {
+                if(j > getGoalAreaHeight() - 1 || j < getBoardHeight() - getGoalAreaHeight() - 1)
                 cellsGrid[i][j] = new Cell(CellState.Empty);
+                else
+                    cellsGrid[i][j] = new Cell(CellState.Unknown);
             }
         }
     }
