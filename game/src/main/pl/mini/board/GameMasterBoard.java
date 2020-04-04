@@ -27,7 +27,36 @@ public class GameMasterBoard extends Board {
         Position position = player.getPosition( );
         int x = position.getX( );
         int y = position.getY( );
-        position.changePosition(direction);
+        switch (direction) {
+            case Up:
+                {
+                y -= 1;
+                if(y < 0)
+                    y = 0;
+                break;
+                }
+            case Down:
+                {
+                y += 1;
+                if(y > getBoardHeight() - 1)
+                    y = getBoardHeight() - 1;
+                break;
+                }
+            case Left:
+                {
+                x -= 1;
+                if(x < 0)
+                    x = 0;
+                break;
+                }
+            case Right:
+                {
+                x += 1;
+                if(x > getBoardWidth() - 1)
+                    x = getBoardWidth() - 1;
+                break;
+                }
+        }
         position.setX(x);
         position.setY(y);
         return position;
