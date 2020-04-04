@@ -21,22 +21,24 @@ public class GameMasterConfiguration {
     /**
     * Constructor
     */
-    public GameMasterConfiguration(double sP, int mTS, int mP, Point[] pGP, int bW, int bTH, int bGH, int DDP,
-                                   int DNPP, int DM, int DD, int DT, int DPi, int DPl){
-        shamProbability = sP;
-        maxTeamSize = mTS;
-        maxPieces = mP;
-        predefinedGoalPositions = pGP;
-        boardWidth = bW;
-        boardTaskHeight = bTH;
-        boardGoalHeight = bGH;
-        delayDestroyPiece = DDP;
-        delayNextPiecePlace = DNPP;
-        delayMove = DM;
-        delayDiscover = DD;
-        delayTest = DT;
-        delayPick = DPi;
-        delayPlace = DPl;
+    public GameMasterConfiguration(double shamProbability, int maxTeamSize, int maxPieces, Point[] predefinedGoalPositions,
+                                   int boardWidth, int boardTaskHeight, int boardGoalHeight, int delayDestroyPiece,
+                                   int delayNextPiecePlace, int delayMove, int delayDiscover, int delayTest,
+                                   int delayPick, int delayPlace){
+        this.shamProbability = shamProbability;
+        this.maxTeamSize = maxTeamSize;
+        this.maxPieces = maxPieces;
+        this.predefinedGoalPositions = predefinedGoalPositions;
+        this.boardWidth = boardWidth;
+        this.boardTaskHeight = boardTaskHeight;
+        this.boardGoalHeight = boardGoalHeight;
+        this.delayDestroyPiece = delayDestroyPiece;
+        this.delayNextPiecePlace = delayNextPiecePlace;
+        this.delayMove = delayMove;
+        this.delayDiscover = delayDiscover;
+        this.delayTest = delayTest;
+        this.delayPick = delayPick;
+        this.delayPlace = delayPlace;
     }
 
     /**
