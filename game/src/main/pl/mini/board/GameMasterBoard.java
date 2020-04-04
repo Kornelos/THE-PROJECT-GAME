@@ -102,13 +102,21 @@ public class GameMasterBoard extends Board {
     }
 
 
-    public PlacementResult placePiece(PlayerDTO player) {
+    public PlacementResult placePiece(PlayerDTO player, double probab) {
         Position position = player.getPosition( );
         int x = position.getX( );
         int y = position.getY( );
+        Random rand = new Random();
+        double random = rand.nextDouble();
+        if (random <= probab)
+            return PlacementResult.Sham;
         if (getCellsGrid( )[ x ][ y ].cellState == CellState.Goal)
+        {
+            getCellsGrid()[x][y].cellState = CellState.Valid;
             return PlacementResult.Correct;
+        }
 
+        getCellsGrid()[x][y].cellState = CellState.Empty;
         return PlacementResult.Pointless;
     }
 
