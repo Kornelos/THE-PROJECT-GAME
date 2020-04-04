@@ -30,6 +30,7 @@ public class Board {
         this.goalAreaHeight = goalAreaHeight;
         this.taskAreaHeight = taskAreaHeight;
         this.boardHeight = 2 * goalAreaHeight + taskAreaHeight;
+        initializeCellsGrid();
     }
 
 
@@ -62,6 +63,12 @@ public class Board {
 
     private void initializeCellsGrid() {
         cellsGrid = new Cell[ boardWidth ][ boardHeight ];
+        for (Cell[] u : cellsGrid){
+            for (Cell elem : u)
+            {
+                elem = new Cell(CellState.Empty);
+            }
+        }
     }
 
 
