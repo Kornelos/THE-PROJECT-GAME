@@ -63,9 +63,15 @@ public class GameMasterBoard extends Board {
         }
         position.setX(x);
         position.setY(y);
-        cll[x][y].playerGuids = cll[x_old][y_old].playerGuids;
-        cll[x_old][y_old].playerGuids = null;
-        this.setCellsGrid(cll);
+
+        if(cll[x][y].playerGuids != null)
+            return new Position(x_old,y_old);
+
+        if(x != x_old || y != y_old) {
+            cll[x][y].playerGuids = cll[x_old][y_old].playerGuids;
+            cll[x_old][y_old].playerGuids = null;
+            this.setCellsGrid(cll);
+        }
 
         return position;
     }
