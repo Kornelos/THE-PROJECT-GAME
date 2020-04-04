@@ -30,6 +30,9 @@ public class Player extends PlayerDTO {
     private PlayerState playerState;
     private int portNumber;
     private InetAddress ipAddress;
+    boolean up = true, left = true, right = true, down = true;
+    boolean isFirstAction = true;
+    int initMDist;
 
     public Player(String playerName, Board board, Team team) {
         super();
@@ -38,6 +41,7 @@ public class Player extends PlayerDTO {
         this.team = team;
         playerTeamColor = team.getColor();
         piece = false;
+        initMDist = -1;
     }
 
     public void listen() {
@@ -47,6 +51,9 @@ public class Player extends PlayerDTO {
     public void makeAction() {
         //NOTE: this is a temporary player game logic
         if (piece) {
+            //restart
+            boolean up = true, left = true, right = true, down = true;
+            isFirstAction = true;
             // goes to base (how?)
             // places piece in the base
             Direction baseDirection;
@@ -60,11 +67,16 @@ public class Player extends PlayerDTO {
             } else
                 move(baseDirection);
         } else {
+            int mDist = askForMDist();
+            if (isFirstAction) {
+                initMDist = mDist;
+                isFirstAction = false;
+            }
+
+
             // looks for piece
             // ask for manhattan distance
-            int mDist = askForMDist();
-            int initMDist = mDist;
-            boolean up = true, left = true, right = true, down = true;
+
             if (up) {
                 move(Direction.Up);
                 mDist = askForMDist();
@@ -100,10 +112,12 @@ public class Player extends PlayerDTO {
             // if mdist == 1
             // test piece
             // grab piece or not if sham
-            if (testPiece())
-                piece = takePiece();
+            System.out.println(" distance to piece: " + mDist);
+            if (mDist == 0)
+                if (testPiece())
+                    piece = takePiece();
         }
-        System.out.println("Player location:" + position.toString());
+        System.out.println("Player " + playerName + " location:" + position.toString());
     }
 
     private List<Field> discover() {

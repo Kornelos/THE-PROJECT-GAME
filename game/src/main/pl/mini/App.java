@@ -33,15 +33,18 @@ public class App {
 
         // game loop
         System.out.println("Game loop starting..");
-        gm.printBoard();
+//        gm.printBoard();
         int i = 0;
         while (i < 120) {
-            if (i % 30 == 0)
+            if (i % 30 == 0) {
                 gm.putNewPiece();
+                gm.printBoard();
+            }
+
             red_player.makeAction();
-            blue_player.makeAction();
-            Thread.sleep(3000);
-            gm.printBoard();
+//            blue_player.makeAction();
+            Thread.sleep(1000);
+//            gm.printBoard();
             i += 1;
         }
     }
