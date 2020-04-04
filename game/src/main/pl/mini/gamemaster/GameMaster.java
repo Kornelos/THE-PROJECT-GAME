@@ -13,6 +13,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import pl.mini.board.GameMasterBoard;
+import pl.mini.cell.Cell;
 import pl.mini.cell.CellState;
 import pl.mini.position.Position;
 
@@ -155,6 +156,7 @@ public class GameMaster {
         int goal = this.board.getGoalAreaHeight();
         Set<Position> positions = this.board.getPiecesPosition();
         String fld;
+        Cell cll;
         CellState cState;
 
         for (int i = 0; i < row; i++)
@@ -167,8 +169,22 @@ public class GameMaster {
             System.out.println(" " + "|     ".repeat(col) + "|");
             for (int j = 0; j < col; j++)
             {
-                cState = this.board.getCellsGrid()[i][j].cellState;
-                if(cState == CellState.Piece || cState == CellState.Sham || cState == CellState.Valid)
+                cll = this.board.getCellsGrid()[j][i];
+                cState = cll.cellState;
+                if(cll.playerGuids != "" && cll.playerGuids != null)
+                {
+                    for(int k =0; k < this.teamBlueGuids.size(); k++)
+                    {
+                        if(cll.playerGuids.equals(this.teamBlueGuids.get(k).toString()))
+                            fld += "| B P ";
+                    }
+                    for(int k =0; k < this.teamRedGuids.size(); k++)
+                    {
+                        if(cll.playerGuids.equals(this.teamRedGuids.get(k).toString()))
+                            fld += "| R P ";
+                    }
+                }
+                else if(cState == CellState.Piece || cState == CellState.Sham || cState == CellState.Valid)
                     fld += "|  P  ";
                 else if(cState == CellState.Goal)
                     fld += "|  G  ";
