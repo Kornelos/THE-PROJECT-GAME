@@ -139,20 +139,12 @@ public class GameMaster {
     public void putNewPiece()
     {
         Random r = new Random();
-        Set<Position> tmp_positions = this.board.getPiecesPosition();
-        /**
-         *   Taking all the pieces off the board
-         */
-        for(int i=0;i<this.board.getBoardWidth();i++){
-            for(int j=0;j<this.board.getBoardHeight();j++){
-                this.board.takePiece(new Position(i,j));
-            }
-        }
-
+        Set<Position> tmp_positions = new HashSet<>();
+        tmp_positions = this.board.getPiecesPosition();
         Position placed = this.board.generatePiece(r.nextDouble());
         tmp_positions.add(placed);
+        this.board.setPiecesPosition(tmp_positions);
         this.board.getCellsGrid()[placed.getX()][ placed.getY()].cellState = CellState.Piece;
-
     }
 
     public void printBoard()
