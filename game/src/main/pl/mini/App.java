@@ -8,6 +8,8 @@ import pl.mini.player.Player;
 import pl.mini.team.Team;
 import pl.mini.team.TeamColor;
 
+import java.util.*;
+
 /**
  * Hello world!
  */
@@ -23,24 +25,38 @@ public class App {
         // teams
         Team red = new Team("RedTeam", TeamColor.Red);
         Team blue = new Team("BlueTeam", TeamColor.Blue);
+        List<UUID> red_ids = new ArrayList<>();
+        List<UUID> blue_ids = new ArrayList<>();
 
         // players
         Player red_player = new Player("p1", new Board(8, 2, 5), red);
         red_player.setPosition(gm.getBoard().placePlayer(red_player));
+        red.addTeamMember(red_player);
 
         Player blue_player = new Player("p2", new Board(8, 2, 5), blue);
         blue_player.setPosition(gm.getBoard().placePlayer(blue_player));
+        blue.addTeamMember(blue_player);
+
+        for(int i = 0;i<red.getTeamMembers().size();i++)
+            red_ids.add(red.getTeamMembers().get(i).getPlayerUuid());
+        for(int i = 0;i<blue.getTeamMembers().size();i++)
+            blue_ids.add(blue.getTeamMembers().get(i).getPlayerUuid());
+
+        gm.setTeamRedGuids(red_ids);
+        gm.setTeamBlueGuids(blue_ids);
 
         // game loop
+        System.out.println("Press ENTER to start...");
+        System.in.read();
         System.out.println("Game loop starting..");
 //        gm.printBoard();
         int i = 0;
         while (i < 120) {
             if (i % 30 == 0) {
                 gm.putNewPiece();
-                gm.printBoard();
             }
-
+            Runtime.getRuntime().exec("clear");
+            gm.printBoard();
             red_player.makeAction();
 //            blue_player.makeAction();
             Thread.sleep(1000);

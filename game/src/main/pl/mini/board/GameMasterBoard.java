@@ -2,6 +2,7 @@ package pl.mini.board;
 
 import lombok.Getter;
 import lombok.Setter;
+import pl.mini.cell.Cell;
 import pl.mini.cell.CellState;
 import pl.mini.cell.Field;
 import pl.mini.player.PlayerDTO;
@@ -25,8 +26,11 @@ public class GameMasterBoard extends Board {
 
     public Position playerMove(PlayerDTO player, Direction direction) {
         Position position = player.getPosition( );
+        int x_old = position.getX();
+        int y_old = position.getY();
         int x = position.getX( );
         int y = position.getY( );
+        Cell[][] cll = this.getCellsGrid();
         switch (direction) {
             case Up:
                 {
@@ -59,6 +63,10 @@ public class GameMasterBoard extends Board {
         }
         position.setX(x);
         position.setY(y);
+        cll[x][y].playerGuids = cll[x_old][y_old].playerGuids;
+        cll[x_old][y_old].playerGuids = null;
+        this.setCellsGrid(cll);
+
         return position;
     }
 
@@ -100,18 +108,25 @@ public class GameMasterBoard extends Board {
     public Position placePlayer(PlayerDTO player) {   //#todo other players boundaries
         Random randomX = new Random( );
         Random randomY = new Random( );
+        Cell[][] cll = this.getCellsGrid();
         int x = randomX.nextInt(getBoardWidth( ));
+        int y;
         switch (player.getPlayerTeamColor( )) {
             case Red: {
-                int y = randomY.nextInt(getGoalAreaHeight( ));
-                return new Position(x, y);
+                y = randomY.nextInt(getGoalAreaHeight( ));
+                break;
             }
             case Blue: {
-                int y = getGoalAreaHeight( ) + getTaskAreaHeight( ) + randomY.nextInt(getGoalAreaHeight( ));
-                return new Position(x, y);
+                y = getGoalAreaHeight( ) + getTaskAreaHeight( ) + randomY.nextInt(getGoalAreaHeight( ));
+                break;
             }
+            default:
+                return null;
         }
-        return null;
+
+        cll[x][y].playerGuids = player.getPlayerUuid().toString();
+        this.setCellsGrid(cll);
+        return new Position(x, y);
     }
 
 //    #todo ticket how complete goals should be marked

@@ -13,7 +13,7 @@ public class Team {
     @Getter
     private final String teamName;
     //NOTE:  field below is not in class diagram
-    private final List<Player> teamMembers = new ArrayList<>();
+    @Getter private final List<Player> teamMembers = new ArrayList<>();
     @Getter
     @Setter
     private TeamColor color;

@@ -32,6 +32,7 @@ public class Player extends PlayerDTO {
     private InetAddress ipAddress;
     boolean up = true, left = true, right = true, down = true;
     boolean isFirstAction = true;
+    boolean vertical = true, horizontal = true;
     int initMDist;
 
     public Player(String playerName, Board board, Team team) {
@@ -68,16 +69,10 @@ public class Player extends PlayerDTO {
                 move(baseDirection);
         } else {
             int mDist = askForMDist();
-            if (isFirstAction) {
-                initMDist = mDist;
-                isFirstAction = false;
-            }
-
-
             // looks for piece
             // ask for manhattan distance
 
-            if (up) {
+            /*if (up) {
                 move(Direction.Up);
                 mDist = askForMDist();
                 if (mDist >= initMDist) {
@@ -105,17 +100,68 @@ public class Player extends PlayerDTO {
                     right = false;
                 }
 
-            }
-            // proceed to the target
+            }*/
 
+            if (vertical)
+            {
+                move(Direction.Up);
+                if(askForMDist() > mDist)
+                {
+                    move(Direction.Down);
+                    move(Direction.Down);
+                    if(askForMDist() > mDist) {
+                        move(Direction.Up);
+                        vertical = false;
+                    }
+                    else if(askForMDist() == mDist)
+                        vertical = false;
+                }
+                else if(askForMDist() == mDist) {
+                    move(Direction.Down);
+                    if (askForMDist() > mDist) {
+                        move(Direction.Up);
+                        horizontal = false;
+                    }
+                }
+            }
+
+            mDist = askForMDist();
+            if (horizontal)
+            {
+                move(Direction.Right);
+                if(askForMDist() > mDist)
+                {
+                    move(Direction.Left);
+                    move(Direction.Left);
+                    if(askForMDist() > mDist) {
+                        move(Direction.Right);
+                        horizontal = false;
+                    }
+                    else if(askForMDist() == mDist)
+                        horizontal = false;
+                }
+                else if(askForMDist() == mDist) {
+                    move(Direction.Left);
+                    if(askForMDist() > mDist) {
+                        move(Direction.Right);
+                        horizontal = false;
+                    }
+                }
+            }
+            System.out.println(" distance to piece: " + mDist);
+            // proceed to the target
+            if (!horizontal && !vertical)
+                if(testPiece())
+                    piece = takePiece();
 
             // if mdist == 1
             // test piece
             // grab piece or not if sham
+            /*
             System.out.println(" distance to piece: " + mDist);
             if (mDist == 0)
                 if (testPiece())
-                    piece = takePiece();
+                    piece = takePiece();*/
         }
         System.out.println("Player " + playerName + " location:" + position.toString());
     }
