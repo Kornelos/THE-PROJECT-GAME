@@ -63,8 +63,9 @@ public class App {
 
             gm.printBoard();
             red_player.makeAction();
-//            blue_player.makeAction();
+            blue_player.makeAction();
             Thread.sleep(1000);
+//            System.in.read();
 //            gm.printBoard();
             i += 1;
         }

@@ -2,25 +2,23 @@ package pl.mini.gamemaster;
 
 import lombok.Getter;
 import lombok.Setter;
-
-import java.io.FileWriter;
-import java.io.FileReader;
-import java.io.FileNotFoundException;
-
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-
 import pl.mini.board.GameMasterBoard;
 import pl.mini.cell.Cell;
 import pl.mini.cell.CellState;
 import pl.mini.position.Position;
 
-import java.awt.Point;
+import java.awt.*;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.util.*;
 import java.net.InetAddress;
+import java.util.List;
+import java.util.*;
 
 public class GameMaster {
     @Getter @Setter private int portNumber;
@@ -140,12 +138,9 @@ public class GameMaster {
     public void putNewPiece()
     {
         Random r = new Random();
-        Set<Position> tmp_positions = new HashSet<>();
-        tmp_positions = this.board.getPiecesPosition();
         Position placed = this.board.generatePiece(r.nextDouble());
-        tmp_positions.add(placed);
-        this.board.setPiecesPosition(tmp_positions);
-        this.board.getCellsGrid()[placed.getX()][ placed.getY()].cellState = CellState.Piece;
+        this.board.getPiecesPosition().add(placed);
+        this.board.getCellsGrid()[placed.getX()][placed.getY()].cellState = CellState.Piece;
     }
 
     public void printBoard()

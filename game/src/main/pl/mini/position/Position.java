@@ -21,5 +21,18 @@ public class Position {
         return "x: " + x + " y: " + y;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Position) {
+            return ((Position) obj).getX() == getX() && ((Position) obj).getY() == getY();
+        } else
+            return false;
+    }
 
+    @Override
+    public int hashCode() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(x).append(y);
+        return sb.toString().hashCode();
+    }
 }

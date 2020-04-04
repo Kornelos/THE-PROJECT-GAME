@@ -195,6 +195,7 @@ public class GameMasterBoard extends Board {
                     min = manhattanDistanceTwoPoints(position, positions[i]);
                 id = i;
             }
+            System.out.println("Closest piece position: " + positions[id].toString());
             return manhattanDistanceTwoPoints(position, positions[id]);
         }
         catch(NullPointerException e)

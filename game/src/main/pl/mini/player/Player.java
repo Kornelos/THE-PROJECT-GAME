@@ -55,33 +55,38 @@ public class Player extends PlayerDTO {
             int goalHeight = board.getGoalAreaHeight();
             if (team.getColor() == TeamColor.Blue) {
                 baseDirection = Direction.Down;
-                if (position.getY() > board.getBoardHeight() - goalHeight)
+                if (position.getY() >= board.getBoardHeight() - goalHeight) {
                     placePiece();
-                else
+                    System.out.println(playerName + " placing piece at: " + position.toString());
+                } else
                     move(baseDirection);
             } else {
                 baseDirection = Direction.Up;
-                if (position.getY() < goalHeight)
+                if (position.getY() < goalHeight) {
                     placePiece();
-                else
+                    System.out.println(playerName + " placing piece at: " + position.toString());
+                } else
                     move(baseDirection);
+
             }
 
         } else {
             int mDist = askForMDist();
             // looks for piece
             // ask for manhattan distance
-
+            if (!horizontal && !vertical) {
+                horizontal = true;
+                vertical = true;
+            }
             if (vertical) {
                 move(Direction.Up);
                 if (askForMDist() > mDist) {
                     move(Direction.Down);
                     move(Direction.Down);
-                    if(askForMDist() > mDist) {
+                    if (askForMDist() > mDist) {
                         move(Direction.Up);
                         vertical = false;
-                    }
-                    else if(askForMDist() == mDist)
+                    } else if (askForMDist() == mDist)
                         vertical = false;
                 }
                 else if(askForMDist() == mDist) {
@@ -107,19 +112,20 @@ public class Player extends PlayerDTO {
                     }
                     else if(askForMDist() == mDist)
                         horizontal = false;
-                }
-                else if(askForMDist() == mDist) {
+                } else if (askForMDist() == mDist) {
                     move(Direction.Left);
-                    if(askForMDist() > mDist) {
+                    if (askForMDist() > mDist) {
                         move(Direction.Right);
                         horizontal = false;
                     }
                 }
             }
-            System.out.println(" distance to piece: " + mDist);
+            System.out.println(playerName + " distance to piece: " + mDist);
             // proceed to the target
-            if (!horizontal && !vertical)
+            if (askForMDist() == 0) {
+                System.out.println(playerName + "taking piece at: " + position.toString());
                 piece = takePiece();
+            }
 
 
         }
