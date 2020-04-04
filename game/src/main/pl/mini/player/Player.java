@@ -29,8 +29,6 @@ public class Player extends PlayerDTO {
     private PlayerState playerState;
     private int portNumber;
     private InetAddress ipAddress;
-    boolean up = true, left = true, right = true, down = true;
-    boolean isFirstAction = true;
     boolean vertical = true, horizontal = true;
     int initMDist;
 
@@ -51,9 +49,6 @@ public class Player extends PlayerDTO {
     public void makeAction() {
         //NOTE: this is a temporary player game logic
         if (piece) {
-            //restart
-            boolean up = true, left = true, right = true, down = true;
-            isFirstAction = true;
             // goes to base (how?)
             // places piece in the base
             Direction baseDirection;
@@ -156,9 +151,13 @@ public class Player extends PlayerDTO {
     private void placePiece() {
         PlacementResult placementResult = CommServerMockSingleton.INSTANCE.requestPlacePiece(this);
         if (placementResult == PlacementResult.Correct) {
-            // TODO: update player board
+            board.getCellsGrid()[position.getX()][position.getY()].cellState = CellState.Valid;
+        } else if (placementResult == PlacementResult.Pointless) {
+            board.getCellsGrid()[position.getX()][position.getY()].cellState = CellState.Empty;
         }
         piece = false;
+        vertical = true;
+        horizontal = true;
     }
 
 

@@ -4,11 +4,14 @@ import lombok.SneakyThrows;
 import pl.mini.board.Board;
 import pl.mini.board.GameMasterBoard;
 import pl.mini.gamemaster.GameMaster;
+import pl.mini.gamemaster.GameMasterConfiguration;
 import pl.mini.player.Player;
 import pl.mini.team.Team;
 import pl.mini.team.TeamColor;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * Hello world!
@@ -20,6 +23,8 @@ public class App {
         System.out.println("Game is initializing..");
         GameMaster gm = new GameMaster();
         gm.setBoard(new GameMasterBoard(8, 2, 2));
+        gm.setConfiguration(new GameMasterConfiguration(
+                0.1, 4, 4, null, 8, 2, 2, 1, 1, 1, 1, 1, 1, 1));
         CommServerMockSingleton.INSTANCE.registerGameMaster(gm);
 
         // teams
@@ -29,7 +34,7 @@ public class App {
         List<UUID> blue_ids = new ArrayList<>();
 
         // players
-        Player red_player = new Player("p1", new Board(8, 2, 5), red);
+        Player red_player = new Player("p1", new Board(8, 2, 2), red);
         red_player.setPosition(gm.getBoard().placePlayer(red_player));
         red.addTeamMember(red_player);
 
@@ -52,7 +57,7 @@ public class App {
 //        gm.printBoard();
         int i = 0;
         while (i < 120) {
-            if (i % 30 == 0) {
+            if (i % 5 == 0) {
                 gm.putNewPiece();
             }
 

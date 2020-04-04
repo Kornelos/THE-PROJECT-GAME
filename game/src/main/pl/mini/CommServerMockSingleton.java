@@ -71,7 +71,7 @@ public class CommServerMockSingleton {
 
     public PlacementResult requestPlacePiece(Player player) {
         GameMasterBoard gmb = gameMaster.getBoard();
-        return gmb.placePiece(player);
+        return gmb.placePiece(player, gameMaster.getConfiguration().shamProbability);
     }
 
 
