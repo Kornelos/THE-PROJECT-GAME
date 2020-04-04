@@ -202,5 +202,9 @@ public class GameMasterBoard extends Board {
         {
             return -1;
         }
+        catch(ArrayIndexOutOfBoundsException e)
+        {
+            return -1;
+        }
     }
 }
