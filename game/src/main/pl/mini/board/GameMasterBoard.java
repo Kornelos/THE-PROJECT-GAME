@@ -78,9 +78,11 @@ public class GameMasterBoard extends Board {
 
 
     public CellState takePiece(Position position) {
-        int x = position.getX( );
-        int y = position.getY( );
-        return getCellsGrid( )[ x ][ y ].cellState;
+        int x = position.getX();
+        int y = position.getY();
+        CellState cs = getCellsGrid()[x][y].cellState;
+        getCellsGrid()[x][y].cellState = CellState.Empty;
+        return cs;
     }
 
     //generate piece on random position in the TaskArea

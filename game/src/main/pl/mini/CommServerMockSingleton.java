@@ -36,16 +36,8 @@ public class CommServerMockSingleton {
 
     public boolean requestPlayerPickPiece(Player player) {
         GameMasterBoard gmb = gameMaster.getBoard();
-        List<Field> nearFields = gmb.discover(player.getPosition());
-        Position position = null;
-        for (Field field : nearFields) {
-            CellState cs = field.getCell().getCellState();
-            if (cs == CellState.Piece) {
-                position = field.getPosition();
-            }
-        }
-        if (position != null) {
-            gmb.takePiece(position);
+        if (gmb.getField(player.getPosition()).getCell().getCellState() == CellState.Piece) {
+            gmb.takePiece(player.getPosition());
             return true;
         } else {
             return false;

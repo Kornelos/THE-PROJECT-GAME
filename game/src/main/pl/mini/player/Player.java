@@ -7,7 +7,6 @@ import pl.mini.board.Board;
 import pl.mini.board.PlacementResult;
 import pl.mini.cell.CellState;
 import pl.mini.cell.Field;
-import pl.mini.cell.FieldColor;
 import pl.mini.position.Direction;
 import pl.mini.position.Position;
 import pl.mini.team.Team;
@@ -58,55 +57,29 @@ public class Player extends PlayerDTO {
             // goes to base (how?)
             // places piece in the base
             Direction baseDirection;
-            if (team.getColor() == TeamColor.Blue)
+            int goalHeight = board.getGoalAreaHeight();
+            if (team.getColor() == TeamColor.Blue) {
                 baseDirection = Direction.Down;
-            else
+                if (position.getY() > board.getBoardHeight() - goalHeight)
+                    placePiece();
+                else
+                    move(baseDirection);
+            } else {
                 baseDirection = Direction.Up;
-            List<Field> fieldList = discover();
-            if (((fieldList.get(4).getFieldColor() == FieldColor.Blue) && (team.getColor() == TeamColor.Blue)) || ((fieldList.get(4).getFieldColor() == FieldColor.Red) && (team.getColor() == TeamColor.Red))) {
-                placePiece();
-            } else
-                move(baseDirection);
+                if (position.getY() < goalHeight)
+                    placePiece();
+                else
+                    move(baseDirection);
+            }
+
         } else {
             int mDist = askForMDist();
             // looks for piece
             // ask for manhattan distance
 
-            /*if (up) {
+            if (vertical) {
                 move(Direction.Up);
-                mDist = askForMDist();
-                if (mDist >= initMDist) {
-                    up = false;
-                }
-
-            } else if (down) {
-                move(Direction.Down);
-                mDist = askForMDist();
-                if (mDist >= initMDist) {
-                    down = false;
-                }
-
-            } else if (left) {
-                move(Direction.Left);
-                mDist = askForMDist();
-                if (mDist >= initMDist) {
-                    left = false;
-                }
-
-            } else if (right) {
-                move(Direction.Up);
-                mDist = askForMDist();
-                if (mDist >= initMDist) {
-                    right = false;
-                }
-
-            }*/
-
-            if (vertical)
-            {
-                move(Direction.Up);
-                if(askForMDist() > mDist)
-                {
+                if (askForMDist() > mDist) {
                     move(Direction.Down);
                     move(Direction.Down);
                     if(askForMDist() > mDist) {
@@ -151,17 +124,9 @@ public class Player extends PlayerDTO {
             System.out.println(" distance to piece: " + mDist);
             // proceed to the target
             if (!horizontal && !vertical)
-                if(testPiece())
-                    piece = takePiece();
+                piece = takePiece();
 
-            // if mdist == 1
-            // test piece
-            // grab piece or not if sham
-            /*
-            System.out.println(" distance to piece: " + mDist);
-            if (mDist == 0)
-                if (testPiece())
-                    piece = takePiece();*/
+
         }
         System.out.println("Player " + playerName + " location:" + position.toString());
     }
