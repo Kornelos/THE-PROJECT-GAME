@@ -48,14 +48,14 @@ public class App {
         // game loop
         System.out.println("Press ENTER to start...");
         System.in.read();
-        System.out.println("Game loop starting..");
+        System.out.println("Game loop starting...");
 //        gm.printBoard();
         int i = 0;
         while (i < 120) {
             if (i % 30 == 0) {
                 gm.putNewPiece();
             }
-            Runtime.getRuntime().exec("clear");
+
             gm.printBoard();
             red_player.makeAction();
 //            blue_player.makeAction();
