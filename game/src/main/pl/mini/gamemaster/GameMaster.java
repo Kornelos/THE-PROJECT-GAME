@@ -168,24 +168,23 @@ public class GameMaster {
                 cState = cll.cellState;
                 if(cll.playerGuids != "" && cll.playerGuids != null)
                 {
-                    for(int k =0; k < this.teamBlueGuids.size(); k++)
-                    {
-                        if(cll.playerGuids.equals(this.teamBlueGuids.get(k).toString()))
+                    for(int k =0; k < this.teamBlueGuids.size(); k++) {
+                        if (cll.playerGuids.equals(this.teamBlueGuids.get(k).toString()))
                             fld += "| B P ";
                     }
-                    for(int k =0; k < this.teamRedGuids.size(); k++)
-                    {
-                        if(cll.playerGuids.equals(this.teamRedGuids.get(k).toString()))
+                    for (int k = 0; k < this.teamRedGuids.size(); k++) {
+                        if (cll.playerGuids.equals(this.teamRedGuids.get(k).toString()))
                             fld += "| R P ";
                     }
-                }
-                else if(cState == CellState.Piece || cState == CellState.Sham || cState == CellState.Valid)
+                } else if (cState == CellState.Piece || cState == CellState.Sham)
                     fld += "|  P  ";
-                else if(cState == CellState.Goal)
+                else if (cState == CellState.Valid)
+                    fld += "|  V  ";
+                else if (cState == CellState.Goal)
                     fld += "|  G  ";
-                else if(cState == CellState.Unknown)
+                else if (cState == CellState.Unknown)
                     fld += "|  U  ";
-                else if(cState == CellState.Empty)
+                else if (cState == CellState.Empty)
                     fld += "|     ";
 
             }

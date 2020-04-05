@@ -56,14 +56,22 @@ public class Player extends PlayerDTO {
             if (team.getColor() == TeamColor.Blue) {
                 baseDirection = Direction.Down;
                 if (position.getY() >= board.getBoardHeight() - goalHeight) {
-                    placePiece();
+                    if (board.getCellsGrid()[position.getX()][position.getY()].cellState == CellState.Unknown)
+                        placePiece();
+                    else {
+                        move(baseDirection);
+                    }
                     System.out.println(playerName + " placing piece at: " + position.toString());
                 } else
                     move(baseDirection);
             } else {
                 baseDirection = Direction.Up;
                 if (position.getY() < goalHeight) {
-                    placePiece();
+                    if (board.getCellsGrid()[position.getX()][position.getY()].cellState == CellState.Unknown)
+                        placePiece();
+                    else {
+                        move(baseDirection);
+                    }
                     System.out.println(playerName + " placing piece at: " + position.toString());
                 } else
                     move(baseDirection);
