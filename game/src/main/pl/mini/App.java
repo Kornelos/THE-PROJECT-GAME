@@ -53,9 +53,10 @@ public class App {
 
         gm.setTeamRedGuids(red_ids);
         gm.setTeamBlueGuids(blue_ids);
-        // setting goal pos
-        gm.getBoard().setGoal(new Position(0, 0));
-        gm.getBoard().setGoal(new Position(3, 5));
+        // setting goal position
+        for (Position p : gm.getConfiguration().predefinedGoalPositions) {
+            gm.getBoard().setGoal(p);
+        }
 
         List<Player> allPlayers = new ArrayList<>();
         allPlayers.addAll(red.getTeamMembers());
@@ -68,7 +69,7 @@ public class App {
         //System.in.read();
         log.info("Game loop starting");
         int i = 0;
-        while (i < 120) {
+        while (i < 180) {
             if (i % 5 == 0) {
                 gm.putNewPiece();
                 for (Player player : allPlayers) {
@@ -77,8 +78,7 @@ public class App {
                 }
             }
             // check win cond
-            if(check_red && check_blue)
-            {
+            if (check_red && check_blue) {
                 log.info("\n---IT'S A TIE---\n");
                 break;
             }
@@ -104,7 +104,7 @@ public class App {
             }
 
             try {
-                Thread.sleep(1);
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

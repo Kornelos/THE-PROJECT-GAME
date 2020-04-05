@@ -12,7 +12,6 @@ import pl.mini.cell.CellState;
 import pl.mini.position.Position;
 import pl.mini.utils.ConsoleColors;
 
-import java.awt.*;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -177,7 +176,7 @@ public class GameMaster {
                 else if (cState == CellState.Valid)
                     fld.append("|  " + ConsoleColors.YELLOW + "V  " + ConsoleColors.RESET);
                 else if (cState == CellState.Goal)
-                    fld.append("|  G  ");
+                    fld.append("|  " + ConsoleColors.PURPLE_BRIGHT + "G  " + ConsoleColors.RESET);
                 else if (cState == CellState.Unknown)
                     fld.append("|  U  ");
                 else if (cState == CellState.Empty)
