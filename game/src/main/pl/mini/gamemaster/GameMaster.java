@@ -10,6 +10,7 @@ import pl.mini.board.GameMasterBoard;
 import pl.mini.cell.Cell;
 import pl.mini.cell.CellState;
 import pl.mini.position.Position;
+import pl.mini.utils.ConsoleColors;
 
 import java.awt.*;
 import java.io.FileNotFoundException;
@@ -28,6 +29,7 @@ public class GameMaster {
     @Getter @Setter private GameMasterBoard board;
     @Getter @Setter private GameMasterStatus status;
     @Getter @Setter private GameMasterConfiguration configuration;
+
 
     public GameMaster()
     {
@@ -150,16 +152,16 @@ public class GameMaster {
         int task = this.board.getTaskAreaHeight();
         int goal = this.board.getGoalAreaHeight();
         Set<Position> positions = this.board.getPiecesPosition();
-        String fld;
+        StringBuilder fld;
         Cell cll;
         CellState cState;
 
         for (int i = 0; i < row; i++)
         {
             if (i < goal || i > goal + task - 1)
-                fld = "G";
+                fld = new StringBuilder("G");
             else
-                fld = "T";
+                fld = new StringBuilder("T");
             System.out.println(" " + "######".repeat(col) + "#");
             System.out.println(" " + "|     ".repeat(col) + "|");
             for (int j = 0; j < col; j++)
@@ -170,22 +172,22 @@ public class GameMaster {
                 {
                     for(int k =0; k < this.teamBlueGuids.size(); k++) {
                         if (cll.playerGuids.equals(this.teamBlueGuids.get(k).toString()))
-                            fld += "| B P ";
+                            fld.append("| " + ConsoleColors.BLUE + "B P " + ConsoleColors.RESET);
                     }
                     for (int k = 0; k < this.teamRedGuids.size(); k++) {
                         if (cll.playerGuids.equals(this.teamRedGuids.get(k).toString()))
-                            fld += "| R P ";
+                            fld.append("| " + ConsoleColors.RED + "R P " + ConsoleColors.RESET);
                     }
                 } else if (cState == CellState.Piece || cState == CellState.Sham)
-                    fld += "|  P  ";
+                    fld.append("|  " + ConsoleColors.GREEN + "P  " + ConsoleColors.RESET);
                 else if (cState == CellState.Valid)
-                    fld += "|  V  ";
+                    fld.append("|  " + ConsoleColors.YELLOW + "V  " + ConsoleColors.RESET);
                 else if (cState == CellState.Goal)
-                    fld += "|  G  ";
+                    fld.append("|  G  ");
                 else if (cState == CellState.Unknown)
-                    fld += "|  U  ";
+                    fld.append("|  U  ");
                 else if (cState == CellState.Empty)
-                    fld += "|     ";
+                    fld.append("|     ");
 
             }
             System.out.println(fld + "|");

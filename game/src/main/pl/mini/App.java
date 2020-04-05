@@ -1,6 +1,6 @@
 package pl.mini;
 
-import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import pl.mini.board.Board;
 import pl.mini.board.GameMasterBoard;
 import pl.mini.gamemaster.GameMaster;
@@ -11,20 +11,25 @@ import pl.mini.team.Team;
 import pl.mini.team.TeamColor;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 
 /**
  * Hello world!
  */
+@Slf4j
 public class App {
-    @SneakyThrows
+
     public static void main(String[] args) {
+
+        log.info("Game is initializing..");
         // temporary game init
-        System.out.println("Game is initializing..");
         GameMaster gm = new GameMaster();
-        gm.setBoard(new GameMasterBoard(8, 2, 2));
+        final int boardWidth = 4;
+        final int goalHeight = 2;
+        final int taskHeight = 3;
+
+        gm.setBoard(new GameMasterBoard(boardWidth, goalHeight, taskHeight));
         gm.setConfiguration(new GameMasterConfiguration(
                 0.1, 4, 4, null, 8, 2, 2, 1, 1, 1, 1, 1, 1, 1));
         CommServerMockSingleton.INSTANCE.registerGameMaster(gm);
@@ -36,11 +41,11 @@ public class App {
         List<UUID> blue_ids = new ArrayList<>();
 
         // players
-        Player red_player = new Player("p1", new Board(8, 2, 2), red);
+        Player red_player = new Player("p1", new Board(boardWidth, goalHeight, taskHeight), red);
         red_player.setPosition(gm.getBoard().placePlayer(red_player));
         red.addTeamMember(red_player);
 
-        Player blue_player = new Player("p2", new Board(8, 2, 2), blue);
+        Player blue_player = new Player("p2", new Board(boardWidth, goalHeight, taskHeight), blue);
         blue_player.setPosition(gm.getBoard().placePlayer(blue_player));
         blue.addTeamMember(blue_player);
 
@@ -53,7 +58,7 @@ public class App {
         gm.setTeamBlueGuids(blue_ids);
         // setting goal pos
         gm.getBoard().setGoal(new Position(0, 0));
-        gm.getBoard().setGoal(new Position(5, 5));
+        gm.getBoard().setGoal(new Position(3, 5));
 
         List<Player> allPlayers = new ArrayList<>();
         allPlayers.addAll(red.getTeamMembers());
@@ -62,10 +67,9 @@ public class App {
         boolean check_red = false;
         boolean check_blue = false;
         // game loop
-        System.out.println("Press ENTER to start...");
-        System.in.read();
-        System.out.println("Game loop starting...");
-//        gm.printBoard();
+        //System.out.println("Press ENTER to start...");
+        //System.in.read();
+        log.info("Game loop starting");
         int i = 0;
         while (i < 120) {
             if (i % 5 == 0) {
@@ -75,32 +79,42 @@ public class App {
                     player.horizontal = true;
                 }
             }
-
+            // check win cond
             if(check_red && check_blue)
             {
-                System.out.println("\n---IT'S A TIE---\n");
+                log.info("\n---IT'S A TIE---\n");
                 break;
             }
-            if(check_red)
-            {
-                System.out.println("\n---RED TEAM WON---\n");
+            if(check_red) {
+                log.info("\n---RED TEAM WON---\n");
                 break;
             }
-            if(check_blue)
-            {
-                System.out.println("\n---BLUE TEAM WON---\n");
+            if (check_blue) {
+                log.info("\n---BLUE TEAM WON---\n");
                 break;
             }
 
+            // randomly decide who moves first (communication simulation)
+            if (Math.random() > 0.5) {
+                red_player.makeAction();
+                blue_player.makeAction();
+            } else {
+                blue_player.makeAction();
+                red_player.makeAction();
+            }
+            // show current state of the game
             gm.printBoard();
-            red_player.makeAction();
-            blue_player.makeAction();
-            Thread.sleep(1000);
+
+
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             check_red = gm.getBoard().checkWinCondition(red.getColor());
             check_blue = gm.getBoard().checkWinCondition(blue.getColor());
 
-//            System.in.read();
-//            gm.printBoard();
+
             i += 1;
         }
     }
