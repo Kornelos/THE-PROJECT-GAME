@@ -55,7 +55,8 @@ public class Player extends PlayerDTO {
             int goalHeight = board.getGoalAreaHeight();
             if (team.getColor() == TeamColor.Blue) {
                 baseDirection = Direction.Down;
-                if (position.getY() >= board.getBoardHeight() - goalHeight) {
+                if (position.getY() >= board.getBoardHeight() - goalHeight
+                        && position.getY() < board.getGoalAreaHeight()) {
                     placePiece();
                     System.out.println(playerName + " placing piece at: " + position.toString());
                 } else
@@ -70,7 +71,7 @@ public class Player extends PlayerDTO {
 
             }
 
-        } else {
+        } else if(askForMDist() != -1) {
             int mDist = askForMDist();
             // looks for piece
             // ask for manhattan distance
