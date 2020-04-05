@@ -63,16 +63,17 @@ public class GameMasterBoard extends Board {
                 break;
                 }
         }
-        position.setX(x);
-        position.setY(y);
 
-        if(getCellsGrid()[x][y].playerGuids != null && !getCellsGrid()[x][y].equals(""))
+        if(!getCellsGrid()[x][y].playerGuids.equals(""))
             return new Position(x_old,y_old);
 
         if(x != x_old || y != y_old) {
-            getCellsGrid()[x][y].playerGuids = getCellsGrid()[x_old][y_old].playerGuids;
-            getCellsGrid()[x_old][y_old].playerGuids = null;
+            getCellsGrid()[x][y].playerGuids = player.getPlayerUuid().toString();
+            getCellsGrid()[x_old][y_old].playerGuids = "";
         }
+
+        position.setX(x);
+        position.setY(y);
 
         return position;
     }

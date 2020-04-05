@@ -25,13 +25,26 @@ public class App {
         log.info("Game is initializing..");
         // temporary game init
         GameMaster gm = new GameMaster();
-        final int boardWidth = 4;
+        final int boardWidth = 6;
         final int goalHeight = 2;
-        final int taskHeight = 3;
+        final int taskHeight = 2;
 
         gm.setBoard(new GameMasterBoard(boardWidth, goalHeight, taskHeight));
         gm.setConfiguration(new GameMasterConfiguration(
-                0.1, 4, 4, null, 8, 2, 2, 1, 1, 1, 1, 1, 1, 1));
+                0.1,
+                4,
+                4,
+                null,
+                8,
+                2,
+                2,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1));
         CommServerMockSingleton.INSTANCE.registerGameMaster(gm);
 
         // teams
@@ -94,6 +107,9 @@ public class App {
                 break;
             }
 
+            // show current state of the game
+            gm.printBoard();
+
             // randomly decide who moves first (communication simulation)
             if (Math.random() > 0.5) {
                 red_player.makeAction();
@@ -102,12 +118,9 @@ public class App {
                 blue_player.makeAction();
                 red_player.makeAction();
             }
-            // show current state of the game
-            gm.printBoard();
-
 
             try {
-                Thread.sleep(10);
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

@@ -13,5 +13,6 @@ public class Cell {
 
     public Cell(CellState cellState) {
         this.cellState = cellState;
+        this.playerGuids = "";
     }
 }

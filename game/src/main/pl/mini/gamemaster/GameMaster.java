@@ -162,7 +162,7 @@ public class GameMaster {
             {
                 cll = this.board.getCellsGrid()[j][i];
                 cState = cll.cellState;
-                if(cll.playerGuids != "" && cll.playerGuids != null)
+                if(!cll.playerGuids.equals(""))
                 {
                     for(int k =0; k < this.teamBlueGuids.size(); k++) {
                         if (cll.playerGuids.equals(this.teamBlueGuids.get(k).toString()))
