@@ -4,13 +4,11 @@ import lombok.extern.slf4j.Slf4j;
 import pl.mini.board.Board;
 import pl.mini.board.GameMasterBoard;
 import pl.mini.gamemaster.GameMaster;
-import pl.mini.gamemaster.GameMasterConfiguration;
 import pl.mini.player.Player;
 import pl.mini.position.Position;
 import pl.mini.team.Team;
 import pl.mini.team.TeamColor;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -26,12 +24,11 @@ public class App {
         log.info("Game is initializing..");
         // temporary game init
         GameMaster gm = new GameMaster();
-        final int boardWidth = 6;
-        final int goalHeight = 2;
-        final int taskHeight = 2;
-
-        gm.setBoard(new GameMasterBoard(boardWidth, goalHeight, taskHeight));
         gm.loadConfigurationFromJson("./game/src/main/resources/config.json");
+        final int boardWidth = gm.getConfiguration().boardWidth;
+        final int goalHeight = gm.getConfiguration().boardGoalHeight;
+        final int taskHeight = gm.getConfiguration().boardTaskHeight;
+        gm.setBoard(new GameMasterBoard(boardWidth, goalHeight, taskHeight));
         CommServerMockSingleton.INSTANCE.registerGameMaster(gm);
 
         // teams
