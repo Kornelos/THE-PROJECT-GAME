@@ -1,1 +1,31 @@
-{"GameMasterConfiguration":{"boardWidth":8,"delayDiscover":2,"shamProbability":0.8,"delayNextPiecePlace":1,"delayPick":5,"maxTeamSize":6,"delayDestroyPiece":2,"maxPieces":7,"delayMove":1,"boardTaskHeight":6,"predefinedGoalPositions":[{"x":7.0,"y":8.0},{"x":7.0,"y":8.0},{"x":7.0,"y":8.0}],"boardGoalHeight":2,"delayPlace":2,"delayTest":3}}
+{
+  "GameMasterConfiguration": {
+    "boardWidth": 8,
+    "delayDiscover": 2,
+    "shamProbability": 0.8,
+    "delayNextPiecePlace": 1,
+    "delayPick": 5,
+    "maxTeamSize": 6,
+    "delayDestroyPiece": 2,
+    "maxPieces": 7,
+    "delayMove": 1,
+    "boardTaskHeight": 6,
+    "predefinedGoalPositions": [
+      {
+        "x": 3.0,
+        "y": 4.0
+      },
+      {
+        "x": 5.0,
+        "y": 6.0
+      },
+      {
+        "x": 7.0,
+        "y": 8.0
+      }
+    ],
+    "boardGoalHeight": 2,
+    "delayPlace": 2,
+    "delayTest": 3
+  }
+}

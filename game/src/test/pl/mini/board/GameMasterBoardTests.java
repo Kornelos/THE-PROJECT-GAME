@@ -1,14 +1,13 @@
 package pl.mini.board;
 
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import pl.mini.cell.Cell;
 import pl.mini.cell.CellState;
 import pl.mini.player.PlayerDTO;
 import pl.mini.position.Position;
-import pl.mini.cell.Cell;
 import pl.mini.team.TeamColor;
 
 import java.util.HashSet;
@@ -37,13 +36,13 @@ public class GameMasterBoardTests {
     public void testGameMasterBoardPlacePiece_Correct() {
         PlayerDTO testDTO = new PlayerDTO();
         testDTO.setPosition(new Position(9,9));
-        testGameMasterBoard.setGoal(new Position(9,9));
-        Assert.assertEquals(testGameMasterBoard.placePiece(testDTO), PlacementResult.Correct);
+        testGameMasterBoard.setGoal(new Position(9, 9));
+        Assert.assertEquals(testGameMasterBoard.placePiece(testDTO, 0), PlacementResult.Correct);
 
         PlayerDTO testDTO2 = new PlayerDTO();
         testDTO2.setPosition(new Position(1,2));
-        testGameMasterBoard.setGoal(new Position(1,2));
-        Assert.assertEquals(testGameMasterBoard.placePiece(testDTO2), PlacementResult.Correct);
+        testGameMasterBoard.setGoal(new Position(1, 2));
+        Assert.assertEquals(testGameMasterBoard.placePiece(testDTO2, 0), PlacementResult.Correct);
     }
 
     @Test
@@ -53,16 +52,16 @@ public class GameMasterBoardTests {
         Cell[][] temp = testGameMasterBoard.getCellsGrid();
         temp[7][6] = new Cell(CellState.Empty);
         testGameMasterBoard.setCellsGrid(temp);
-        testGameMasterBoard.setGoal(new Position(9,9));
-        Assert.assertEquals(testGameMasterBoard.placePiece(testDTO3), PlacementResult.Pointless);
+        testGameMasterBoard.setGoal(new Position(9, 9));
+        Assert.assertEquals(testGameMasterBoard.placePiece(testDTO3, 0), PlacementResult.Pointless);
 
         PlayerDTO testDTO4 = new PlayerDTO();
         testDTO4.setPosition(new Position(2,5));
         Cell[][] temp2 = testGameMasterBoard.getCellsGrid();
         temp2[2][5] = new Cell(CellState.Empty);
         testGameMasterBoard.setCellsGrid(temp2);
-        testGameMasterBoard.setGoal(new Position(1,2));
-        Assert.assertEquals(testGameMasterBoard.placePiece(testDTO4), PlacementResult.Pointless);
+        testGameMasterBoard.setGoal(new Position(1, 2));
+        Assert.assertEquals(testGameMasterBoard.placePiece(testDTO4, 0), PlacementResult.Pointless);
     }
 
     @Test

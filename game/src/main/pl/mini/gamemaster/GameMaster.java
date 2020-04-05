@@ -13,14 +13,9 @@ import pl.mini.position.Position;
 import pl.mini.utils.ConsoleColors;
 
 import java.awt.*;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.net.InetAddress;
-import java.util.List;
-import java.util.*;
-import java.util.concurrent.atomic.DoubleAccumulator;
 import java.net.InetAddress;
 import java.util.List;
 import java.util.*;
@@ -78,21 +73,17 @@ public class GameMaster {
             points.toArray(finalConf.predefinedGoalPositions);
 
             finalConf.boardWidth = ((Long)arg.get("boardWidth")).intValue();
-            finalConf.boardTaskHeight = ((Long)arg.get("boardTaskHeight")).intValue();
-            finalConf.boardGoalHeight = ((Long)arg.get("boardGoalHeight")).intValue();
-            finalConf.delayDestroyPiece = ((Long)arg.get("delayDestroyPiece")).intValue();
-            finalConf.delayNextPiecePlace = ((Long)arg.get("delayNextPiecePlace")).intValue();
-            finalConf.delayMove = ((Long)arg.get("delayMove")).intValue();
-            finalConf.delayDiscover = ((Long)arg.get("delayDiscover")).intValue();
-            finalConf.delayTest = ((Long)arg.get("delayTest")).intValue();
-            finalConf.delayPick = ((Long)arg.get("delayPick")).intValue();
-            finalConf.delayPlace = ((Long)arg.get("delayPlace")).intValue();
+            finalConf.boardTaskHeight = ((Long) arg.get("boardTaskHeight")).intValue();
+            finalConf.boardGoalHeight = ((Long) arg.get("boardGoalHeight")).intValue();
+            finalConf.delayDestroyPiece = ((Long) arg.get("delayDestroyPiece")).intValue();
+            finalConf.delayNextPiecePlace = ((Long) arg.get("delayNextPiecePlace")).intValue();
+            finalConf.delayMove = ((Long) arg.get("delayMove")).intValue();
+            finalConf.delayDiscover = ((Long) arg.get("delayDiscover")).intValue();
+            finalConf.delayTest = ((Long) arg.get("delayTest")).intValue();
+            finalConf.delayPick = ((Long) arg.get("delayPick")).intValue();
+            finalConf.delayPlace = ((Long) arg.get("delayPlace")).intValue();
 
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ParseException e) {
+        } catch (IOException | ParseException e) {
             e.printStackTrace();
         }
 
