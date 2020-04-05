@@ -2,6 +2,7 @@ package pl.mini.player;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import pl.mini.CommServerMockSingleton;
 import pl.mini.board.Board;
 import pl.mini.board.PlacementResult;
@@ -15,6 +16,7 @@ import pl.mini.team.TeamColor;
 import java.net.InetAddress;
 import java.util.List;
 
+@Slf4j
 public class Player extends PlayerDTO {
     @Getter
     private final String playerName;
@@ -30,7 +32,7 @@ public class Player extends PlayerDTO {
     private int portNumber;
     private InetAddress ipAddress;
     public boolean vertical = true, horizontal = true;
-    int initMDist;
+
 
     public Player(String playerName, Board board, Team team) {
         super();
@@ -49,7 +51,7 @@ public class Player extends PlayerDTO {
     public void makeAction() {
         //NOTE: this is a temporary player game logic
         if (piece) {
-            // goes to base (how?)
+            // goes to base
             // places piece in the base
             Direction baseDirection;
             int goalHeight = board.getGoalAreaHeight();
@@ -58,7 +60,7 @@ public class Player extends PlayerDTO {
                 if (position.getY() >= board.getBoardHeight() - goalHeight) {
                     if (board.getCellsGrid()[position.getX()][position.getY()].cellState == CellState.Unknown) {
                         placePiece();
-                        System.out.println(playerName + " placing piece at: " + position.toString());
+                        log.debug(playerName + " placing piece at: " + position.toString());
                     }
                     else {
                         seekGoal();
@@ -71,7 +73,7 @@ public class Player extends PlayerDTO {
                 if (position.getY() < goalHeight) {
                     if (board.getCellsGrid()[position.getX()][position.getY()].cellState == CellState.Unknown) {
                         placePiece();
-                        System.out.println(playerName + " placing piece at: " + position.toString());
+                        log.debug(playerName + " placing piece at: " + position.toString());
                     }
                     else {
                         seekGoal();
@@ -127,10 +129,10 @@ public class Player extends PlayerDTO {
                     }
                 }
             }
-            System.out.println(playerName + " distance to piece: " + mDist);
+            log.debug(playerName + " distance to piece: " + mDist);
             // proceed to the target
             if (askForMDist() == 0) {
-                System.out.println(playerName + "taking piece at: " + position.toString());
+                log.debug(playerName + "taking piece at: " + position.toString());
                 piece = takePiece();
                 if (piece) {
                     vertical = true;
@@ -140,7 +142,7 @@ public class Player extends PlayerDTO {
 
 
         }
-        System.out.println("Player " + playerName + " location:" + position.toString());
+        log.debug("Player " + playerName + " location:" + position.toString());
     }
 
     private List<Field> discover() {
