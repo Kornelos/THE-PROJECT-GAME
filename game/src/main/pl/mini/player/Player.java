@@ -41,7 +41,6 @@ public class Player extends PlayerDTO {
         this.team = team;
         playerTeamColor = team.getColor();
         piece = false;
-        initMDist = -1;
     }
 
     public void listen() {
