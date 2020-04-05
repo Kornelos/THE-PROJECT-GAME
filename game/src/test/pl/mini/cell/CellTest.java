@@ -1,9 +1,17 @@
 package pl.mini.cell;
 
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+
 public class CellTest {
-    Cell c = new Cell(CellState.Empty);
-    Position p = new Position(0, 0);
-
-
-
+    private Cell c;
+    @Before
+    public void initCellTests() {
+        c = new Cell(CellState.Piece);
+    }
+    @Test
+    public void testCreate(){
+        Assert.assertNotNull(c.cellState);
+    }
 }

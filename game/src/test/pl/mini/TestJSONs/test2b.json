@@ -1,0 +1,1 @@
+{"GameMasterConfiguration":{"boardWidth":10,"delayDiscover":3,"shamProbability":0.4,"delayNextPiecePlace":2,"delayPick":2,"maxTeamSize":4,"delayDestroyPiece":3,"maxPieces":8,"delayMove":2,"boardTaskHeight":7,"predefinedGoalPositions":[{"x":1,"y":2},{"x":3,"y":4},{"x":5,"y":6}],"boardGoalHeight":3,"delayPlace":3,"delayTest":4}}

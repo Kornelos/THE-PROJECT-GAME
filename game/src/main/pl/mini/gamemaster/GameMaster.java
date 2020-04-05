@@ -2,46 +2,34 @@ package pl.mini.gamemaster;
 
 import lombok.Getter;
 import lombok.Setter;
-
-import java.io.FileWriter;
-import java.io.FileReader;
-import java.io.FileNotFoundException;
-
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import pl.mini.board.GameMasterBoard;
+import pl.mini.cell.Cell;
+import pl.mini.cell.CellState;
+import pl.mini.position.Position;
+import pl.mini.utils.ConsoleColors;
 
-import java.awt.Point;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
-import java.net.InetAddress;
 
 public class GameMaster {
-    private int portNumber;
-    private InetAddress ipAddress;
-    private List<UUID> teamRedGuids;
-    private List<UUID> teamBlueGuids;
-    /*
-    @Getter
-    @Setter
-    private GameMasterBoard board;
-    */
-    @Getter
-    @Setter
-    private GameMasterStatus status;
+    @Getter @Setter private int portNumber;
+    @Getter @Setter private InetAddress ipAddress;
+    @Getter @Setter private List<UUID> teamRedGuids;
+    @Getter @Setter private List<UUID> teamBlueGuids;
+    @Getter @Setter private GameMasterBoard board;
+    @Getter @Setter private GameMasterStatus status;
+    @Getter @Setter private GameMasterConfiguration configuration;
 
-    private GameMasterConfiguration configuration;
-
-    public GameMasterConfiguration getConfiguration(){
-        return configuration;
-    }
-
-    public void setConfiguration(GameMasterConfiguration gc){
-        configuration = gc;
-    }
 
     public GameMaster()
     {
@@ -62,48 +50,44 @@ public class GameMaster {
     {
         GameMasterConfiguration finalConf = new GameMasterConfiguration();
         JSONParser jsonParser = new JSONParser();
-        Point tmp;
-        List<Point> points = new ArrayList<Point>();
+        Position tmp;
+        List<Position> positions = new ArrayList<Position>();
 
         try (FileReader reader = new FileReader(path))
         {
             JSONObject conf = (JSONObject) jsonParser.parse(reader);
+            JSONObject arg = (JSONObject)conf.get("GameMasterConfiguration");
+            finalConf.shamProbability = (double)arg.get("shamProbability");
+            finalConf.maxTeamSize = ((Long)arg.get("maxTeamSize")).intValue();
+            finalConf.maxPieces = ((Long)arg.get("maxPieces")).intValue();
 
-            finalConf.shamProbability = (double)conf.get("shamProbability");
-            finalConf.maxTeamSize = (int)conf.get("maxTeamSize");
-            finalConf.maxPieces = (int)conf.get("maxPieces");
-
-            JSONArray pointList = (JSONArray) conf.get("predefinedGoalPositions");
+            JSONArray pointList = (JSONArray) arg.get("predefinedGoalPositions");
             for(Object obj : pointList){
                 if(obj instanceof JSONObject){
-                    tmp = new Point();
-                    tmp.x = (int)((JSONObject) obj).get("x");
-                    tmp.y = (int)((JSONObject) obj).get("y");
-                    points.add(tmp);
+                    int x = ((Long)((JSONObject) obj).get("x")).intValue();
+                    int y = ((Long)((JSONObject) obj).get("y")).intValue();
+                    tmp = new Position(x,y);
+                    positions.add(tmp);
                 }
             }
-            finalConf.predefinedGoalPositions = new Point[points.size()];
-            points.toArray(finalConf.predefinedGoalPositions);
+            finalConf.predefinedGoalPositions = new Position[positions.size()];
+            positions.toArray(finalConf.predefinedGoalPositions);
 
-            finalConf.boardWidth = (int)conf.get("boardWidth");
-            finalConf.boardTaskHeight = (int)conf.get("boardTaskHeight");
-            finalConf.boardGoalHeight = (int)conf.get("boardGoalHeight");
-            finalConf.delayDestroyPiece = (int)conf.get("delayDestroyPiece");
-            finalConf.delayNextPiecePlace = (int)conf.get("delayNextPiecePlace");
-            finalConf.delayMove = (int)conf.get("delayMove");
-            finalConf.delayDiscover = (int)conf.get("delayDiscover");
-            finalConf.delayTest = (int)conf.get("delayTest");
-            finalConf.delayPick = (int)conf.get("delayPick");
-            finalConf.delayPlace = (int)conf.get("delayPlace");
+            finalConf.boardWidth = ((Long)arg.get("boardWidth")).intValue();
+            finalConf.boardTaskHeight = ((Long) arg.get("boardTaskHeight")).intValue();
+            finalConf.boardGoalHeight = ((Long) arg.get("boardGoalHeight")).intValue();
+            finalConf.delayDestroyPiece = ((Long) arg.get("delayDestroyPiece")).intValue();
+            finalConf.delayNextPiecePlace = ((Long) arg.get("delayNextPiecePlace")).intValue();
+            finalConf.delayMove = ((Long) arg.get("delayMove")).intValue();
+            finalConf.delayDiscover = ((Long) arg.get("delayDiscover")).intValue();
+            finalConf.delayTest = ((Long) arg.get("delayTest")).intValue();
+            finalConf.delayPick = ((Long) arg.get("delayPick")).intValue();
+            finalConf.delayPlace = ((Long) arg.get("delayPlace")).intValue();
 
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ParseException e) {
+        } catch (IOException | ParseException e) {
             e.printStackTrace();
         }
-
+        this.setConfiguration(finalConf);
         return finalConf;
     }
 
@@ -111,16 +95,15 @@ public class GameMaster {
     {
         JSONObject conf = new JSONObject();
         JSONArray goalPos = new JSONArray();
-        JSONObject point = new JSONObject();
 
         conf.put("shamProbability", configuration.shamProbability);
         conf.put("maxTeamSize", configuration.maxTeamSize);
         conf.put("maxPieces", configuration.maxPieces);
 
-        for (Point pt : configuration.predefinedGoalPositions) {
-            point.clear();
-            point.put("x", pt.getX());
-            point.put("y", pt.getY());
+        for (int i = 0; i<configuration.predefinedGoalPositions.length; i++) {
+            JSONObject point = new JSONObject();
+            point.put("x", configuration.predefinedGoalPositions[i].getX());
+            point.put("y", configuration.predefinedGoalPositions[i].getY());
             goalPos.add(point);
         }
 
@@ -149,14 +132,61 @@ public class GameMaster {
         }
     }
 
-    private void putNewPiece()
+    public void putNewPiece()
     {
-
+        Random r = new Random();
+        Position placed = this.board.generatePiece();
+        this.board.getPiecesPosition().add(placed);
+        this.board.getCellsGrid()[placed.getX()][placed.getY()].cellState = CellState.Piece;
     }
 
-    private void printBoard()
+    public void printBoard()
     {
+        int col = this.board.getBoardWidth();
+        int row = this.board.getBoardHeight();
+        int task = this.board.getTaskAreaHeight();
+        int goal = this.board.getGoalAreaHeight();
+        StringBuilder fld;
+        Cell cll;
+        CellState cState;
 
+        for (int i = 0; i < row; i++)
+        {
+            if (i < goal || i > goal + task - 1)
+                fld = new StringBuilder("G");
+            else
+                fld = new StringBuilder("T");
+            System.out.println(" " + "######".repeat(col) + "#");
+            System.out.println(" " + "|     ".repeat(col) + "|");
+            for (int j = 0; j < col; j++)
+            {
+                cll = this.board.getCellsGrid()[j][i];
+                cState = cll.cellState;
+                if(!cll.playerGuids.equals("")) {
+                    for (UUID teamBlueGuid : this.teamBlueGuids) {
+                        if (cll.playerGuids.equals(teamBlueGuid.toString()))
+                            fld.append("| " + ConsoleColors.BLUE + "B P " + ConsoleColors.RESET);
+                    }
+                    for (UUID teamRedGuid : this.teamRedGuids) {
+                        if (cll.playerGuids.equals(teamRedGuid.toString()))
+                            fld.append("| " + ConsoleColors.RED + "R P " + ConsoleColors.RESET);
+                    }
+                } else if (cState == CellState.Piece || cState == CellState.Sham)
+                    fld.append("|  " + ConsoleColors.GREEN + "P  " + ConsoleColors.RESET);
+                else if (cState == CellState.Valid)
+                    fld.append("|  " + ConsoleColors.YELLOW + "V  " + ConsoleColors.RESET);
+                else if (cState == CellState.Goal)
+                    fld.append("|  " + ConsoleColors.PURPLE_BRIGHT + "G  " + ConsoleColors.RESET);
+                else if (cState == CellState.Unknown)
+                    fld.append("|  U  ");
+                else if (cState == CellState.Empty)
+                    fld.append("|     ");
+
+            }
+            System.out.println(fld + "|");
+            System.out.println(" " + "|     ".repeat(col) + "|");
+        }
+        System.out.println(" " + "######".repeat(col) + "#");
     }
 
     public void messageHandler(String message)
