@@ -83,7 +83,7 @@ public class GameMasterBoardTests {
         testPositionSet.add(new Position(3,5));
         testPositionSet.add(new Position(2,2));
         testGameMasterBoard.setPiecesPosition(testPositionSet);
-        Assert.assertEquals(testGameMasterBoard.manhattanDistanceToClosestPiece(new Position(1,1)),6);
+        Assert.assertEquals(testGameMasterBoard.manhattanDistanceToClosestPiece(new Position(5,9)),6);
         Assert.assertEquals(testGameMasterBoard.manhattanDistanceToClosestPiece(new Position(3,3)),2);
 
     }
