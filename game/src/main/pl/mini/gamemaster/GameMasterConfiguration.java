@@ -1,5 +1,7 @@
 package pl.mini.gamemaster;
 
+import pl.mini.position.Position;
+
 import java.awt.Point;
 import java.util.Arrays;
 
@@ -8,7 +10,7 @@ public class GameMasterConfiguration {
     public int maxTeamSize;
     public int maxPieces;
     // current (?)
-    public Point[] predefinedGoalPositions;
+    public Position[] predefinedGoalPositions;
     public int boardWidth;
     public int boardTaskHeight;
     public int boardGoalHeight;
@@ -22,7 +24,7 @@ public class GameMasterConfiguration {
     /**
     * Constructor
     */
-    public GameMasterConfiguration(double shamProbability, int maxTeamSize, int maxPieces, Point[] predefinedGoalPositions,
+    public GameMasterConfiguration(double shamProbability, int maxTeamSize, int maxPieces, Position[] predefinedGoalPositions,
                                    int boardWidth, int boardTaskHeight, int boardGoalHeight, int delayDestroyPiece,
                                    int delayNextPiecePlace, int delayMove, int delayDiscover, int delayTest,
                                    int delayPick, int delayPlace){

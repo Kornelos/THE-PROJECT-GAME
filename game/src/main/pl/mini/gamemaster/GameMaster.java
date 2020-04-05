@@ -51,8 +51,8 @@ public class GameMaster {
     {
         GameMasterConfiguration finalConf = new GameMasterConfiguration();
         JSONParser jsonParser = new JSONParser();
-        Point tmp;
-        List<Point> points = new ArrayList<Point>();
+        Position tmp;
+        List<Position> positions = new ArrayList<Position>();
 
         try (FileReader reader = new FileReader(path))
         {
@@ -65,14 +65,14 @@ public class GameMaster {
             JSONArray pointList = (JSONArray) arg.get("predefinedGoalPositions");
             for(Object obj : pointList){
                 if(obj instanceof JSONObject){
-                    tmp = new Point();
-                    tmp.x = (int)Math.round((Double)(((JSONObject) obj).get("x")));
-                    tmp.y = (int)Math.round((Double)(((JSONObject) obj).get("y")));
-                    points.add(tmp);
+                    int x = ((Long)((JSONObject) obj).get("x")).intValue();
+                    int y = ((Long)((JSONObject) obj).get("y")).intValue();
+                    tmp = new Position(x,y);
+                    positions.add(tmp);
                 }
             }
-            finalConf.predefinedGoalPositions = new Point[points.size()];
-            points.toArray(finalConf.predefinedGoalPositions);
+            finalConf.predefinedGoalPositions = new Position[positions.size()];
+            positions.toArray(finalConf.predefinedGoalPositions);
 
             finalConf.boardWidth = ((Long)arg.get("boardWidth")).intValue();
             finalConf.boardTaskHeight = ((Long) arg.get("boardTaskHeight")).intValue();
