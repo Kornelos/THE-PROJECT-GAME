@@ -8,6 +8,7 @@ import pl.mini.cell.Field;
 import pl.mini.player.PlayerDTO;
 import pl.mini.position.Direction;
 import pl.mini.position.Position;
+import pl.mini.team.TeamColor;
 
 import java.util.*;
 
@@ -146,11 +147,44 @@ public class GameMasterBoard extends Board {
         return new Position(x, y);
     }
 
-//    #todo ticket how complete goals should be marked
-//    public void checkWinCondition(TeamColor teamColor)
-//    {
-//
-//    }
+
+    public boolean checkWinCondition(TeamColor teamColor)
+    {
+        int goalcounter = 0;
+        switch(teamColor)
+        {
+        case Red:
+            {
+            for(int i = 0; i < getGoalAreaHeight(); i++)
+            {
+                for (int j = 0; j < getBoardWidth(); j++)
+                {
+                    if(getCellsGrid()[j][i].cellState == CellState.Goal)
+                        goalcounter++;
+                }
+            }
+            if (goalcounter == 0)
+                return true;
+            return false;
+            }
+        case Blue:
+            {
+                for(int i = getBoardHeight() - getGoalAreaHeight(); i < getBoardHeight(); i++)
+                {
+                    for (int j = 0; j < getBoardWidth(); j++)
+                    {
+                        if(getCellsGrid()[j][i].cellState == CellState.Goal)
+                            goalcounter++;
+                    }
+                }
+                if (goalcounter == 0)
+                    return true;
+                return false;
+            }
+
+        }
+        return false;
+    }
 
 
     public List<Field> discover(Position position) {
