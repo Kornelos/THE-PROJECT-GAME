@@ -10,6 +10,7 @@ import pl.mini.position.Position;
 import pl.mini.team.Team;
 import pl.mini.team.TeamColor;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -30,21 +31,7 @@ public class App {
         final int taskHeight = 2;
 
         gm.setBoard(new GameMasterBoard(boardWidth, goalHeight, taskHeight));
-        gm.setConfiguration(new GameMasterConfiguration(
-                0.1,
-                4,
-                4,
-                null,
-                8,
-                2,
-                2,
-                1,
-                1,
-                1,
-                1,
-                1,
-                1,
-                1));
+        gm.loadConfigurationFromJson("./game/src/main/resources/config.json");
         CommServerMockSingleton.INSTANCE.registerGameMaster(gm);
 
         // teams

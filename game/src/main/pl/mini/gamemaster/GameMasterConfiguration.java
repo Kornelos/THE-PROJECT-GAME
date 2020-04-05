@@ -1,6 +1,6 @@
 package pl.mini.gamemaster;
 
-import java.awt.*;
+import java.awt.Point;
 import java.util.Arrays;
 
 public class GameMasterConfiguration {
@@ -50,10 +50,11 @@ public class GameMasterConfiguration {
     /**
      * Print utility for test purposes
      */
-    public String print() {
-        return shamProbability + " " + maxTeamSize + " " + maxPieces + " " +
-                Arrays.toString(predefinedGoalPositions) + " " + boardWidth + " " + boardTaskHeight + " "
-                + boardGoalHeight + " " + delayDestroyPiece + " " + delayNextPiecePlace + " " + delayMove +
-                " " + delayDiscover + " " + delayTest + " " + delayPick + " " + delayPlace;
+    @Override
+    public String toString(){
+        return new String(shamProbability + " " + maxTeamSize + " " + maxPieces + " " +
+                          Arrays.toString(predefinedGoalPositions) + " " + boardWidth + " " + boardTaskHeight + " "
+                          + boardGoalHeight + " " + delayDestroyPiece + " " + delayNextPiecePlace + " " + delayMove +
+                          " " + delayDiscover + " " + delayTest + " " + delayPick + " " + delayPlace);
     }
 }

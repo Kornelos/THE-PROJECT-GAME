@@ -88,7 +88,7 @@ public class GameMaster {
         } catch (IOException | ParseException e) {
             e.printStackTrace();
         }
-
+        this.setConfiguration(finalConf);
         return finalConf;
     }
 

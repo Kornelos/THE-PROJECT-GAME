@@ -24,7 +24,7 @@ public class GameMasterTest
         gm.saveConfigurationToJson("./game/src/test/pl/mini/TestJSONs/test1b.json");
         GameMaster gm2 = new GameMaster();
         gm2.setConfiguration(gm2.loadConfigurationFromJson("./game/src/test/pl/mini/TestJSONs/test1b.json"));
-        Assert.assertEquals(gm.getConfiguration().print(),gm2.getConfiguration().print());
+        Assert.assertEquals(gm.getConfiguration().toString(),gm2.getConfiguration().toString());
         GameMaster gm3 = new GameMaster();
         GameMasterConfiguration gc3 = new GameMasterConfiguration(0.4,4,8, new Point[]{new Point(1, 2), new Point(3, 4), new Point(5, 6)},10,
                                                                   7, 3, 3, 2, 2, 3, 4, 2, 3);
@@ -32,7 +32,7 @@ public class GameMasterTest
         gm3.saveConfigurationToJson("./game/src/test/pl/mini/TestJSONs/test2b.json");
         GameMaster gm4 = new GameMaster();
         gm4.setConfiguration(gm4.loadConfigurationFromJson("./game/src/test/pl/mini/TestJSONs/test2b.json"));
-        Assert.assertEquals(gm3.getConfiguration().print(),gm4.getConfiguration().print());
+        Assert.assertEquals(gm3.getConfiguration().toString(),gm4.getConfiguration().toString());
 
     }
 }
