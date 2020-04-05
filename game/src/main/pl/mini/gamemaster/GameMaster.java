@@ -20,6 +20,10 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.util.List;
 import java.util.*;
+import java.util.concurrent.atomic.DoubleAccumulator;
+import java.net.InetAddress;
+import java.util.List;
+import java.util.*;
 
 public class GameMaster {
     @Getter @Setter private int portNumber;
@@ -56,33 +60,33 @@ public class GameMaster {
         try (FileReader reader = new FileReader(path))
         {
             JSONObject conf = (JSONObject) jsonParser.parse(reader);
+            JSONObject arg = (JSONObject)conf.get("GameMasterConfiguration");
+            finalConf.shamProbability = (double)arg.get("shamProbability");
+            finalConf.maxTeamSize = ((Long)arg.get("maxTeamSize")).intValue();
+            finalConf.maxPieces = ((Long)arg.get("maxPieces")).intValue();
 
-            finalConf.shamProbability = (double)conf.get("shamProbability");
-            finalConf.maxTeamSize = ((Long)conf.get("maxTeamSize")).intValue();
-            finalConf.maxPieces = ((Long)conf.get("maxPieces")).intValue();
-
-            JSONArray pointList = (JSONArray) conf.get("predefinedGoalPositions");
+            JSONArray pointList = (JSONArray) arg.get("predefinedGoalPositions");
             for(Object obj : pointList){
                 if(obj instanceof JSONObject){
                     tmp = new Point();
-                    tmp.x = ((Long)((JSONObject) obj).get("x")).intValue();
-                    tmp.y = ((Long)((JSONObject) obj).get("y")).intValue();
+                    tmp.x = (int)Math.round((Double)(((JSONObject) obj).get("x")));
+                    tmp.y = (int)Math.round((Double)(((JSONObject) obj).get("y")));
                     points.add(tmp);
                 }
             }
             finalConf.predefinedGoalPositions = new Point[points.size()];
             points.toArray(finalConf.predefinedGoalPositions);
 
-            finalConf.boardWidth = ((Long)conf.get("boardWidth")).intValue();
-            finalConf.boardTaskHeight = ((Long)conf.get("boardTaskHeight")).intValue();
-            finalConf.boardGoalHeight = ((Long)conf.get("boardGoalHeight")).intValue();
-            finalConf.delayDestroyPiece = ((Long)conf.get("delayDestroyPiece")).intValue();
-            finalConf.delayNextPiecePlace = ((Long)conf.get("delayNextPiecePlace")).intValue();
-            finalConf.delayMove = ((Long)conf.get("delayMove")).intValue();
-            finalConf.delayDiscover = ((Long)conf.get("delayDiscover")).intValue();
-            finalConf.delayTest = ((Long)conf.get("delayTest")).intValue();
-            finalConf.delayPick = ((Long)conf.get("delayPick")).intValue();
-            finalConf.delayPlace = ((Long)conf.get("delayPlace")).intValue();
+            finalConf.boardWidth = ((Long)arg.get("boardWidth")).intValue();
+            finalConf.boardTaskHeight = ((Long)arg.get("boardTaskHeight")).intValue();
+            finalConf.boardGoalHeight = ((Long)arg.get("boardGoalHeight")).intValue();
+            finalConf.delayDestroyPiece = ((Long)arg.get("delayDestroyPiece")).intValue();
+            finalConf.delayNextPiecePlace = ((Long)arg.get("delayNextPiecePlace")).intValue();
+            finalConf.delayMove = ((Long)arg.get("delayMove")).intValue();
+            finalConf.delayDiscover = ((Long)arg.get("delayDiscover")).intValue();
+            finalConf.delayTest = ((Long)arg.get("delayTest")).intValue();
+            finalConf.delayPick = ((Long)arg.get("delayPick")).intValue();
+            finalConf.delayPlace = ((Long)arg.get("delayPlace")).intValue();
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -99,16 +103,15 @@ public class GameMaster {
     {
         JSONObject conf = new JSONObject();
         JSONArray goalPos = new JSONArray();
-        JSONObject point = new JSONObject();
 
         conf.put("shamProbability", configuration.shamProbability);
         conf.put("maxTeamSize", configuration.maxTeamSize);
         conf.put("maxPieces", configuration.maxPieces);
 
-        for (Point pt : configuration.predefinedGoalPositions) {
-            point.clear();
-            point.put("x", pt.getX());
-            point.put("y", pt.getY());
+        for (int i = 0; i<configuration.predefinedGoalPositions.length; i++) {
+            JSONObject point = new JSONObject();
+            point.put("x", configuration.predefinedGoalPositions[i].getX());
+            point.put("y", configuration.predefinedGoalPositions[i].getY());
             goalPos.add(point);
         }
 

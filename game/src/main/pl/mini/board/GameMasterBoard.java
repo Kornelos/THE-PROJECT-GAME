@@ -100,7 +100,10 @@ public class GameMasterBoard extends Board {
     public void setGoal(Position position) {
         int x = position.getX( );
         int y = position.getY( );
-        getCellsGrid( )[ x ][ y ].cellState = CellState.Goal;
+        Cell[][] testCG = getCellsGrid();
+        testCG[x][y] = new Cell(CellState.Goal);
+        setCellsGrid(testCG);
+        // getCellsGrid( )[ x ][ y ].cellState = CellState.Goal;
     }
 
 
