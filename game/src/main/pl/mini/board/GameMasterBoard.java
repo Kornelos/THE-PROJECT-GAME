@@ -66,7 +66,7 @@ public class GameMasterBoard extends Board {
         position.setX(x);
         position.setY(y);
 
-        if(getCellsGrid()[x][y].playerGuids != null)
+        if(getCellsGrid()[x][y].playerGuids != null && !getCellsGrid()[x][y].equals(""))
             return new Position(x_old,y_old);
 
         if(x != x_old || y != y_old) {

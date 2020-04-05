@@ -57,25 +57,28 @@ public class Player extends PlayerDTO {
             if (team.getColor() == TeamColor.Blue) {
                 baseDirection = Direction.Down;
                 if (position.getY() >= board.getBoardHeight() - goalHeight) {
-                    if (board.getCellsGrid()[position.getX()][position.getY()].cellState == CellState.Unknown)
+                    if (board.getCellsGrid()[position.getX()][position.getY()].cellState == CellState.Unknown) {
                         placePiece();
+                        log.debug(playerName + " placing piece at: " + position.toString());
+                    }
                     else {
                         seekGoal();
                     }
-                    log.debug(playerName + " placing piece at: " + position.toString());
+
                 } else
-                    move(baseDirection);
+                    seekGoal();
             } else {
                 baseDirection = Direction.Up;
                 if (position.getY() < goalHeight) {
-                    if (board.getCellsGrid()[position.getX()][position.getY()].cellState == CellState.Unknown)
+                    if (board.getCellsGrid()[position.getX()][position.getY()].cellState == CellState.Unknown) {
                         placePiece();
+                        log.debug(playerName + " placing piece at: " + position.toString());
+                    }
                     else {
                         seekGoal();
                     }
-                    log.debug(playerName + " placing piece at: " + position.toString());
                 } else
-                    move(baseDirection);
+                    seekGoal();
 
             }
 
@@ -181,6 +184,9 @@ public class Player extends PlayerDTO {
 
     private void seekGoal() {
         int mDist = askForMDistToUnknown();
+
+        if (mDist == 0)
+                return;
 
         if (!horizontal && !vertical) {
             horizontal = true;
