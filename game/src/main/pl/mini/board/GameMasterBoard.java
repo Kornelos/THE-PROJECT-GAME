@@ -2,6 +2,7 @@ package pl.mini.board;
 
 import lombok.Getter;
 import lombok.Setter;
+import pl.mini.cell.Cell;
 import pl.mini.cell.CellState;
 import pl.mini.cell.Field;
 import pl.mini.player.PlayerDTO;
@@ -55,7 +56,10 @@ public class GameMasterBoard extends Board {
     public void setGoal(Position position) {
         int x = position.getX( );
         int y = position.getY( );
-        getCellsGrid( )[ x ][ y ].cellState = CellState.Goal;
+        Cell[][] testCG = getCellsGrid();
+        testCG[x][y] = new Cell(CellState.Goal);
+        setCellsGrid(testCG);
+        // getCellsGrid( )[ x ][ y ].cellState = CellState.Goal;
     }
 
 
