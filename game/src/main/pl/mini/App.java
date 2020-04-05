@@ -6,6 +6,7 @@ import pl.mini.board.GameMasterBoard;
 import pl.mini.gamemaster.GameMaster;
 import pl.mini.gamemaster.GameMasterConfiguration;
 import pl.mini.player.Player;
+import pl.mini.position.Position;
 import pl.mini.team.Team;
 import pl.mini.team.TeamColor;
 
@@ -42,13 +43,16 @@ public class App {
         blue_player.setPosition(gm.getBoard().placePlayer(blue_player));
         blue.addTeamMember(blue_player);
 
-        for(int i = 0;i<red.getTeamMembers().size();i++)
+        for (int i = 0; i < red.getTeamMembers().size(); i++)
             red_ids.add(red.getTeamMembers().get(i).getPlayerUuid());
-        for(int i = 0;i<blue.getTeamMembers().size();i++)
+        for (int i = 0; i < blue.getTeamMembers().size(); i++)
             blue_ids.add(blue.getTeamMembers().get(i).getPlayerUuid());
 
         gm.setTeamRedGuids(red_ids);
         gm.setTeamBlueGuids(blue_ids);
+        // setting goal pos
+        gm.getBoard().setGoal(new Position(0, 0));
+        gm.getBoard().setGoal(new Position(5, 5));
 
         // game loop
         System.out.println("Press ENTER to start...");
@@ -62,7 +66,7 @@ public class App {
             }
 
             gm.printBoard();
-            //red_player.makeAction();
+            red_player.makeAction();
             blue_player.makeAction();
             Thread.sleep(1000);
 //            System.in.read();

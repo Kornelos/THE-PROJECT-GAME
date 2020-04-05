@@ -31,8 +31,7 @@ public class Position {
 
     @Override
     public int hashCode() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(x).append(y);
-        return sb.toString().hashCode();
+        return (String.valueOf(x) + y).hashCode();
     }
+
 }
