@@ -38,7 +38,7 @@ public class App {
         red_player.setPosition(gm.getBoard().placePlayer(red_player));
         red.addTeamMember(red_player);
 
-        Player blue_player = new Player("p2", new Board(8, 2, 5), blue);
+        Player blue_player = new Player("p2", new Board(8, 2, 2), blue);
         blue_player.setPosition(gm.getBoard().placePlayer(blue_player));
         blue.addTeamMember(blue_player);
 
@@ -62,7 +62,7 @@ public class App {
             }
 
             gm.printBoard();
-            red_player.makeAction();
+            //red_player.makeAction();
             blue_player.makeAction();
             Thread.sleep(1000);
 //            System.in.read();

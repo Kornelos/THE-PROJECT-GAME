@@ -55,8 +55,7 @@ public class Player extends PlayerDTO {
             int goalHeight = board.getGoalAreaHeight();
             if (team.getColor() == TeamColor.Blue) {
                 baseDirection = Direction.Down;
-                if (position.getY() >= board.getBoardHeight() - goalHeight
-                        && position.getY() < board.getGoalAreaHeight()) {
+                if (position.getY() >= board.getBoardHeight() - goalHeight) {
                     placePiece();
                     System.out.println(playerName + " placing piece at: " + position.toString());
                 } else
