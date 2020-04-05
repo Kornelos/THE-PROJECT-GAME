@@ -29,7 +29,7 @@ public class Player extends PlayerDTO {
     private PlayerState playerState;
     private int portNumber;
     private InetAddress ipAddress;
-    boolean vertical = true, horizontal = true;
+    public boolean vertical = true, horizontal = true;
     int initMDist;
 
     public Player(String playerName, Board board, Team team) {
@@ -59,7 +59,7 @@ public class Player extends PlayerDTO {
                     if (board.getCellsGrid()[position.getX()][position.getY()].cellState == CellState.Unknown)
                         placePiece();
                     else {
-                        move(baseDirection);
+                        seekGoal();
                     }
                     System.out.println(playerName + " placing piece at: " + position.toString());
                 } else
@@ -70,7 +70,7 @@ public class Player extends PlayerDTO {
                     if (board.getCellsGrid()[position.getX()][position.getY()].cellState == CellState.Unknown)
                         placePiece();
                     else {
-                        move(baseDirection);
+                        seekGoal();
                     }
                     System.out.println(playerName + " placing piece at: " + position.toString());
                 } else
@@ -78,7 +78,7 @@ public class Player extends PlayerDTO {
 
             }
 
-        } else if(askForMDist() != -1) {
+        } else if (askForMDist() != -1) {
             int mDist = askForMDist();
             // looks for piece
             // ask for manhattan distance
@@ -96,29 +96,25 @@ public class Player extends PlayerDTO {
                         vertical = false;
                     } else if (askForMDist() == mDist)
                         vertical = false;
-                }
-                else if(askForMDist() == mDist) {
+                } else if (askForMDist() == mDist) {
                     move(Direction.Down);
                     if (askForMDist() > mDist) {
                         move(Direction.Up);
-                        horizontal = false;
+                        vertical = false;
                     }
                 }
             }
 
             mDist = askForMDist();
-            if (horizontal)
-            {
+            if (horizontal) {
                 move(Direction.Right);
-                if(askForMDist() > mDist)
-                {
+                if (askForMDist() > mDist) {
                     move(Direction.Left);
                     move(Direction.Left);
-                    if(askForMDist() > mDist) {
+                    if (askForMDist() > mDist) {
                         move(Direction.Right);
                         horizontal = false;
-                    }
-                    else if(askForMDist() == mDist)
+                    } else if (askForMDist() == mDist)
                         horizontal = false;
                 } else if (askForMDist() == mDist) {
                     move(Direction.Left);
@@ -133,6 +129,10 @@ public class Player extends PlayerDTO {
             if (askForMDist() == 0) {
                 System.out.println(playerName + "taking piece at: " + position.toString());
                 piece = takePiece();
+                if (piece) {
+                    vertical = true;
+                    horizontal = true;
+                }
             }
 
 
@@ -148,6 +148,10 @@ public class Player extends PlayerDTO {
     private int askForMDist() {
         // asks for manhattan distance
         return CommServerMockSingleton.INSTANCE.requestClosestPieceManhattan(this);
+    }
+
+    private int askForMDistToUnknown() {
+        return CommServerMockSingleton.INSTANCE.requestClosestUnknownManhattan(this);
     }
 
     private void move(Direction direction) {
@@ -174,5 +178,52 @@ public class Player extends PlayerDTO {
         horizontal = true;
     }
 
+    private void seekGoal() {
+        int mDist = askForMDistToUnknown();
 
+        if (!horizontal && !vertical) {
+            horizontal = true;
+            vertical = true;
+        }
+
+        if (vertical) {
+            move(Direction.Up);
+            if (askForMDistToUnknown() > mDist) {
+                move(Direction.Down);
+                move(Direction.Down);
+                if (askForMDistToUnknown() > mDist) {
+                    move(Direction.Up);
+                    vertical = false;
+                } else if (askForMDistToUnknown() == mDist)
+                    vertical = false;
+            } else if (askForMDistToUnknown() == mDist) {
+                move(Direction.Down);
+                if (askForMDistToUnknown() > mDist) {
+                    move(Direction.Up);
+                    vertical = false;
+                }
+            }
+        }
+
+        mDist = askForMDistToUnknown();
+
+        if (horizontal) {
+            move(Direction.Right);
+            if (askForMDistToUnknown() > mDist) {
+                move(Direction.Left);
+                move(Direction.Left);
+                if (askForMDistToUnknown() > mDist) {
+                    move(Direction.Right);
+                    horizontal = false;
+                } else if (askForMDistToUnknown() == mDist)
+                    horizontal = false;
+            } else if (askForMDistToUnknown() == mDist) {
+                move(Direction.Left);
+                if (askForMDistToUnknown() > mDist) {
+                    move(Direction.Right);
+                    horizontal = false;
+                }
+            }
+        }
+    }
 }

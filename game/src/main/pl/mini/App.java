@@ -11,6 +11,7 @@ import pl.mini.team.Team;
 import pl.mini.team.TeamColor;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 
@@ -54,6 +55,12 @@ public class App {
         gm.getBoard().setGoal(new Position(0, 0));
         gm.getBoard().setGoal(new Position(5, 5));
 
+        List<Player> allPlayers = new ArrayList<>();
+        allPlayers.addAll(red.getTeamMembers());
+        allPlayers.addAll(blue.getTeamMembers());
+
+        boolean check_red = false;
+        boolean check_blue = false;
         // game loop
         System.out.println("Press ENTER to start...");
         System.in.read();
@@ -63,12 +70,35 @@ public class App {
         while (i < 120) {
             if (i % 5 == 0) {
                 gm.putNewPiece();
+                for (Player player : allPlayers) {
+                    player.vertical = true;
+                    player.horizontal = true;
+                }
+            }
+
+            if(check_red && check_blue)
+            {
+                System.out.println("\n---IT'S A TIE---\n");
+                break;
+            }
+            if(check_red)
+            {
+                System.out.println("\n---RED TEAM WON---\n");
+                break;
+            }
+            if(check_blue)
+            {
+                System.out.println("\n---BLUE TEAM WON---\n");
+                break;
             }
 
             gm.printBoard();
             red_player.makeAction();
             blue_player.makeAction();
             Thread.sleep(1000);
+            check_red = gm.getBoard().checkWinCondition(red.getColor());
+            check_blue = gm.getBoard().checkWinCondition(blue.getColor());
+
 //            System.in.read();
 //            gm.printBoard();
             i += 1;

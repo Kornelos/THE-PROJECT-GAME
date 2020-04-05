@@ -8,8 +8,10 @@ import pl.mini.cell.Field;
 import pl.mini.player.PlayerDTO;
 import pl.mini.position.Direction;
 import pl.mini.position.Position;
+import pl.mini.team.Team;
 import pl.mini.team.TeamColor;
 
+import java.lang.reflect.Array;
 import java.util.*;
 
 
@@ -31,7 +33,6 @@ public class GameMasterBoard extends Board {
         int y_old = position.getY();
         int x = position.getX( );
         int y = position.getY( );
-        Cell[][] cll = this.getCellsGrid();
         switch (direction) {
             case Up:
                 {
@@ -65,13 +66,12 @@ public class GameMasterBoard extends Board {
         position.setX(x);
         position.setY(y);
 
-        if(cll[x][y].playerGuids != null)
+        if(getCellsGrid()[x][y].playerGuids != null)
             return new Position(x_old,y_old);
 
         if(x != x_old || y != y_old) {
-            cll[x][y].playerGuids = cll[x_old][y_old].playerGuids;
-            cll[x_old][y_old].playerGuids = null;
-            this.setCellsGrid(cll);
+            getCellsGrid()[x][y].playerGuids = getCellsGrid()[x_old][y_old].playerGuids;
+            getCellsGrid()[x_old][y_old].playerGuids = null;
         }
 
         return position;
@@ -218,19 +218,66 @@ public class GameMasterBoard extends Board {
     }
 
     public int manhattanDistanceToClosestPiece(Position position) {
-        int min = 0;
+        int min = Integer.MAX_VALUE;
         int id = 0;
         try {
             Position[] positions = piecesPosition.toArray(new Position[piecesPosition.size()]);
 
 
             for (int i = 0; i < positions.length; i++) {
-                if (manhattanDistanceTwoPoints(position, positions[i]) >= min)
+                if (manhattanDistanceTwoPoints(position, positions[i]) < min) {
                     min = manhattanDistanceTwoPoints(position, positions[i]);
-                id = i;
+                    id = i;
+                }
             }
-//            System.out.println("Closest piece position: " + positions[id].toString());
-            return manhattanDistanceTwoPoints(position, positions[id]);
+            //System.out.println("Closest piece position: " + positions[id].toString());
+            return min;
+        }
+        catch(NullPointerException e)
+        {
+            return -1;
+        }
+        catch(ArrayIndexOutOfBoundsException e)
+        {
+            return -1;
+        }
+    }
+
+    public int manhattanDistanceToClosestUnknown(Position position, TeamColor teamColor) {
+        int min = Integer.MAX_VALUE;
+        int mDist;
+
+        try {
+            Cell[][] cll = this.getCellsGrid();
+
+            if(teamColor == TeamColor.Red)
+            {
+                for (int i = 0; i < this.getBoardWidth(); i++)
+                    for(int j = 0; j < this.getGoalAreaHeight(); j++) {
+                        if (cll[i][j].cellState == CellState.Unknown || cll[i][j].cellState == CellState.Goal) {
+                            mDist = manhattanDistanceTwoPoints(position, new Position(i, j));
+                            if (mDist < min)
+                                min = mDist;
+                        }
+                    }
+            }
+            else if(teamColor == TeamColor.Blue)
+            {
+                for (int i = 0; i < this.getBoardWidth(); i++)
+                    for(int j = this.getGoalAreaHeight() + this.getTaskAreaHeight();
+                        j < this.getBoardHeight(); j++) {
+                        if (cll[i][j].cellState == CellState.Unknown || cll[i][j].cellState == CellState.Goal) {
+                            mDist = manhattanDistanceTwoPoints(position, new Position(i, j));
+                            if (mDist < min)
+                                min = mDist;
+                        }
+                    }
+            }
+
+            if (min != Integer.MAX_VALUE)
+                return min;
+            else
+                return -1;
         }
         catch(NullPointerException e)
         {

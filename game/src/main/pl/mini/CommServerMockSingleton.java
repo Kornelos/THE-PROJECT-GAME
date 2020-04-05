@@ -69,6 +69,11 @@ public class CommServerMockSingleton {
         return gmb.manhattanDistanceToClosestPiece(player.getPosition());
     }
 
+    public int requestClosestUnknownManhattan(Player player) {
+        GameMasterBoard gmb = gameMaster.getBoard();
+        return gmb.manhattanDistanceToClosestUnknown(player.getPosition(), player.getTeam().getColor());
+    }
+
     public PlacementResult requestPlacePiece(Player player) {
         GameMasterBoard gmb = gameMaster.getBoard();
         return gmb.placePiece(player, gameMaster.getConfiguration().shamProbability);
