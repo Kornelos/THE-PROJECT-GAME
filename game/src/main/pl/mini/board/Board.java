@@ -39,8 +39,7 @@ public class Board {
     public Field getField(Position position) {
         int x = position.getX( );
         int y = position.getY( );
-        Field field = new Field(position, cellsGrid[ x ][ y ]);
-        return field;
+        return new Field(position, cellsGrid[x][y]);
     }
 
 

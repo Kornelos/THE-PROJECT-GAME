@@ -17,8 +17,10 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.InetAddress;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.*;
+import java.util.Random;
+import java.util.UUID;
 
 public class GameMaster {
     @Getter @Setter private int portNumber;
@@ -134,7 +136,7 @@ public class GameMaster {
     public void putNewPiece()
     {
         Random r = new Random();
-        Position placed = this.board.generatePiece(r.nextDouble());
+        Position placed = this.board.generatePiece();
         this.board.getPiecesPosition().add(placed);
         this.board.getCellsGrid()[placed.getX()][placed.getY()].cellState = CellState.Piece;
     }
@@ -145,7 +147,6 @@ public class GameMaster {
         int row = this.board.getBoardHeight();
         int task = this.board.getTaskAreaHeight();
         int goal = this.board.getGoalAreaHeight();
-        Set<Position> positions = this.board.getPiecesPosition();
         StringBuilder fld;
         Cell cll;
         CellState cState;
@@ -162,14 +163,13 @@ public class GameMaster {
             {
                 cll = this.board.getCellsGrid()[j][i];
                 cState = cll.cellState;
-                if(!cll.playerGuids.equals(""))
-                {
-                    for(int k =0; k < this.teamBlueGuids.size(); k++) {
-                        if (cll.playerGuids.equals(this.teamBlueGuids.get(k).toString()))
+                if(!cll.playerGuids.equals("")) {
+                    for (UUID teamBlueGuid : this.teamBlueGuids) {
+                        if (cll.playerGuids.equals(teamBlueGuid.toString()))
                             fld.append("| " + ConsoleColors.BLUE + "B P " + ConsoleColors.RESET);
                     }
-                    for (int k = 0; k < this.teamRedGuids.size(); k++) {
-                        if (cll.playerGuids.equals(this.teamRedGuids.get(k).toString()))
+                    for (UUID teamRedGuid : this.teamRedGuids) {
+                        if (cll.playerGuids.equals(teamRedGuid.toString()))
                             fld.append("| " + ConsoleColors.RED + "R P " + ConsoleColors.RESET);
                     }
                 } else if (cState == CellState.Piece || cState == CellState.Sham)

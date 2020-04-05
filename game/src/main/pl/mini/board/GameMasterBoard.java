@@ -8,10 +8,8 @@ import pl.mini.cell.Field;
 import pl.mini.player.PlayerDTO;
 import pl.mini.position.Direction;
 import pl.mini.position.Position;
-import pl.mini.team.Team;
 import pl.mini.team.TeamColor;
 
-import java.lang.reflect.Array;
 import java.util.*;
 
 
@@ -89,11 +87,11 @@ public class GameMasterBoard extends Board {
     }
 
     //generate piece on random position in the TaskArea
-    public Position generatePiece(double chance) {
-        Random randomX = new Random( );
-        Random randomY = new Random( );
-        int x = randomX.nextInt(getBoardWidth( ));
-        int y = getGoalAreaHeight( ) + randomY.nextInt(getTaskAreaHeight( ));
+    public Position generatePiece() {
+        Random randomX = new Random();
+        Random randomY = new Random();
+        int x = randomX.nextInt(getBoardWidth());
+        int y = getGoalAreaHeight() + randomY.nextInt(getTaskAreaHeight());
         return new Position(x, y);
     }
 
@@ -127,15 +125,15 @@ public class GameMasterBoard extends Board {
     }
 
 
-    public Position placePlayer(PlayerDTO player) {   //#todo other players boundaries
-        Random randomX = new Random( );
-        Random randomY = new Random( );
+    public Position placePlayer(PlayerDTO player) {
+        Random randomX = new Random();
+        Random randomY = new Random();
         Cell[][] cll = this.getCellsGrid();
-        int x = randomX.nextInt(getBoardWidth( ));
+        int x = randomX.nextInt(getBoardWidth());
         int y;
-        switch (player.getPlayerTeamColor( )) {
+        switch (player.getPlayerTeamColor()) {
             case Red: {
-                y = randomY.nextInt(getGoalAreaHeight( ));
+                y = randomY.nextInt(getGoalAreaHeight());
                 break;
             }
             case Blue: {
@@ -167,9 +165,7 @@ public class GameMasterBoard extends Board {
                         goalcounter++;
                 }
             }
-            if (goalcounter == 0)
-                return true;
-            return false;
+                return goalcounter == 0;
             }
         case Blue:
             {
@@ -181,9 +177,7 @@ public class GameMasterBoard extends Board {
                             goalcounter++;
                     }
                 }
-                if (goalcounter == 0)
-                    return true;
-                return false;
+                return goalcounter == 0;
             }
 
         }
@@ -192,7 +186,6 @@ public class GameMasterBoard extends Board {
 
 
     public List<Field> discover(Position position) {
-        //#todo boundary
         int x = position.getX( );
         int y = position.getY( );
         List<Field> list = new ArrayList<>( );
@@ -236,13 +229,7 @@ public class GameMasterBoard extends Board {
             }
             //System.out.println("Closest piece position: " + positions[id].toString());
             return min;
-        }
-        catch(NullPointerException e)
-        {
-            return -1;
-        }
-        catch(ArrayIndexOutOfBoundsException e)
-        {
+        } catch (NullPointerException | ArrayIndexOutOfBoundsException e) {
             return -1;
         }
     }
@@ -282,13 +269,7 @@ public class GameMasterBoard extends Board {
                 return min;
             else
                 return -1;
-        }
-        catch(NullPointerException e)
-        {
-            return -1;
-        }
-        catch(ArrayIndexOutOfBoundsException e)
-        {
+        } catch (NullPointerException | ArrayIndexOutOfBoundsException e) {
             return -1;
         }
     }

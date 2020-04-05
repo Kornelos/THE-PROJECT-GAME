@@ -52,10 +52,8 @@ public class Player extends PlayerDTO {
         if (piece) {
             // goes to base
             // places piece in the base
-            Direction baseDirection;
             int goalHeight = board.getGoalAreaHeight();
             if (team.getColor() == TeamColor.Blue) {
-                baseDirection = Direction.Down;
                 if (position.getY() >= board.getBoardHeight() - goalHeight) {
                     if (board.getCellsGrid()[position.getX()][position.getY()].cellState == CellState.Unknown) {
                         placePiece();
@@ -68,7 +66,6 @@ public class Player extends PlayerDTO {
                 } else
                     seekGoal();
             } else {
-                baseDirection = Direction.Up;
                 if (position.getY() < goalHeight) {
                     if (board.getCellsGrid()[position.getX()][position.getY()].cellState == CellState.Unknown) {
                         placePiece();
