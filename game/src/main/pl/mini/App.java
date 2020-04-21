@@ -1,7 +1,9 @@
 package pl.mini;
 
 import lombok.extern.slf4j.Slf4j;
+import pl.mini.communication.GameMasterClientRunner;
 import pl.mini.communication.ServerRunner;
+import pl.mini.player.Player;
 
 /**
  * Hello world!
@@ -10,19 +12,19 @@ import pl.mini.communication.ServerRunner;
 public class App {
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         if (args.length < 1) {
             log.error("Program needs input argument (gm | player | server)");
             return;
         }
-        switch (args[1]) {
+        switch (args[0]) {
             case "gm":
-                // run gamemaster
-
+                // run gm
+                GameMasterClientRunner.main(args);
                 break;
             case "player":
                 // run player
-
+                Player.main(args);
                 break;
             case "server":
                 //run server

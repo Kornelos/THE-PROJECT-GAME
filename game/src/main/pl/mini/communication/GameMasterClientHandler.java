@@ -2,24 +2,21 @@ package pl.mini.communication;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class GameMasterClientHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) {
-        System.out.println("Client active");
+        log.info("Client active");
         ctx.writeAndFlush("GameMaster");
     }
 
-    @Override
-    public void channelInactive(ChannelHandlerContext ctx){
-        System.out.println("Server shutdown");
-
-    }
 
     @Override
-    public void channelRead(ChannelHandlerContext ctx, Object msg) throws InterruptedException {
-    System.out.println(msg.toString());
+    public void channelRead(ChannelHandlerContext ctx, Object msg) {
+        log.info(msg.toString());
     }
 
     @Override
@@ -33,5 +30,10 @@ public class GameMasterClientHandler extends ChannelInboundHandlerAdapter {
         ctx.close();
     }
 
+    @Override
+    public void channelInactive(ChannelHandlerContext ctx) {
+        log.info("closing program..");
+        System.exit(0);
+    }
 
 }
