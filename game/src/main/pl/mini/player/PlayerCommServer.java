@@ -48,6 +48,7 @@ public class PlayerCommServer {
         while((return_msg = handler.getMessage()) == (null));
         if(return_msg.equals("Game Over"))
             this.closeConnection();
+        handler.setMessage(null);
         return return_msg;
     }
 
