@@ -8,14 +8,18 @@ public class GameMasterClientHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelActive(ChannelHandlerContext ctx) {
         System.out.println("Client active");
-        ctx.writeAndFlush("GameMaster connected");
+        ctx.writeAndFlush("GameMaster");
+    }
+
+    @Override
+    public void channelInactive(ChannelHandlerContext ctx){
+        System.out.println("Server shutdown");
+
     }
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws InterruptedException {
-        ctx.write(msg);
-        System.out.println(msg.toString());
-        Thread.sleep(5000);
+    System.out.println(msg.toString());
     }
 
     @Override

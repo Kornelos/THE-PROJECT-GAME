@@ -13,13 +13,13 @@ import pl.mini.gamemaster.GameMaster;
 
 public class GameMasterClient {
     static final private GameMaster gm = new GameMaster();
-    //static final String HOST = System.getProperty("host", "127.0.0.1");
-    //static final int PORT = Integer.parseInt(System.getProperty("port", "997"));
-    static final int PORT = gm.getPortNumber();
-    static final String HOST = gm.getIpAddress().toString();
+    static final String HOST = System.getProperty("host", "127.0.0.1");
+    static final int PORT = Integer.parseInt(System.getProperty("port", "997"));
+    //static final int PORT = gm.getPortNumber();
+    //static final String HOST = gm.getIpAddress().toString();
 
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void start(int port) throws InterruptedException {
         EventLoopGroup group = new NioEventLoopGroup();
         try {
             Bootstrap b = new Bootstrap();
@@ -36,7 +36,7 @@ public class GameMasterClient {
                         }
                     });
 
-            ChannelFuture f = b.connect(HOST, PORT).sync();
+            ChannelFuture f = b.connect(HOST, port).sync();
 
 
 
