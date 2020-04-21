@@ -3,17 +3,28 @@ package pl.mini.player;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.mina.core.future.ConnectFuture;
+import org.apache.mina.core.service.IoConnector;
+import org.apache.mina.filter.codec.ProtocolCodecFilter;
+import org.apache.mina.filter.codec.serialization.ObjectSerializationCodecFactory;
+import org.apache.mina.transport.socket.nio.NioSocketConnector;
+import org.json.simple.JSONObject;
 import pl.mini.CommServerMockSingleton;
 import pl.mini.board.Board;
 import pl.mini.board.PlacementResult;
 import pl.mini.cell.CellState;
 import pl.mini.cell.Field;
+import pl.mini.communication.CommunicationServer;
 import pl.mini.position.Direction;
 import pl.mini.position.Position;
 import pl.mini.team.Team;
 import pl.mini.team.TeamColor;
 
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.Socket;
 import java.util.List;
 
 @Slf4j
@@ -230,4 +241,25 @@ public class Player extends PlayerDTO {
             }
         }
     }
+
+    private static void sendMessage(String jsonObject) throws Exception {
+        String msg = jsonObject;
+
+
+    }
+
+    public static void main(String[] args) throws Exception {
+        try {
+            PlayerCommServer communicationServer = new PlayerCommServer();
+            communicationServer.connect();
+            Thread.sleep(5000);
+            String msg = communicationServer.sendMessage("This is a message from external class");
+            System.out.println("==================================="+ msg + "========================================");
+            Thread.sleep(5000);
+            communicationServer.closeConnection();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
