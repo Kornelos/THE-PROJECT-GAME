@@ -11,7 +11,7 @@ import io.netty.handler.codec.string.StringEncoder;
 public class PlayerCommServer {
     static final String HOST = System.getProperty("host", "127.0.0.1");
     static final int PORT = Integer.parseInt(System.getProperty("port", "2137"));
-    private EventLoopGroup group = new NioEventLoopGroup();
+    private final EventLoopGroup group = new NioEventLoopGroup();
     private Channel channel;
     SimplePlayerCommHandler handler;
 

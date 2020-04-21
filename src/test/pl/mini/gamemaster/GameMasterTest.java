@@ -1,17 +1,10 @@
 package pl.mini.gamemaster;
 
-import static org.junit.Assert.assertTrue;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Assert;
 import org.junit.Test;
-import pl.mini.gamemaster.GameMaster;
 import pl.mini.position.Position;
 
-import java.awt.Point;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 public class GameMasterTest
 {
