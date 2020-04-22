@@ -230,4 +230,25 @@ public class Player extends PlayerDTO {
             }
         }
     }
+
+    private static void sendMessage(String jsonObject) {
+        String msg = jsonObject;
+
+
+    }
+
+    public static void main(String[] args) {
+        try {
+            PlayerCommServer communicationServer = new PlayerCommServer();
+            communicationServer.connect();
+            Thread.sleep(5000);
+            String msg = communicationServer.sendMessage("This is a message from external class");
+            System.out.println("===================================" + msg + "========================================");
+            Thread.sleep(5000);
+            // communicationServer.closeConnection();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

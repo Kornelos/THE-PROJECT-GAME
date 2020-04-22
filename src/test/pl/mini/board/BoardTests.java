@@ -3,7 +3,9 @@ package pl.mini.board;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import pl.mini.cell.*;
+import pl.mini.cell.Cell;
+import pl.mini.cell.CellState;
+import pl.mini.cell.Field;
 import pl.mini.position.Position;
 
 public class BoardTests {

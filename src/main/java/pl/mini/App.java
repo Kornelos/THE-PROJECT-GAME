@@ -1,17 +1,9 @@
 package pl.mini;
 
 import lombok.extern.slf4j.Slf4j;
-import pl.mini.board.Board;
-import pl.mini.board.GameMasterBoard;
-import pl.mini.gamemaster.GameMaster;
+import pl.mini.communication.GameMasterClientRunner;
+import pl.mini.communication.ServerRunner;
 import pl.mini.player.Player;
-import pl.mini.position.Position;
-import pl.mini.team.Team;
-import pl.mini.team.TeamColor;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
 /**
  * Hello world!
@@ -19,6 +11,28 @@ import java.util.UUID;
 @Slf4j
 public class App {
 
+
+    public static void main(String[] args) throws Exception {
+        if (args.length < 1) {
+            log.error("Program needs input argument (gm | player | server)");
+            return;
+        }
+        switch (args[0]) {
+            case "gm":
+                // run gm
+                GameMasterClientRunner.main(args);
+                break;
+            case "player":
+                // run player
+                Player.main(args);
+                break;
+            case "server":
+                //run server
+                ServerRunner.main(args);
+                break;
+        }
+    }
+/*
     public static void main(String[] args) {
 
         log.info("Game is initializing..");
@@ -115,4 +129,6 @@ public class App {
             i += 1;
         }
     }
+
+ */
 }
