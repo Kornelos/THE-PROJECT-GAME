@@ -10,6 +10,7 @@ import pl.mini.position.Direction;
 import pl.mini.position.Position;
 import pl.mini.team.TeamColor;
 import pl.mini.team.TeamRole;
+import pl.mini.position.Position;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +30,6 @@ public class MessageFactory {
         JSONObject json = (JSONObject) parser.parse(jsonString);
 
         MessageAction action = MessageAction.valueOf((String) json.get("action"));
-
 
         switch (action) {
             case connect:
@@ -54,7 +54,7 @@ public class MessageFactory {
                         Status.valueOf((String) json.get("status")),
                         Test.valueOf((String) json.get("test")));
             case place:
-                return  new PlaceMessage(UUID.fromString((String) json.get("playerGuid")));
+                return new PlaceMessage(UUID.fromString((String) json.get("playerGuid")));
             case start:
                 JSONArray pointList = (JSONArray) json.get("teamGuids");
                 List<UUID> guids = new ArrayList<>();
@@ -73,7 +73,10 @@ public class MessageFactory {
             case pickupResult:
                 return new PickupResultMessage(UUID.fromString((String) json.get("playerGuid")), (String) json.get("result"));
             case discover:
-                return null;
+                int x = (int) json.get("x");
+                int y = (int) json.get("y");
+                Position position = new Position(x, y);
+                return new DiscoverMessage(UUID.fromString((String) json.get("playerGuid")), position);
         }
 
         // if code hasn't returned any value throw exception
