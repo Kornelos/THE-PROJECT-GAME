@@ -12,4 +12,5 @@ public class Position {
     @Getter
     @Setter
     private int y;
+
 }
