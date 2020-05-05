@@ -1,13 +1,9 @@
 package pl.mini;
 
 import lombok.extern.slf4j.Slf4j;
-import pl.mini.cell.Cell;
-import pl.mini.cell.CellState;
-import pl.mini.cell.Field;
 import pl.mini.communication.GameMasterClientRunner;
 import pl.mini.communication.ServerRunner;
 import pl.mini.player.Player;
-import pl.mini.position.Position;
 
 /**
  * Hello world!
@@ -17,13 +13,6 @@ public class App {
 
 
     public static void main(String[] args) throws Exception {
-
-        Cell cell = new Cell(CellState.Empty);
-        Position position = new Position(2,2);
-        Field field = new Field(position, cell);
-        System.out.print(field.toString());
-    }}
-     /*
         if (args.length < 1) {
             log.error("Program needs input argument (gm | player | server)");
             return;
@@ -42,7 +31,8 @@ public class App {
                 ServerRunner.main(args);
                 break;
         }
-    }*/
+    }
+}
 /*
     public static void main(String[] args) {
 

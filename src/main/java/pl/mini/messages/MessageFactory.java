@@ -10,7 +10,6 @@ import pl.mini.position.Direction;
 import pl.mini.position.Position;
 import pl.mini.team.TeamColor;
 import pl.mini.team.TeamRole;
-import pl.mini.position.Position;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,8 +74,12 @@ public class MessageFactory {
             case discover:
                 int x = (int) json.get("x");
                 int y = (int) json.get("y");
-                Position position = new Position(x, y);
-                return new DiscoverMessage(UUID.fromString((String) json.get("playerGuid")), position);
+                Position discoverPosition = new Position(x, y);
+                return new DiscoverMessage(UUID.fromString((String) json.get("playerGuid")), discoverPosition);
+            case discoverResult:
+                Position discoverResultPosition = new Position((int) json.get("x"), (int) json.get("y"));
+                //TODO: add after fixing
+//                return new DiscoverResultMessage(UUID.fromString((String) json.get("playerGuid")),discoverResultPosition)
         }
 
         // if code hasn't returned any value throw exception

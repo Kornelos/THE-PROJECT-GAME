@@ -10,15 +10,15 @@ import pl.mini.position.Position;
 import java.util.*;
 
 @EqualsAndHashCode
-public class DiscoverStatusMessage implements JsonMessage {
+public class DiscoverResultMessage implements JsonMessage {
     @Getter
-    private final MessageAction action = MessageAction.discover;
+    private final MessageAction action = MessageAction.discoverResult;
     private final UUID playerGuid;
     private final Position position;
     private final List<Field> fields;
     private final List<String> tmp = new ArrayList<>();
 
-    public DiscoverStatusMessage(UUID playerGuid, Position position, List<Field> fields) {
+    public DiscoverResultMessage(UUID playerGuid, Position position, List<Field> fields) {
         this.playerGuid = playerGuid;
         this.position = position;
         this.fields = fields;
