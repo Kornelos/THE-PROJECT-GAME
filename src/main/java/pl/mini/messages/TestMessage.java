@@ -20,15 +20,21 @@ public class TestMessage implements JsonMessage{
     }
 
     @Override
-    public String toJsonString(){
+    public String toJsonString() {
         Map<String, String> jsonMap = new HashMap<>();
-        jsonMap.put("playerGuid",this.playerGuid.toString());
+        jsonMap.put("playerGuid", this.playerGuid.toString());
         jsonMap.put("action", this.action.name());
         JSONObject json = new JSONObject(jsonMap);
         return json.toString();
     }
+
     @Override
-    public String toString(){
+    public String getTarget() {
+        return "gm";
+    }
+
+    @Override
+    public String toString() {
         return toJsonString();
     }
 }

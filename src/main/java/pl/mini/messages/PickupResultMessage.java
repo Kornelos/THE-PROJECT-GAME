@@ -33,5 +33,12 @@ public class PickupResultMessage implements JsonMessage {
     }
 
     @Override
-    public String toString() { return toJsonString(); }
+    public String getTarget() {
+        return playerGuid.toString();
+    }
+
+    @Override
+    public String toString() {
+        return toJsonString();
+    }
 }

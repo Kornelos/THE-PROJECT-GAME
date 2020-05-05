@@ -2,7 +2,6 @@ package pl.mini.messages;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import pl.mini.position.Position;
 
@@ -34,12 +33,17 @@ public class DiscoverMessage implements JsonMessage {
         JSONObject json = new JSONObject(jsonMap);
         point.put("x", this.position.getX());
         point.put("y", this.position.getY());
-        json.put("position",point);
+        json.put("position", point);
         return json.toString();
     }
 
     @Override
-    public String toString(){
+    public String getTarget() {
+        return "gm";
+    }
+
+    @Override
+    public String toString() {
         return this.toJsonString();
     }
 }

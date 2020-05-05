@@ -18,6 +18,7 @@ public class PlaceMessage implements JsonMessage {
     public PlaceMessage (UUID playerGuid) {
         this.playerGuid = playerGuid;
     }
+
     @Override
     public String toJsonString() {
         Map<String, String> jsonMap = new HashMap<>();
@@ -25,6 +26,11 @@ public class PlaceMessage implements JsonMessage {
         jsonMap.put("action", action.name());
         JSONObject json = new JSONObject(jsonMap);
         return json.toString();
+    }
+
+    @Override
+    public String getTarget() {
+        return "gm";
     }
 
     @Override

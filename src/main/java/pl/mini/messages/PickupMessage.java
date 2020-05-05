@@ -29,5 +29,12 @@ public class PickupMessage implements JsonMessage {
     }
 
     @Override
-    public String toString() { return toJsonString(); }
+    public String getTarget() {
+        return "gm";
+    }
+
+    @Override
+    public String toString() {
+        return toJsonString();
+    }
 }

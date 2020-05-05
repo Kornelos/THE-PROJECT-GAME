@@ -2,7 +2,6 @@ package pl.mini.messages;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import pl.mini.position.Direction;
 import pl.mini.position.Position;
@@ -34,18 +33,24 @@ public class MoveResultMessage implements JsonMessage {
     @Override
     public String toJsonString(){
         Map<String, String> jsonMap = new HashMap<>();
-        jsonMap.put("playerGuid",this.playerGuid.toString());
+        jsonMap.put("playerGuid", this.playerGuid.toString());
         jsonMap.put("action", this.action.name());
-        jsonMap.put("direction",this.direction.name());
+        jsonMap.put("direction", this.direction.name());
         JSONObject point = new JSONObject();
         point.put("x", this.position.getX());
         point.put("y", this.position.getY());
         JSONObject json = new JSONObject(jsonMap);
-        json.put("position",point);
+        json.put("position", point);
         return json.toString();
     }
+
     @Override
-    public String toString(){
+    public String getTarget() {
+        return playerGuid.toString();
+    }
+
+    @Override
+    public String toString() {
         return toJsonString();
     }
 }
