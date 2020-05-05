@@ -32,6 +32,15 @@ public class Cell {
         return json.toString();
     }
 
+    public  JSONObject toJSONObject() {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("cellState", cellState.name());
+        jsonObject.put("distance", distance);
+        jsonObject.put("playerGuid", playerGuids);
+
+        return jsonObject;
+    }
+
     @Override
     public String toString() {
         return toJsonString();

@@ -1,11 +1,14 @@
 package pl.mini.messages;
 
+import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import pl.mini.board.Board;
+import pl.mini.cell.Cell;
+import pl.mini.cell.CellState;
 import pl.mini.cell.Field;
 import pl.mini.position.Direction;
 import pl.mini.position.Position;
@@ -15,6 +18,7 @@ import pl.mini.team.TeamRole;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.logging.FileHandler;
 
 
 public class MessageFactory {
@@ -79,7 +83,9 @@ public class MessageFactory {
                 Position discoverPosition = new Position(x, y);
                 return new DiscoverMessage(UUID.fromString((String) json.get("playerGuid")), discoverPosition);
             case discoverResult:
-                Position discoverResultPosition = new Position((int) json.get("x"), (int) json.get("y"));
+                JSONObject pos1 = (JSONObject) json.get("position");
+                Position discoverResultPosition = new Position(((Long) pos1.get("x")).intValue(),
+                        ((Long) pos1.get("y")).intValue());
                 //TODO: add after fixing
                 List<Field> fields = new ArrayList<>();
                 JSONArray fieldList = (JSONArray) json.get("fields");
@@ -87,12 +93,15 @@ public class MessageFactory {
                     if (obj instanceof JSONObject) {
                         int xField = ((Long) ((JSONObject) obj).get("x")).intValue();
                         int yField = ((Long) ((JSONObject) obj).get("y")).intValue();
-//                        new Position(xField,yField);
                         JSONObject cellJson = (JSONObject) ((JSONObject) obj).get("cell");
-//                        TODO: skonczyc xd
+                        Cell cll = new Cell((CellState.valueOf((String) cellJson.get("cellState"))));
+                        cll.playerGuids = (String) cellJson.get("playerGuid");
+                        cll.distance = ((Long) cellJson.get("distance")).intValue();
+                        fields.add(new Field(new Position(xField, yField), cll));
                     }
                 }
-                return new DiscoverResultMessage(UUID.fromString((String) json.get("playerGuid")), discoverResultPosition, )
+                return new DiscoverResultMessage(UUID.fromString((String) json.get("playerGuid")),
+                        discoverResultPosition, fields);
         }
 
         // if code hasn't returned any value throw exception

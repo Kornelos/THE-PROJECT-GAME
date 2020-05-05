@@ -1,5 +1,6 @@
 package pl.mini.cell;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.json.simple.JSONObject;
@@ -8,6 +9,7 @@ import pl.mini.position.Position;
 import java.util.HashMap;
 import java.util.Map;
 
+@EqualsAndHashCode
 public class Field {
     @Getter
     @Setter
@@ -32,6 +34,15 @@ public class Field {
 
         JSONObject json = new JSONObject(jsonMap);
         return json.toString();
+    }
+
+    public JSONObject toJSONObject() {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("x", position.getX());
+        jsonObject.put("y", position.getY());
+        jsonObject.put("cell", cell.toJSONObject());
+
+        return  jsonObject;
     }
 
     @Override

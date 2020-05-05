@@ -2,8 +2,12 @@ package pl.mini.messages;
 
 import org.json.simple.parser.ParseException;
 import org.junit.Assert;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
 import pl.mini.board.Board;
+import pl.mini.cell.Cell;
+import pl.mini.cell.CellState;
+import pl.mini.cell.Field;
 import pl.mini.position.Position;
 import pl.mini.team.TeamColor;
 import pl.mini.team.TeamRole;
@@ -11,6 +15,7 @@ import pl.mini.team.TeamRole;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.logging.FileHandler;
 
 public class MessageFactoryTest {
 
@@ -74,5 +79,18 @@ public class MessageFactoryTest {
         Assert.assertEquals(pickupResultMessage.getClass(), jsonMessagePickupResult.getClass());
         PickupResultMessage prm = (PickupResultMessage) jsonMessagePickupResult;
         Assert.assertEquals(pickupResultMessage, prm);
+
+        //test discover result message
+        List<Field> fields = new ArrayList<>();
+        fields.add(new Field(new Position(3,4), new Cell(CellState.Goal)));
+        fields.add(new Field(new Position(5,6), new Cell(CellState.Piece)));
+        fields.add(new Field(new Position(7,8), new Cell(CellState.Empty)));
+        DiscoverResultMessage discoverResultMessage = new DiscoverResultMessage(UUID.randomUUID(),
+                new Position(1,2), fields);
+        JsonMessage jsonMessageDiscoverResult = MessageFactory.messageFromString(discoverResultMessage.toString());
+        assert jsonMessageDiscoverResult != null;
+        Assert.assertEquals(discoverResultMessage.getClass(), jsonMessageDiscoverResult.getClass());
+        DiscoverResultMessage drm = (DiscoverResultMessage) jsonMessageDiscoverResult;
+        Assert.assertEquals(discoverResultMessage, drm);
     }
 }

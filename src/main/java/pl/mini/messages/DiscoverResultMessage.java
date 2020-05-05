@@ -3,6 +3,7 @@ package pl.mini.messages;
 import com.google.gson.JsonArray;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import pl.mini.cell.Field;
 import pl.mini.position.Position;
@@ -19,16 +20,11 @@ public class DiscoverResultMessage implements JsonMessage {
     private final Position position;
     @Getter
     private final List<Field> fields;
-    @Getter
-    private final List<String> tmp = new ArrayList<>();
 
     public DiscoverResultMessage(UUID playerGuid, Position position, List<Field> fields) {
         this.playerGuid = playerGuid;
         this.position = position;
         this.fields = fields;
-        for (Field f : fields) {
-            tmp.add(f.toJsonString());
-        }
     }
 
     @Override
@@ -42,10 +38,10 @@ public class DiscoverResultMessage implements JsonMessage {
         point.put("x", this.position.getX());
         point.put("y", this.position.getY());
         json.put("position",point);
-        JsonArray fields = new JsonArray();
-        for(String s : tmp)
+        JSONArray fields = new JSONArray();
+        for(Field f : this.fields)
         {
-            fields.add(s);
+            fields.add(f.toJSONObject());
         }
         json.put("fields", fields);
         return json.toString();
