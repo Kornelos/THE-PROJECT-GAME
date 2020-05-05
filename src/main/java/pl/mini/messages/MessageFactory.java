@@ -56,6 +56,10 @@ public class MessageFactory {
                         Test.valueOf((String) json.get("test")));
             case place:
                 return new PlaceMessage(UUID.fromString((String) json.get("playerGuid")));
+            case placeResult:
+                return new PlaceResultMessage(UUID.fromString((String) json.get("playerGuid")),
+                        PlacementResult.valueOf((String) json.get("result"))
+                        ,Status.valueOf((String) json.get("status")));
             case start:
                 JSONArray pointList = (JSONArray) json.get("teamGuids");
                 List<UUID> guids = new ArrayList<>();
@@ -99,6 +103,7 @@ public class MessageFactory {
                 }
                 return new DiscoverResultMessage(UUID.fromString((String) json.get("playerGuid")),
                         discoverResultPosition, fields);
+
         }
 
         // if code hasn't returned any value throw exception
