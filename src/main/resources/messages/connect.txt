@@ -1,0 +1,132 @@
+## player connection message [player->server]
+{
+"action" : "connect",
+"playerGUID" : "string"
+}
+
+## gamemaster connection [gm -> server]
+{
+"action" : "gmConnect"
+}
+
+## game start message [gm -> players]
+{
+"action" : "start",
+"team" : "<Red|Blue>",
+"teamRole" : "<Leader|Member>",
+"teamSize" : <1|2|3|4>,
+"teamGuids : [
+"string",
+"string",
+...
+]
+"position" : {
+"x" : <0|1|2 | . . . | boardWidth in the config JSON − 1 >,
+"y" : <0|1|2 | . . . | boardHeight in the config JSON − 1 >
+}
+"board" : {
+"boardWidth" : <1|2|3 | . . . | boardWidth in the config JSON>,
+"taskAreaHeight" : <1|2|3 | . . . | taskAreaHeight in the config JSON>,
+"goalAreaHeight" : <1|2|3 | . . . | boardWidth in the config JSON>
+}
+}
+
+## game end message [mg -> players]
+{
+"action" : "end",
+"result" : "<Red|Blue|Draw>"
+}
+
+## move message [player -> gm]
+{
+"action" : "move",
+"playerGuid" : "string",
+"direction" : "<Up|Down|Left|Right>"
+}
+## move message reply [gm->player]
+{
+"action" : "move",
+"playerGUID" : "string",
+"direction" : "<Up|Down|Left|Right>",
+"status" : "<OK|DENIED>",
+"position" : {
+"x" : "<0-max_x>",
+"y" : "<0-max_y>"
+}
+}
+
+## pickup message [player -> gm]
+{
+"action": "pickup",
+"playerGuid": "string",
+}
+
+## pickup message reply [gm -> player]
+{
+"action": "pickup",
+"playerGuid": "string",
+"status" : "<OK|DENIED>"
+}
+
+
+
+
+## test message
+{
+"action": "test",
+"playerGuid": "string
+}
+
+## test status message
+{
+"action": "test",
+"playerGuid": "string",
+"test": <true|false|null>,
+"status": <OK|DENIED>
+}
+
+## place message [player -> gm]
+{
+"action": "place"
+"playerGuid": "string",
+}
+
+## place status message reply [gm -> player]
+{
+"action": "test",
+"playerGuid": "string",
+"placementResult": "<Correct|Pointless>",
+"status": "<OK|DENIED>"
+}
+
+
+## discover message [player -> gm]
+{
+"action" : "discover",
+"playerGuid" : "string",
+"position" : {
+"x" : "0-maxx"
+"y" : "0-maxy"
+}
+}
+## discover message reply [gm -> player]
+{
+"action" : "discover",
+"playerGuid" : "string",
+"position" : {
+"x" : "0-maxx"
+"y" : "0-maxy"
+},
+"fields" : [
+{
+"x" : "<x in goal area>",
+"y" : "<y in goal area>",
+"cell" : {
+"cellState" : "<Empty|Piece>",
+"distance" : "<0-max>",
+"playerGuid": "string"
+}, ...
+
+}
+]
+}

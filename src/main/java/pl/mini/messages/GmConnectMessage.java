@@ -1,27 +1,24 @@
-package pl.mini.position;
+package pl.mini.messages;
 
-import lombok.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import org.json.simple.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
 
-@ToString
 @EqualsAndHashCode
-@AllArgsConstructor
-public class Position {
+public class GmConnectMessage implements JsonMessage {
     @Getter
-    @Setter
-    private int x;
-    @Getter
-    @Setter
-    private int y;
+    public MessageAction action = MessageAction.gmConnect;
 
+    public GmConnectMessage() {
+    }
+
+    @Override
     public String toJsonString() {
         Map<String, String> jsonMap = new HashMap<>();
-        jsonMap.put("x", String.valueOf(x));
-        jsonMap.put("y", String.valueOf(y));
-
+        jsonMap.put("action", action.name());
         JSONObject json = new JSONObject(jsonMap);
         return json.toString();
     }
