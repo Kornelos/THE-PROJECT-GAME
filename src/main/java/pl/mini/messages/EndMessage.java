@@ -5,23 +5,22 @@ import org.json.simple.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
-public class pickupMessage implements JsonMessage {
+public class EndMessage implements JsonMessage {
     @Getter
     private final MessageAction action;
     @Getter
-    private final UUID playerGuid;
+    private final String result;
 
-    public pickupMessage(MessageAction action, UUID playerGuid) {
+    public EndMessage(MessageAction action, String result) {
         this.action = action;
-        this.playerGuid = playerGuid;
+        this.result = result;
     }
 
     @Override
     public String toJsonString() {
         Map<String, String> jsonMap = new HashMap<>();
-        jsonMap.put("playerGuid", playerGuid.toString());
+        jsonMap.put("result", result);
         jsonMap.put("action", action.name());
         JSONObject json = new JSONObject(jsonMap);
         return json.toString();

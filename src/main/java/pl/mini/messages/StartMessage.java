@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public class startMessage implements JsonMessage {
+public class StartMessage implements JsonMessage {
     @Getter
     private final MessageAction action;
     @Getter
@@ -31,7 +31,7 @@ public class startMessage implements JsonMessage {
     @Getter
     private final Board board;
 
-    public startMessage(MessageAction action, TeamColor teamColor, TeamRole teamRole, int teamSize,
+    public StartMessage(MessageAction action, TeamColor teamColor, TeamRole teamRole, int teamSize,
                         List<UUID> teamGuids, Position position, Board board) {
         this.action = action;
         this.teamColor = teamColor;
