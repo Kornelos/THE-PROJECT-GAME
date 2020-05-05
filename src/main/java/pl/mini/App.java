@@ -1,21 +1,9 @@
 package pl.mini;
 
 import lombok.extern.slf4j.Slf4j;
-import pl.mini.board.Board;
-import pl.mini.cell.Cell;
-import pl.mini.cell.CellState;
 import pl.mini.communication.GameMasterClientRunner;
 import pl.mini.communication.ServerRunner;
-import pl.mini.messages.StartMessage;
 import pl.mini.player.Player;
-import pl.mini.position.Position;
-import pl.mini.team.TeamColor;
-import pl.mini.team.TeamRole;
-
-import java.io.Console;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
 /**
  * Hello world!
@@ -25,9 +13,24 @@ public class App {
 
 
     public static void main(String[] args) throws Exception {
-        Cell c1 = new Cell(CellState.Goal);
-        Cell c2 = new Cell(CellState.Goal);
-        System.out.println(c1.equals(c2));
+        if (args.length < 1) {
+            log.error("Program needs input argument (gm | player | server)");
+            return;
+        }
+        switch (args[0]) {
+            case "gm":
+                // run gm
+                GameMasterClientRunner.main(args);
+                break;
+            case "player":
+                // run player
+                Player.main(args);
+                break;
+            case "server":
+                //run server
+                ServerRunner.main(args);
+                break;
+        }
     }
 }
 /*
