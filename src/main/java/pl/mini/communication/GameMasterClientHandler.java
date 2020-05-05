@@ -3,6 +3,7 @@ package pl.mini.communication;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import lombok.extern.slf4j.Slf4j;
+import pl.mini.messages.GmConnectMessage;
 
 @Slf4j
 public class GameMasterClientHandler extends ChannelInboundHandlerAdapter {
@@ -10,7 +11,7 @@ public class GameMasterClientHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelActive(ChannelHandlerContext ctx) {
         log.info("Client active");
-        ctx.writeAndFlush("GameMaster");
+        ctx.writeAndFlush(new GmConnectMessage().toString());
     }
 
 

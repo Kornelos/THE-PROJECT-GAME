@@ -5,8 +5,11 @@ import io.netty.channel.group.ChannelGroup;
 import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.util.concurrent.GlobalEventExecutor;
 import lombok.extern.slf4j.Slf4j;
-import pl.mini.messages.JsonMessage;
-import pl.mini.messages.MessageFactory;
+import pl.mini.messages.*;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * Business logic of the communication server
@@ -15,13 +18,14 @@ import pl.mini.messages.MessageFactory;
 @ChannelHandler.Sharable
 public class SimpleTCPChannelHandler extends SimpleChannelInboundHandler<String> {
     // this holds reference to all active channels, also game master connection should be somehow separated.
-    ChannelGroup channels =
+    ChannelGroup allChannels =
             new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
+    Map<UUID, Channel> playerChannels = new HashMap<>();
     Channel gmChannel;
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) {
-        channels.add(ctx.channel());
+        allChannels.add(ctx.channel());
         log.info(ctx.channel().remoteAddress() + " Channel Active");
 
     }
@@ -29,35 +33,37 @@ public class SimpleTCPChannelHandler extends SimpleChannelInboundHandler<String>
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, String s) {
 
-//        if (s.equals("GameMaster")) {
-//            gmChannel = ctx.channel();
-//            channels.writeAndFlush("GameMaster connected to the server.\n");
-//        } else if (s.equals("Player")) {
-//            channels.writeAndFlush("Player connected to the server.\n");
-//        }
-//        log.info(ctx.channel().remoteAddress() + s);
         try {
             JsonMessage jsonMessage = MessageFactory.messageFromString(s);
             switch (jsonMessage.getTarget()) {
                 case "server":
-                    //handle
+                    // add players and game master to prop. structures
+                    if (jsonMessage.getAction() == MessageAction.connect) {
+                        ConnectMessage playerConnect = (ConnectMessage) jsonMessage;
+                        playerChannels.put(playerConnect.getPlayerGuid(), ctx.channel());
+
+                    } else if (jsonMessage.getAction() == MessageAction.gmConnect) {
+                        gmChannel = ctx.channel();
+                    }
                     break;
                 case "all":
                     // send message to all players and game master
-                    for (Channel c : channels) {
+                    for (Channel c : allChannels) {
                         c.writeAndFlush(s);
                     }
                     break;
                 case "gm":
                     // send message to gm
+                    gmChannel.writeAndFlush(s);
                     break;
                 default:
-                    // if none of the above - assume target is player uuid
+                    UUID targetUUID = UUID.fromString(jsonMessage.getTarget());
+                    playerChannels.get(targetUUID).writeAndFlush(s);
                     break;
             }
 
         } catch (Exception e) {
-            log.error("Server got corrupted message! Exception: " + e.getMessage());
+            log.error("Server got corrupted message! " + s + " Exception: " + e.getMessage());
         }
 
     }
@@ -69,10 +75,12 @@ public class SimpleTCPChannelHandler extends SimpleChannelInboundHandler<String>
         if (ctx.channel().equals(gmChannel)) {
             // if GM disconnected - disconnect all players
             log.warn("GameMaster has disconnected - server stops");
-            for (Channel c : channels) {
-                c.writeAndFlush("Game Over - GM disconnected\n").addListener(ChannelFutureListener.CLOSE);
+            EndMessage endMessage = new EndMessage("draw");
+            for (Channel c : allChannels) {
+                c.writeAndFlush(endMessage.toString()).addListener(ChannelFutureListener.CLOSE);
             }
-            channels.clear();
+            // remove all connections
+            cleanConnections();
         }
     }
 
@@ -83,5 +91,10 @@ public class SimpleTCPChannelHandler extends SimpleChannelInboundHandler<String>
         ctx.close();
     }
 
+    private void cleanConnections() {
+        allChannels.clear();
+        gmChannel = null;
+        playerChannels.clear();
+    }
 
 }
