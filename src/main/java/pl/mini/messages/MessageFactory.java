@@ -1,10 +1,17 @@
 package pl.mini.messages;
 
 import com.google.gson.JsonSyntaxException;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import pl.mini.board.Board;
+import pl.mini.position.Position;
+import pl.mini.team.TeamColor;
+import pl.mini.team.TeamRole;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 
@@ -28,7 +35,7 @@ public class MessageFactory {
             case gmConnect:
                 return new GmConnectMessage();
             case end:
-                return null;
+                return new EndMessage((String) json.get("result"));
             case move:
                 return null;
             case test:
@@ -36,9 +43,22 @@ public class MessageFactory {
             case place:
                 return  new PlaceMessage(UUID.fromString((String) json.get("playerGuid")));
             case start:
-                return null;
+                JSONArray pointList = (JSONArray) json.get("teamGuids");
+                List<UUID> guids = new ArrayList<>();
+                JSONObject pos = (JSONObject) json.get("position");
+                JSONObject brd = (JSONObject) json.get("board");
+                for (Object o : pointList)
+                    guids.add(UUID.fromString(o.toString()));
+                return new StartMessage(TeamColor.valueOf((String) json.get("teamColor")),
+                        TeamRole.valueOf((String) json.get("teamRole")),
+                        (int) json.get("teamSize"),
+                        guids,
+                        new Position((int) pos.get("x"), (int) pos.get("y")),
+                        new Board((int) brd.get("boardWidth"), (int) brd.get("goalAreaHeight"), (int) brd.get("taskAreaHeight")));
             case pickup:
-                return null;
+                return new PickupMessage(UUID.fromString((String) json.get("playerGuid")));
+            case pickupResult:
+                return new PickupResultMessage(UUID.fromString((String) json.get("playerGuid")), (String) json.get("result"));
             case discover:
                 return null;
         }

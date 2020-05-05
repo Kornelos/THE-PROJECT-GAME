@@ -1,5 +1,6 @@
 package pl.mini.messages;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.json.simple.JSONObject;
 
@@ -7,16 +8,16 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+@EqualsAndHashCode
 public class PickupResultMessage implements JsonMessage {
     @Getter
-    private final MessageAction action;
+    private final MessageAction action = MessageAction.pickup;
     @Getter
     private final UUID playerGuid;
     @Getter
     private final String result;
 
-    public PickupResultMessage(MessageAction action, UUID playerGuid, String result) {
-        this.action = action;
+    public PickupResultMessage(UUID playerGuid, String result) {
         this.playerGuid = playerGuid;
         this.result = result;
     }
@@ -30,4 +31,7 @@ public class PickupResultMessage implements JsonMessage {
         JSONObject json = new JSONObject(jsonMap);
         return json.toString();
     }
+
+    @Override
+    public String toString() { return toJsonString(); }
 }

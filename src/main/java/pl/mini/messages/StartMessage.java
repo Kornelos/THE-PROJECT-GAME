@@ -1,5 +1,6 @@
 package pl.mini.messages;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.json.simple.JSONArray;
@@ -15,9 +16,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+@EqualsAndHashCode
 public class StartMessage implements JsonMessage {
     @Getter
-    private final MessageAction action;
+    private final MessageAction action = MessageAction.start;
     @Getter
     private final TeamColor teamColor;
     @Getter
@@ -31,9 +33,8 @@ public class StartMessage implements JsonMessage {
     @Getter
     private final Board board;
 
-    public StartMessage(MessageAction action, TeamColor teamColor, TeamRole teamRole, int teamSize,
+    public StartMessage(TeamColor teamColor, TeamRole teamRole, int teamSize,
                         List<UUID> teamGuids, Position position, Board board) {
-        this.action = action;
         this.teamColor = teamColor;
         this.teamRole = teamRole;
         this.teamSize = teamSize;
@@ -64,4 +65,7 @@ public class StartMessage implements JsonMessage {
         obj.put("board",brd);
         return obj.toString();
     }
+
+    @Override
+    public String toString() { return toJsonString(); }
 }

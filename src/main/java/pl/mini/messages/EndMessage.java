@@ -1,19 +1,20 @@
 package pl.mini.messages;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.json.simple.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@EqualsAndHashCode
 public class EndMessage implements JsonMessage {
     @Getter
-    private final MessageAction action;
+    private final MessageAction action = MessageAction.pickup;
     @Getter
     private final String result;
 
-    public EndMessage(MessageAction action, String result) {
-        this.action = action;
+    public EndMessage(String result) {
         this.result = result;
     }
 
@@ -25,4 +26,7 @@ public class EndMessage implements JsonMessage {
         JSONObject json = new JSONObject(jsonMap);
         return json.toString();
     }
+
+    @Override
+    public String toString() { return toJsonString(); }
 }
