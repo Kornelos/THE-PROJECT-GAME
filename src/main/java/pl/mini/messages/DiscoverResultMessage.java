@@ -13,9 +13,13 @@ import java.util.*;
 public class DiscoverResultMessage implements JsonMessage {
     @Getter
     private final MessageAction action = MessageAction.discoverResult;
+    @Getter
     private final UUID playerGuid;
+    @Getter
     private final Position position;
+    @Getter
     private final List<Field> fields;
+    @Getter
     private final List<String> tmp = new ArrayList<>();
 
     public DiscoverResultMessage(UUID playerGuid, Position position, List<Field> fields) {
@@ -33,13 +37,22 @@ public class DiscoverResultMessage implements JsonMessage {
         Map<String, String> jsonMap = new HashMap<>();
         jsonMap.put("playerGuid", playerGuid.toString());
         jsonMap.put("action", action.name());
-        jsonMap.put("position", position.toString());
+        JSONObject point = new JSONObject();
+        JSONObject json = new JSONObject(jsonMap);
+        point.put("x", this.position.getX());
+        point.put("y", this.position.getY());
+        json.put("position",point);
+        JsonArray fields = new JsonArray();
         for(String s : tmp)
         {
-            jsonArray.add(s);
+            fields.add(s);
         }
-        jsonMap.put("fields", jsonArray.toString());
-        JSONObject json = new JSONObject(jsonMap);
+        json.put("fields", fields);
         return json.toString();
+    }
+
+    @Override
+    public String toString(){
+        return this.toJsonString();
     }
 }

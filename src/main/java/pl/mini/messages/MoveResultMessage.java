@@ -40,8 +40,6 @@ public class MoveResultMessage implements JsonMessage {
         JSONObject point = new JSONObject();
         point.put("x", this.position.getX());
         point.put("y", this.position.getY());
-        JSONArray position = new JSONArray();
-        position.add(point);
         JSONObject json = new JSONObject(jsonMap);
         json.put("position",point);
         return json.toString();
