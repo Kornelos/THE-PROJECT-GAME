@@ -24,6 +24,11 @@ public class GmConnectMessage implements JsonMessage {
     }
 
     @Override
+    public String getTarget() {
+        return "server";
+    }
+
+    @Override
     public String toString() {
         return toJsonString();
     }

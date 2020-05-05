@@ -39,10 +39,9 @@ public class DiscoverResultMessage implements JsonMessage {
         JSONObject json = new JSONObject(jsonMap);
         point.put("x", this.position.getX());
         point.put("y", this.position.getY());
-        json.put("position",point);
+        json.put("position", point);
         JSONArray fields = new JSONArray();
-        for(Field f : this.fields)
-        {
+        for (Field f : this.fields) {
             fields.add(f.toJSONObject());
         }
         json.put("fields", fields);
@@ -50,7 +49,12 @@ public class DiscoverResultMessage implements JsonMessage {
     }
 
     @Override
-    public String toString(){
+    public String getTarget() {
+        return playerGuid.toString();
+    }
+
+    @Override
+    public String toString() {
         return this.toJsonString();
     }
 }
