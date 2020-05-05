@@ -34,7 +34,7 @@ public class MessageFactory {
             case test:
                 return null;
             case place:
-                return null;
+                return  new PlaceMessage(UUID.fromString((String) json.get("playerGuid")));
             case start:
                 return null;
             case pickup:
