@@ -24,5 +24,14 @@ public class MessageFactoryTest {
         JsonMessage jsonMessageGm = MessageFactory.messageFromString(gmConnectMessage.toString());
         assert jsonMessageGm != null;
         Assert.assertEquals(gmConnectMessage.getClass(), jsonMessageGm.getClass());
+
+        //test place message creation
+        PlaceMessage placeMessage= new PlaceMessage(UUID.randomUUID());
+        JsonMessage jsonMessagePlace = MessageFactory.messageFromString(placeMessage.toString());
+        assert jsonMessagePlace != null;
+        Assert.assertEquals(placeMessage.getClass(), jsonMessagePlace.getClass());
+        PlaceMessage pm = (PlaceMessage) jsonMessagePlace;
+        Assert.assertEquals(placeMessage.getPlayerGuid(), pm.getPlayerGuid());
+
     }
 }
