@@ -20,6 +20,7 @@ public class pickupResultMessage implements JsonMessage {
         this.playerGuid = playerGuid;
         this.result = result;
     }
+
     @Override
     public String toJsonString() {
         Map<String, String> jsonMap = new HashMap<>();

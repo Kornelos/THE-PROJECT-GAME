@@ -17,6 +17,7 @@ public class pickupMessage implements JsonMessage {
         this.action = action;
         this.playerGuid = playerGuid;
     }
+
     @Override
     public String toJsonString() {
         Map<String, String> jsonMap = new HashMap<>();

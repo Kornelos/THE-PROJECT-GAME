@@ -42,7 +42,6 @@ public class startMessage implements JsonMessage {
         this.board = board;
     }
 
-
     @Override
     public String toJsonString() {
         JSONObject obj = new JSONObject();
