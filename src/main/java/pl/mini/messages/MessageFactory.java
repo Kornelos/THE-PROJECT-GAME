@@ -4,6 +4,7 @@ import com.google.gson.JsonSyntaxException;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import pl.mini.position.Position;
 
 import java.util.UUID;
 
@@ -34,13 +35,16 @@ public class MessageFactory {
             case test:
                 return null;
             case place:
-                return  new PlaceMessage(UUID.fromString((String) json.get("playerGuid")));
+                return new PlaceMessage(UUID.fromString((String) json.get("playerGuid")));
             case start:
                 return null;
             case pickup:
                 return null;
             case discover:
-                return null;
+                int x = (int) json.get("x");
+                int y = (int) json.get("y");
+                Position position = new Position(x, y);
+                return new DiscoverMessage(UUID.fromString((String) json.get("playerGuid")), position);
         }
 
         // if code hasn't returned any value throw exception
