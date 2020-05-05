@@ -63,10 +63,11 @@ public class MessageFactory {
                     guids.add(UUID.fromString(o.toString()));
                 return new StartMessage(TeamColor.valueOf((String) json.get("teamColor")),
                         TeamRole.valueOf((String) json.get("teamRole")),
-                        (int) json.get("teamSize"),
+                        ((Long) json.get("teamSize")).intValue(),
                         guids,
-                        new Position((int) pos.get("x"), (int) pos.get("y")),
-                        new Board((int) brd.get("boardWidth"), (int) brd.get("goalAreaHeight"), (int) brd.get("taskAreaHeight")));
+                        new Position(((Long) pos.get("x")).intValue(), ((Long) pos.get("y")).intValue()),
+                        new Board(((Long) brd.get("boardWidth")).intValue(), ((Long) brd.get("goalAreaHeight")).intValue(),
+                                ((Long) brd.get("taskAreaHeight")).intValue()));
             case pickup:
                 return new PickupMessage(UUID.fromString((String) json.get("playerGuid")));
             case pickupResult:

@@ -10,7 +10,7 @@ import java.util.Map;
 @EqualsAndHashCode
 public class EndMessage implements JsonMessage {
     @Getter
-    private final MessageAction action = MessageAction.pickup;
+    private final MessageAction action = MessageAction.end;
     @Getter
     private final String result;
 

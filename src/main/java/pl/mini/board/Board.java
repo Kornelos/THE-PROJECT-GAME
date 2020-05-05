@@ -1,6 +1,7 @@
 package pl.mini.board;
 
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import pl.mini.cell.Cell;
@@ -8,7 +9,7 @@ import pl.mini.cell.CellState;
 import pl.mini.cell.Field;
 import pl.mini.position.Position;
 
-
+@EqualsAndHashCode
 public class Board {
 
     @Getter

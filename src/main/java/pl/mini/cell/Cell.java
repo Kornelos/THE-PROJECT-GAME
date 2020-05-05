@@ -1,6 +1,7 @@
 package pl.mini.cell;
 
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.json.simple.JSONObject;
@@ -8,6 +9,7 @@ import org.json.simple.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+@EqualsAndHashCode
 public class Cell {
     @Getter
     @Setter

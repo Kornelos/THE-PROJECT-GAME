@@ -11,7 +11,7 @@ import java.util.UUID;
 @EqualsAndHashCode
 public class PickupResultMessage implements JsonMessage {
     @Getter
-    private final MessageAction action = MessageAction.pickup;
+    private final MessageAction action = MessageAction.pickupResult;
     @Getter
     private final UUID playerGuid;
     @Getter
