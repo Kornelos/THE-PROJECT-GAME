@@ -6,6 +6,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import pl.mini.board.Board;
+import pl.mini.cell.Field;
 import pl.mini.position.Direction;
 import pl.mini.position.Position;
 import pl.mini.team.TeamColor;
@@ -80,7 +81,18 @@ public class MessageFactory {
             case discoverResult:
                 Position discoverResultPosition = new Position((int) json.get("x"), (int) json.get("y"));
                 //TODO: add after fixing
-//                return new DiscoverResultMessage(UUID.fromString((String) json.get("playerGuid")),discoverResultPosition)
+                List<Field> fields = new ArrayList<>();
+                JSONArray fieldList = (JSONArray) json.get("fields");
+                for (Object obj : fieldList) {
+                    if (obj instanceof JSONObject) {
+                        int xField = ((Long) ((JSONObject) obj).get("x")).intValue();
+                        int yField = ((Long) ((JSONObject) obj).get("y")).intValue();
+//                        new Position(xField,yField);
+                        JSONObject cellJson = (JSONObject) ((JSONObject) obj).get("cell");
+//                        TODO: skonczyc xd
+                    }
+                }
+                return new DiscoverResultMessage(UUID.fromString((String) json.get("playerGuid")), discoverResultPosition, )
         }
 
         // if code hasn't returned any value throw exception
