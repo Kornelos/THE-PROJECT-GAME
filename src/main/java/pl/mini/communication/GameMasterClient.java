@@ -18,12 +18,12 @@ public class GameMasterClient {
     static final int PORT = Integer.parseInt(System.getProperty("port", "997"));
     //static final int PORT = gm.getPortNumber();
     //static final String HOST = gm.getIpAddress().toString();
-    private final EventLoopGroup group = new NioEventLoopGroup();
-    private Channel channel;
-    GameMasterClientHandler handler;
+    static final EventLoopGroup group = new NioEventLoopGroup();
+    static Channel channel;
+    static GameMasterClientHandler handler;
 
 
-     void start(int port) throws InterruptedException {
+     public static void start(int port) throws InterruptedException {
 
         try {
             Bootstrap b = new Bootstrap();

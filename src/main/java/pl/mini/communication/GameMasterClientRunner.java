@@ -1,7 +1,7 @@
 package pl.mini.communication;
 
 public class GameMasterClientRunner {
-    public static void main(String[] args)
+     public static void main(String[] args)
     {
         try{
             GameMasterClient gmClient = new GameMasterClient();
