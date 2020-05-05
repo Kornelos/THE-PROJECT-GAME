@@ -6,9 +6,11 @@ public enum MessageAction {
     start,
     end,
     move,
+    gmMove,
     pickup,
     pickupResult,
     test,
+    testStatus,
     place,
     discover
 }
