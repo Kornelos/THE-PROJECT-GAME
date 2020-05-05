@@ -12,5 +12,6 @@ public enum MessageAction {
     test,
     testStatus,
     place,
+    placeResult,
     discoverResult, discover
 }
