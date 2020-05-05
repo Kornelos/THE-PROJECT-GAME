@@ -1,8 +1,6 @@
 package pl.mini.messages;
 
-import org.json.simple.parser.ParseException;
 import org.junit.Assert;
-import org.junit.FixMethodOrder;
 import org.junit.Test;
 import pl.mini.board.Board;
 import pl.mini.cell.Cell;
@@ -15,12 +13,11 @@ import pl.mini.team.TeamRole;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.logging.FileHandler;
 
 public class MessageFactoryTest {
 
     @Test
-    public void testFactory() throws ParseException {
+    public void testFactory() throws Exception {
         ConnectMessage connectMessage = new ConnectMessage(UUID.randomUUID());
 
         // test player connect message creation

@@ -6,9 +6,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.json.simple.JSONObject;
 
-import java.util.HashMap;
-import java.util.Map;
-
 @EqualsAndHashCode
 public class Cell {
     @Getter
@@ -22,15 +19,6 @@ public class Cell {
         this.playerGuids = "";
     }
 
-    public String toJsonString() {
-        Map<String, String> jsonMap = new HashMap<>();
-        jsonMap.put("cellState", cellState.name());
-        jsonMap.put("distance", String.valueOf(distance));
-        jsonMap.put("playerGuid", playerGuids);
-
-        JSONObject json = new JSONObject(jsonMap);
-        return json.toString();
-    }
 
     public  JSONObject toJSONObject() {
         JSONObject jsonObject = new JSONObject();
@@ -41,8 +29,5 @@ public class Cell {
         return jsonObject;
     }
 
-    @Override
-    public String toString() {
-        return toJsonString();
-    }
+
 }

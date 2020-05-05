@@ -1,6 +1,5 @@
 package pl.mini.messages;
 
-import com.google.gson.JsonArray;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.json.simple.JSONArray;
@@ -8,7 +7,10 @@ import org.json.simple.JSONObject;
 import pl.mini.cell.Field;
 import pl.mini.position.Position;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 @EqualsAndHashCode
 public class DiscoverResultMessage implements JsonMessage {
@@ -29,7 +31,7 @@ public class DiscoverResultMessage implements JsonMessage {
 
     @Override
     public String toJsonString() {
-        JsonArray jsonArray = new JsonArray();
+
         Map<String, String> jsonMap = new HashMap<>();
         jsonMap.put("playerGuid", playerGuid.toString());
         jsonMap.put("action", action.name());

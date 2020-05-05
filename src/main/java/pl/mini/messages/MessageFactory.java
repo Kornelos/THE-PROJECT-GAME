@@ -1,7 +1,5 @@
 package pl.mini.messages;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSyntaxException;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -18,7 +16,6 @@ import pl.mini.team.TeamRole;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.logging.FileHandler;
 
 
 public class MessageFactory {
@@ -29,7 +26,7 @@ public class MessageFactory {
      * @return instance of JsonMessage
      * @throws ParseException if message is not correct JSON string
      */
-    public static JsonMessage messageFromString(String jsonString) throws ParseException, JsonSyntaxException {
+    public static JsonMessage messageFromString(String jsonString) throws Exception {
         JSONParser parser = new JSONParser();
         JSONObject json = (JSONObject) parser.parse(jsonString);
 
@@ -105,6 +102,6 @@ public class MessageFactory {
         }
 
         // if code hasn't returned any value throw exception
-        throw new JsonSyntaxException("Incorrect Json argument");
+        throw new Exception("Incorrect Json argument");
     }
 }
