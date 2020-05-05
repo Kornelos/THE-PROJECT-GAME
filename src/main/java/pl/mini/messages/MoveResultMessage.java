@@ -12,11 +12,11 @@ import java.util.Map;
 import java.util.UUID;
 
 @EqualsAndHashCode
-public class GmMoveMessage implements JsonMessage{
+public class MoveResultMessage implements JsonMessage {
     @Getter
     private final UUID playerGuid;
     @Getter
-    private final MessageAction action = MessageAction.move;
+    private final MessageAction action = MessageAction.moveResult;
     @Getter
     private final Direction direction;
     @Getter
@@ -24,7 +24,7 @@ public class GmMoveMessage implements JsonMessage{
     @Getter
     private final Status status;
 
-    public GmMoveMessage(UUID pGUID, Direction dir, Position pos, Status stat){
+    public MoveResultMessage(UUID pGUID, Direction dir, Position pos, Status stat) {
         this.playerGuid = pGUID;
         this.direction = dir;
         this.position = pos;
