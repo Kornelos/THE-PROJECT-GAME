@@ -2,5 +2,5 @@ package pl.mini.messages;
 
 public interface JsonMessage {
 
-    String toJson();
+    String toJsonString();
 }
