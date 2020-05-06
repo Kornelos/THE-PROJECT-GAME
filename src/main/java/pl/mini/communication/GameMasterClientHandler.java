@@ -1,35 +1,49 @@
 package pl.mini.communication;
 
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import pl.mini.board.GameMasterBoard;
+import pl.mini.board.Board;
 import pl.mini.board.PlacementResult;
 import pl.mini.cell.CellState;
+import pl.mini.gamemaster.GameMaster;
 import pl.mini.messages.*;
 import pl.mini.player.PlayerDTO;
 import pl.mini.position.Position;
+import pl.mini.team.TeamColor;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 @Slf4j
+@ChannelHandler.Sharable
 public class GameMasterClientHandler extends ChannelInboundHandlerAdapter {
-    private ChannelHandlerContext ctx;
+    private final GameMaster gameMaster;
     @Getter
     @Setter
     private String message = null;
+    private final List<PlayerDTO> players = new ArrayList<>();
+    //    private ChannelHandlerContext ctx;
+    private Channel serverChannel;
 
-    private final GameMasterBoard gameMasterBoard;
-
-    public GameMasterClientHandler(GameMasterBoard gmb) {
-        gameMasterBoard = gmb;
+    public GameMasterClientHandler(GameMaster gm) {
+        gameMaster = gm;
     }
 
     @Override
-    public void channelActive(ChannelHandlerContext ctx) {
-        this.ctx = ctx;
+    public void channelActive(ChannelHandlerContext ctx) throws InterruptedException {
+        //gameMaster.loadConfigurationFromJson("src/main/resources/config.json");
+//        this.ctx = ctx;
+        serverChannel = ctx.channel();
         log.info("Client active");
         ctx.writeAndFlush(new GmConnectMessage().toJsonString());
+
+
     }
 
 
@@ -39,19 +53,39 @@ public class GameMasterClientHandler extends ChannelInboundHandlerAdapter {
         try {
             JsonMessage jsonMessage = MessageFactory.messageFromString(msg.toString());
             switch (jsonMessage.getAction()) {
+                case connect: {
+                    // add player to team and place him on board
+                    ConnectMessage connectMessage = (ConnectMessage) jsonMessage;
+                    PlayerDTO playerDTO = new PlayerDTO();
+                    playerDTO.setPlayerUuid(connectMessage.getPlayerGuid());
+                    TeamColor teamColor = gameMaster.assignPlayerToTeam(playerDTO);
+                    if (teamColor != null) {
+                        playerDTO.setPlayerTeamColor(teamColor);
+                        Position position = gameMaster.getBoard().placePlayer(playerDTO);
+                        playerDTO.setPosition(position);
+                        players.add(playerDTO);
+                        log.info("player connected: " + playerDTO.getPlayerUuid().toString());
+                    }
+                    synchronized (this) {
+                        if (players.size() == 2 * gameMaster.getConfiguration().maxTeamSize)
+                            this.notifyAll();
+                    }
+
+
+                }
                 case discover: {
-                    DiscoverMessage discoverMessage = (DiscoverMessage) jsonMessage;
+                    //DiscoverMessage discoverMessage = (DiscoverMessage) jsonMessage;
                     //TODO: implement
                     break;
                 }
                 case pickup: {
                     PickupMessage pickupMessage = (PickupMessage) jsonMessage;
-                    Position playerPosition = gameMasterBoard.findPlayerPositionByGuid(pickupMessage.getPlayerGuid().toString());
+                    Position playerPosition = gameMaster.getBoard().findPlayerPositionByGuid(pickupMessage.getPlayerGuid().toString());
                     PickupResultMessage resultMessage;
 
                     if (playerPosition != null) {
-                        if (gameMasterBoard.getField(playerPosition).getCell().getCellState() == CellState.Piece) {
-                            gameMasterBoard.takePiece(playerPosition);
+                        if (gameMaster.getBoard().getField(playerPosition).getCell().getCellState() == CellState.Piece) {
+                            gameMaster.getBoard().takePiece(playerPosition);
                             resultMessage = new PickupResultMessage(pickupMessage.getPlayerGuid(), Status.OK);
                         } else {
                             resultMessage = new PickupResultMessage(pickupMessage.getPlayerGuid(), Status.DENIED);
@@ -65,10 +99,10 @@ public class GameMasterClientHandler extends ChannelInboundHandlerAdapter {
                     MoveMessage moveMessage = (MoveMessage) jsonMessage;
                     PlayerDTO playerDTO = new PlayerDTO();
                     playerDTO.setPlayerUuid(moveMessage.getPlayerGuid());
-                    Position playerPosition = gameMasterBoard.findPlayerPositionByGuid(playerDTO.getPlayerUuid().toString());
+                    Position playerPosition = gameMaster.getBoard().findPlayerPositionByGuid(playerDTO.getPlayerUuid().toString());
                     if (playerPosition != null) {
                         playerDTO.setPosition(playerPosition);
-                        Position newPosition = gameMasterBoard.playerMove(playerDTO, moveMessage.getDirection());
+                        Position newPosition = gameMaster.getBoard().playerMove(playerDTO, moveMessage.getDirection());
                         // send response
                         MoveResultMessage resultMessage = new MoveResultMessage(playerDTO.getPlayerUuid(),
                                 moveMessage.getDirection(), newPosition, Status.OK);
@@ -85,14 +119,15 @@ public class GameMasterClientHandler extends ChannelInboundHandlerAdapter {
                     PlaceMessage placeMessage = (PlaceMessage) jsonMessage;
                     PlayerDTO playerDTO = new PlayerDTO();
                     playerDTO.setPlayerUuid(placeMessage.getPlayerGuid());
-                    Position playerPosition = gameMasterBoard.findPlayerPositionByGuid(playerDTO.getPlayerUuid().toString());
+                    Position playerPosition = gameMaster.getBoard().findPlayerPositionByGuid(playerDTO.getPlayerUuid().toString());
                     PlaceResultMessage placeResultMessage;
                     if (playerPosition != null) {
                         playerDTO.setPosition(playerPosition);
                         //note: quick fix
                         double SHAM_PROB = 0.3;
-                        PlacementResult placementResult = gameMasterBoard.placePiece(playerDTO, SHAM_PROB);
+                        PlacementResult placementResult = gameMaster.getBoard().placePiece(playerDTO, SHAM_PROB);
                         placeResultMessage = new PlaceResultMessage(playerDTO.getPlayerUuid(), placementResult, Status.OK);
+                        ctx.writeAndFlush(placeResultMessage.toString());
                     }
                     break;
                 }
@@ -122,5 +157,23 @@ public class GameMasterClientHandler extends ChannelInboundHandlerAdapter {
         log.info("closing program..");
         System.exit(0);
     }
+
+    public void startGame() {
+        // send start game message to every player
+        for (var p : players) {
+            StartMessage startMessage;
+            List<UUID> teamList;
+            if (p.getPlayerTeamColor() == TeamColor.Red) {
+                teamList = gameMaster.getTeamRedGuids();
+            } else {
+                teamList = gameMaster.getTeamBlueGuids();
+            }
+            startMessage = new StartMessage(p.getPlayerUuid(), p.getPlayerTeamColor(), p.getPlayerTeamRole(),
+                    gameMaster.getTeamRedGuids().size(), teamList, p.getPosition(),
+                    new Board(gameMaster.getBoard().getBoardWidth(), gameMaster.getBoard().getGoalAreaHeight(), gameMaster.getBoard().getTaskAreaHeight()));
+            serverChannel.writeAndFlush(startMessage.toString());
+        }
+    }
+
 
 }

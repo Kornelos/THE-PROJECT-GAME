@@ -5,7 +5,7 @@ public class GameMasterClientRunner {
     {
         try{
             GameMasterClient gmClient = new GameMasterClient();
-            GameMasterClient.start(2137);
+            gmClient.start(2137);
         }
         catch (InterruptedException e){
         e.printStackTrace();

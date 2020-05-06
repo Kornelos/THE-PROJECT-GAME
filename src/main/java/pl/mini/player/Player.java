@@ -8,6 +8,7 @@ import pl.mini.board.Board;
 import pl.mini.board.PlacementResult;
 import pl.mini.cell.CellState;
 import pl.mini.cell.Field;
+import pl.mini.messages.ConnectMessage;
 import pl.mini.position.Direction;
 import pl.mini.position.Position;
 import pl.mini.team.Team;
@@ -238,11 +239,12 @@ public class Player extends PlayerDTO {
     }
 
     public static void main(String[] args) {
+        PlayerDTO playerDTO = new PlayerDTO();
         try {
             PlayerCommServer communicationServer = new PlayerCommServer();
             communicationServer.connect();
             Thread.sleep(5000);
-            String msg = communicationServer.sendMessage("This is a message from external class");
+            String msg = communicationServer.sendMessage(new ConnectMessage(playerDTO.getPlayerUuid()).toString());
             System.out.println("===================================" + msg + "========================================");
             Thread.sleep(5000);
             // communicationServer.closeConnection();

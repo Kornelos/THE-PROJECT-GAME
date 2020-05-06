@@ -38,9 +38,10 @@ public class SimpleTCPChannelHandler extends SimpleChannelInboundHandler<String>
             switch (jsonMessage.getTarget()) {
                 case "server":
                     // add players and game master to prop. structures
-                    if (jsonMessage.getAction() == MessageAction.connect) {
+                    if (jsonMessage.getAction() == MessageAction.connect && gmChannel != null) {
                         ConnectMessage playerConnect = (ConnectMessage) jsonMessage;
                         playerChannels.put(playerConnect.getPlayerGuid(), ctx.channel());
+                        gmChannel.writeAndFlush(s);
 
                     } else if (jsonMessage.getAction() == MessageAction.gmConnect) {
                         gmChannel = ctx.channel();

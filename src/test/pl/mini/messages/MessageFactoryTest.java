@@ -3,6 +3,7 @@ package pl.mini.messages;
 import org.junit.Assert;
 import org.junit.Test;
 import pl.mini.board.Board;
+import pl.mini.board.PlacementResult;
 import pl.mini.cell.Cell;
 import pl.mini.cell.CellState;
 import pl.mini.cell.Field;

@@ -5,7 +5,7 @@
     "shamProbability": 0.1,
     "delayNextPiecePlace": 1,
     "delayPick": 1,
-    "maxTeamSize": 4,
+    "maxTeamSize": 1,
     "delayDestroyPiece": 1,
     "maxPieces": 4,
     "delayMove": 1,

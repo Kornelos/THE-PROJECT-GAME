@@ -25,7 +25,7 @@ public class PickupResultMessage implements JsonMessage {
     @Override
     public String toJsonString() {
         Map<String, String> jsonMap = new HashMap<>();
-        jsonMap.put("result", status.name());
+        jsonMap.put("status", status.name());
         jsonMap.put("playerGuid", playerGuid.toString());
         jsonMap.put("action", action.name());
         JSONObject json = new JSONObject(jsonMap);

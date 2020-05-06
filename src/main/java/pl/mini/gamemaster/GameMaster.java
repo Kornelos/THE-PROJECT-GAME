@@ -10,7 +10,9 @@ import pl.mini.board.GameMasterBoard;
 import pl.mini.cell.Cell;
 import pl.mini.cell.CellState;
 import pl.mini.communication.GameMasterClient;
+import pl.mini.player.PlayerDTO;
 import pl.mini.position.Position;
+import pl.mini.team.TeamColor;
 import pl.mini.utils.ConsoleColors;
 
 import java.io.FileReader;
@@ -23,18 +25,31 @@ import java.util.Random;
 import java.util.UUID;
 
 public class GameMaster {
-    @Getter @Setter private int portNumber;
-    @Getter @Setter private InetAddress ipAddress;
-    @Getter @Setter private List<UUID> teamRedGuids;
-    @Getter @Setter private List<UUID> teamBlueGuids;
-    @Getter @Setter private GameMasterBoard board;
-    @Getter @Setter private GameMasterStatus status;
-    @Getter @Setter private GameMasterConfiguration configuration;
+    @Getter
+    @Setter
+    private int portNumber;
+    @Getter
+    @Setter
+    private InetAddress ipAddress;
+    @Getter
+    @Setter
+    private List<UUID> teamRedGuids = new ArrayList<>();
+    @Getter
+    @Setter
+    private List<UUID> teamBlueGuids = new ArrayList<>();
+    @Getter
+    @Setter
+    private GameMasterBoard board;
+    @Getter
+    @Setter
+    private GameMasterStatus status;
+    @Getter
+    @Setter
+    private GameMasterConfiguration configuration;
     private GameMasterClient gmClient;
 
 
-    public GameMaster()
-    {
+    public GameMaster() {
 
     }
 
@@ -218,8 +233,22 @@ public class GameMaster {
         System.out.println(" " + "######".repeat(col) + "#");
     }
 
-    public void messageHandler(String message)
-    {
+    public void messageHandler(String message) {
 
     }
+
+    public TeamColor assignPlayerToTeam(PlayerDTO playerDTO) {
+        int teamSize = configuration.maxTeamSize;
+        if (teamRedGuids.size() < teamSize) {
+            teamRedGuids.add(playerDTO.getPlayerUuid());
+            return TeamColor.Red;
+        } else if (teamBlueGuids.size() < teamSize) {
+            teamBlueGuids.add(playerDTO.getPlayerUuid());
+            return TeamColor.Blue;
+        }
+        // if both teams full
+        return null;
+    }
+
+
 }
