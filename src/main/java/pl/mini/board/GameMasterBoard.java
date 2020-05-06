@@ -197,8 +197,8 @@ public class GameMasterBoard extends Board {
         int x = position.getX( );
         int y = position.getY( );
         List<Field> list = new ArrayList<>( );
-        for (int i = y - 1; i < y + 1; i++) {
-            for (int j = x - 1; j < x + 1; j++) {
+        for (int i = y - 1; i <= y + 1; i++) {
+            for (int j = x - 1; j <= x + 1; j++) {
                 int localX = j;
                 int localY = i;
                 if(localX < 0 || localY < 0 || localX > getBoardWidth() - 1 || localY > getBoardHeight() - 1)

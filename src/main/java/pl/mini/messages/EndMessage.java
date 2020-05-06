@@ -28,5 +28,12 @@ public class EndMessage implements JsonMessage {
     }
 
     @Override
-    public String toString() { return toJsonString(); }
+    public String getTarget() {
+        return "all";
+    }
+
+    @Override
+    public String toString() {
+        return toJsonString();
+    }
 }

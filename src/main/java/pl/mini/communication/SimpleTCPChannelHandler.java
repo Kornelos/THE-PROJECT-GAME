@@ -5,6 +5,8 @@ import io.netty.channel.group.ChannelGroup;
 import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.util.concurrent.GlobalEventExecutor;
 import lombok.extern.slf4j.Slf4j;
+import pl.mini.messages.JsonMessage;
+import pl.mini.messages.MessageFactory;
 
 /**
  * Business logic of the communication server
@@ -27,13 +29,36 @@ public class SimpleTCPChannelHandler extends SimpleChannelInboundHandler<String>
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, String s) {
 
-        if (s.equals("GameMaster")) {
-            gmChannel = ctx.channel();
-            channels.writeAndFlush("GameMaster connected to the server.\n");
-        } else if (s.equals("Player")) {
-            channels.writeAndFlush("Player connected to the server.\n");
+//        if (s.equals("GameMaster")) {
+//            gmChannel = ctx.channel();
+//            channels.writeAndFlush("GameMaster connected to the server.\n");
+//        } else if (s.equals("Player")) {
+//            channels.writeAndFlush("Player connected to the server.\n");
+//        }
+//        log.info(ctx.channel().remoteAddress() + s);
+        try {
+            JsonMessage jsonMessage = MessageFactory.messageFromString(s);
+            switch (jsonMessage.getTarget()) {
+                case "server":
+                    //handle
+                    break;
+                case "all":
+                    // send message to all players and game master
+                    for (Channel c : channels) {
+                        c.writeAndFlush(s);
+                    }
+                    break;
+                case "gm":
+                    // send message to gm
+                    break;
+                default:
+                    // if none of the above - assume target is player uuid
+                    break;
+            }
+
+        } catch (Exception e) {
+            log.error("Server got corrupted message! Exception: " + e.getMessage());
         }
-        log.info(ctx.channel().remoteAddress() + s);
 
     }
 
