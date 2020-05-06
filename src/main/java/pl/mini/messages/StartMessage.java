@@ -2,18 +2,14 @@ package pl.mini.messages;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.Setter;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import pl.mini.board.Board;
-import pl.mini.position.Direction;
 import pl.mini.position.Position;
 import pl.mini.team.TeamColor;
 import pl.mini.team.TeamRole;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 @EqualsAndHashCode
@@ -62,10 +58,17 @@ public class StartMessage implements JsonMessage {
         brd.put("boardWidth", board.getBoardWidth());
         brd.put("taskAreaHeight", board.getTaskAreaHeight());
         brd.put("goalAreaHeight", board.getGoalAreaHeight());
-        obj.put("board",brd);
+        obj.put("board", brd);
         return obj.toString();
     }
 
     @Override
-    public String toString() { return toJsonString(); }
+    public String getTarget() {
+        return "all";
+    }
+
+    @Override
+    public String toString() {
+        return toJsonString();
+    }
 }
