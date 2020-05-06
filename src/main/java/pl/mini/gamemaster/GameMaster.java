@@ -87,6 +87,9 @@ public class GameMaster {
             finalConf.delayPick = ((Long) arg.get("delayPick")).intValue();
             finalConf.delayPlace = ((Long) arg.get("delayPlace")).intValue();
 
+            // initialize board
+            initBoard(finalConf.boardWidth, finalConf.boardGoalHeight, finalConf.boardTaskHeight);
+
         } catch (IOException | ParseException e) {
             e.printStackTrace();
         }
@@ -155,18 +158,19 @@ public class GameMaster {
     {
         this.board.getPiecesPosition().add(placed);
         this.board.getCellsGrid()[placed.getX()][placed.getY()].cellState = CellState.Piece;
-        for(int i = board.getGoalAreaHeight(); i < board.getGoalAreaHeight() + board.getTaskAreaHeight(); i++)
-        {
-            for(int j = 0; j < board.getBoardWidth(); j++)
-            {
+        for (int i = board.getGoalAreaHeight(); i < board.getGoalAreaHeight() + board.getTaskAreaHeight(); i++) {
+            for (int j = 0; j < board.getBoardWidth(); j++) {
                 Position pos = new Position(j, i);
                 this.board.getCellsGrid()[j][i].distance = this.board.manhattanDistanceToClosestPiece(pos);
             }
         }
     }
 
-    public void printBoard()
-    {
+    private void initBoard(int width, int height, int taskAreaHeight) {
+        board = new GameMasterBoard(width, height, taskAreaHeight);
+    }
+
+    public void printBoard() {
         int col = this.board.getBoardWidth();
         int row = this.board.getBoardHeight();
         int task = this.board.getTaskAreaHeight();
@@ -187,13 +191,13 @@ public class GameMaster {
             {
                 cll = this.board.getCellsGrid()[j][i];
                 cState = cll.cellState;
-                if(!cll.playerGuids.equals("")) {
+                if (!cll.playerGuid.equals("")) {
                     for (UUID teamBlueGuid : this.teamBlueGuids) {
-                        if (cll.playerGuids.equals(teamBlueGuid.toString()))
+                        if (cll.playerGuid.equals(teamBlueGuid.toString()))
                             fld.append("| " + ConsoleColors.BLUE + "B P " + ConsoleColors.RESET);
                     }
                     for (UUID teamRedGuid : this.teamRedGuids) {
-                        if (cll.playerGuids.equals(teamRedGuid.toString()))
+                        if (cll.playerGuid.equals(teamRedGuid.toString()))
                             fld.append("| " + ConsoleColors.RED + "R P " + ConsoleColors.RESET);
                     }
                 } else if (cState == CellState.Piece || cState == CellState.Sham)

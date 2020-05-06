@@ -14,6 +14,9 @@ import java.util.UUID;
 
 @EqualsAndHashCode
 public class StartMessage implements JsonMessage {
+    // this field is not in docs
+    @Getter
+    private final UUID playerGuid;
     @Getter
     private final MessageAction action = MessageAction.start;
     @Getter
@@ -29,8 +32,9 @@ public class StartMessage implements JsonMessage {
     @Getter
     private final Board board;
 
-    public StartMessage(TeamColor teamColor, TeamRole teamRole, int teamSize,
+    public StartMessage(UUID playerGuid, TeamColor teamColor, TeamRole teamRole, int teamSize,
                         List<UUID> teamGuids, Position position, Board board) {
+        this.playerGuid = playerGuid;
         this.teamColor = teamColor;
         this.teamRole = teamRole;
         this.teamSize = teamSize;
@@ -45,6 +49,7 @@ public class StartMessage implements JsonMessage {
         JSONObject brd = new JSONObject();
         JSONObject pos = new JSONObject();
         JSONArray guids = new JSONArray();
+        obj.put("playerGuid", playerGuid.toString());
         obj.put("action", action.toString());
         obj.put("teamColor", teamColor.toString());
         obj.put("teamRole", teamRole.toString());

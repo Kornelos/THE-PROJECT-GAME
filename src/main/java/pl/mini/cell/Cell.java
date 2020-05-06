@@ -12,11 +12,11 @@ public class Cell {
     @Setter
     public CellState cellState;
     public int distance = 0;
-    public String playerGuids;
+    public String playerGuid;
 
     public Cell(CellState cellState) {
         this.cellState = cellState;
-        this.playerGuids = "";
+        this.playerGuid = "";
     }
 
 
@@ -24,7 +24,7 @@ public class Cell {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("cellState", cellState.name());
         jsonObject.put("distance", distance);
-        jsonObject.put("playerGuid", playerGuids);
+        jsonObject.put("playerGuid", playerGuid);
 
         return jsonObject;
     }

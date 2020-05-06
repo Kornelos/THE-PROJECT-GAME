@@ -5,6 +5,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import pl.mini.board.Board;
+import pl.mini.board.PlacementResult;
 import pl.mini.cell.Cell;
 import pl.mini.cell.CellState;
 import pl.mini.cell.Field;
@@ -59,7 +60,7 @@ public class MessageFactory {
             case placeResult:
                 return new PlaceResultMessage(UUID.fromString((String) json.get("playerGuid")),
                         PlacementResult.valueOf((String) json.get("placementResult"))
-                        ,Status.valueOf((String) json.get("status")));
+                        , Status.valueOf((String) json.get("status")));
             case start:
                 JSONArray pointList = (JSONArray) json.get("teamGuids");
                 List<UUID> guids = new ArrayList<>();
@@ -67,7 +68,8 @@ public class MessageFactory {
                 JSONObject brd = (JSONObject) json.get("board");
                 for (Object o : pointList)
                     guids.add(UUID.fromString(o.toString()));
-                return new StartMessage(TeamColor.valueOf((String) json.get("teamColor")),
+                return new StartMessage(UUID.fromString((String) json.get("playerGuid")),
+                        TeamColor.valueOf((String) json.get("teamColor")),
                         TeamRole.valueOf((String) json.get("teamRole")),
                         ((Long) json.get("teamSize")).intValue(),
                         guids,
@@ -77,7 +79,7 @@ public class MessageFactory {
             case pickup:
                 return new PickupMessage(UUID.fromString((String) json.get("playerGuid")));
             case pickupResult:
-                return new PickupResultMessage(UUID.fromString((String) json.get("playerGuid")), (String) json.get("result"));
+                return new PickupResultMessage(UUID.fromString((String) json.get("playerGuid")), Status.valueOf((String) json.get("status")));
             case discover:
                 int x = (int) json.get("x");
                 int y = (int) json.get("y");
@@ -95,7 +97,7 @@ public class MessageFactory {
                         int yField = ((Long) ((JSONObject) obj).get("y")).intValue();
                         JSONObject cellJson = (JSONObject) ((JSONObject) obj).get("cell");
                         Cell cll = new Cell((CellState.valueOf((String) cellJson.get("cellState"))));
-                        cll.playerGuids = (String) cellJson.get("playerGuid");
+                        cll.playerGuid = (String) cellJson.get("playerGuid");
                         cll.distance = ((Long) cellJson.get("distance")).intValue();
                         fields.add(new Field(new Position(xField, yField), cll));
                     }

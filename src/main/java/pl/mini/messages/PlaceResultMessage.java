@@ -2,6 +2,7 @@ package pl.mini.messages;
 
 import lombok.Getter;
 import org.json.simple.JSONObject;
+import pl.mini.board.PlacementResult;
 
 import java.util.HashMap;
 import java.util.Map;
