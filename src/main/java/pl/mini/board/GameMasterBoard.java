@@ -83,6 +83,14 @@ public class GameMasterBoard extends Board {
         CellState cs = getCellsGrid()[x][y].cellState;
         getCellsGrid()[x][y].cellState = CellState.Empty;
         piecesPosition.remove(position);
+        for(int i = getGoalAreaHeight(); i < getGoalAreaHeight() + getTaskAreaHeight(); i++)
+        {
+            for(int j = 0; j < getBoardWidth(); j++)
+            {
+                Position pos = new Position(j, i);
+                getCellsGrid()[j][i].distance = manhattanDistanceToClosestPiece(pos);
+            }
+        }
         return cs;
     }
 
@@ -189,21 +197,20 @@ public class GameMasterBoard extends Board {
         int x = position.getX( );
         int y = position.getY( );
         List<Field> list = new ArrayList<>( );
-        for (int i = y - 1; i < y + 1; i++) {
-            for (int j = x - 1; j < x + 1; j++) {
+        for (int i = y - 1; i <= y + 1; i++) {
+            for (int j = x - 1; j <= x + 1; j++) {
                 int localX = j;
                 int localY = i;
-                if(localX < 0)
-                    localX = 0;
-                if(localY < 0)
-                    localY = 0;
-                if(localX > getBoardWidth() - 1)
-                    localX = getBoardWidth() - 1;
-                if(localY > getBoardHeight() - 1)
-                    localY = getBoardHeight() - 1;
-                Position position1 = new Position(localX, localY);
-                Field field = new Field(position1, getCellsGrid( )[ position1.getX() ][ position1.getY() ]);
-                list.add(field);
+                if(localX < 0 || localY < 0 || localX > getBoardWidth() - 1 || localY > getBoardHeight() - 1)
+                {
+                    list.add(null);
+                }
+
+                else {
+                    Position position1 = new Position(localX, localY);
+                    Field field = new Field(position1, getCellsGrid()[position1.getX()][position1.getY()]);
+                    list.add(field);
+                }
             }
         }
         return list;
