@@ -17,7 +17,7 @@ public class SimplePlayerCommHandler extends ChannelInboundHandlerAdapter {
     public void channelActive(ChannelHandlerContext ctx) {
         this.ctx = ctx;
         log.info("Connected to: " + ctx.channel().remoteAddress());
-        ctx.writeAndFlush("Player");
+        // ctx.writeAndFlush("Player");
     }
 
     @Override
