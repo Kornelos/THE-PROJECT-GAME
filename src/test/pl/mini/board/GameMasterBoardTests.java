@@ -6,11 +6,14 @@ import org.junit.Before;
 import org.junit.Test;
 import pl.mini.cell.Cell;
 import pl.mini.cell.CellState;
+import pl.mini.cell.Field;
 import pl.mini.player.PlayerDTO;
 import pl.mini.position.Position;
 import pl.mini.team.TeamColor;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class GameMasterBoardTests {
@@ -86,6 +89,25 @@ public class GameMasterBoardTests {
         Assert.assertEquals(testGameMasterBoard.manhattanDistanceToClosestPiece(new Position(5,9)),6);
         Assert.assertEquals(testGameMasterBoard.manhattanDistanceToClosestPiece(new Position(3,3)),2);
 
+    }
+
+    @Test
+    public void testDiscover()
+    {
+        GameMasterBoard board = new GameMasterBoard(6,2,4);
+        Position position = new Position(0,0);
+        List<Field> actual = board.discover(position);
+        List<Field> expected = new ArrayList<>();
+        expected.add(null);
+        expected.add(null);
+        expected.add(null);
+        expected.add(null);
+        expected.add(new Field(new Position(0,0), board.getCellsGrid()[0][0]));
+        expected.add(new Field(new Position(1,0), board.getCellsGrid()[1][0]));
+        expected.add(null);
+        expected.add(new Field(new Position(0,1), board.getCellsGrid()[0][1]));
+        expected.add(new Field(new Position(1,1), board.getCellsGrid()[1][1]));
+        Assert.assertEquals(expected, actual);
     }
 
 }
