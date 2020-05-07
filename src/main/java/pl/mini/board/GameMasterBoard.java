@@ -62,12 +62,12 @@ public class GameMasterBoard extends Board {
                 }
         }
 
-        if(!getCellsGrid()[x][y].playerGuids.equals(""))
-            return new Position(x_old,y_old);
+        if (!getCellsGrid()[x][y].playerGuid.equals(""))
+            return new Position(x_old, y_old);
 
         if(x != x_old || y != y_old) {
-            getCellsGrid()[x][y].playerGuids = player.getPlayerUuid().toString();
-            getCellsGrid()[x_old][y_old].playerGuids = "";
+            getCellsGrid()[x][y].playerGuid = player.getPlayerUuid().toString();
+            getCellsGrid()[x_old][y_old].playerGuid = "";
         }
 
         position.setX(x);
@@ -152,7 +152,7 @@ public class GameMasterBoard extends Board {
                 return null;
         }
 
-        cll[x][y].playerGuids = player.getPlayerUuid().toString();
+        cll[x][y].playerGuid = player.getPlayerUuid().toString();
         this.setCellsGrid(cll);
         return new Position(x, y);
     }
@@ -279,5 +279,15 @@ public class GameMasterBoard extends Board {
         } catch (NullPointerException | ArrayIndexOutOfBoundsException e) {
             return -1;
         }
+    }
+
+    public Position findPlayerPositionByGuid(String guid) {
+        for (int i = 0; i < getGoalAreaHeight(); i++)
+            for (int j = 0; j < getBoardWidth(); j++)
+                if (getCellsGrid()[j][i].playerGuid.equals(guid))
+                    return new Position(j, i);
+
+        // if not found
+        return null;
     }
 }

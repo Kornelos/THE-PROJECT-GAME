@@ -1,12 +1,15 @@
 package pl.mini.position;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import org.json.simple.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
 
-@ToString
+
 @EqualsAndHashCode
 @AllArgsConstructor
 public class Position {

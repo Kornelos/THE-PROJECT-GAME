@@ -1,11 +1,11 @@
-package pl.mini.communication;
+package pl.mini.gamemaster;
 
 public class GameMasterClientRunner {
-    public static void main(String[] args)
+     public static void main(String[] args)
     {
         try{
             GameMasterClient gmClient = new GameMasterClient();
-            GameMasterClient.start(2137);
+            gmClient.start(2137);
         }
         catch (InterruptedException e){
         e.printStackTrace();

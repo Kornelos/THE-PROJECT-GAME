@@ -3,6 +3,7 @@ package pl.mini.messages;
 import org.junit.Assert;
 import org.junit.Test;
 import pl.mini.board.Board;
+import pl.mini.board.PlacementResult;
 import pl.mini.cell.Cell;
 import pl.mini.cell.CellState;
 import pl.mini.cell.Field;
@@ -59,7 +60,7 @@ public class MessageFactoryTest {
         List<UUID> lst = new ArrayList<>();
         lst.add(UUID.randomUUID());
         lst.add(UUID.randomUUID());
-        StartMessage startMessage = new StartMessage(TeamColor.Red, TeamRole.Member,
+        StartMessage startMessage = new StartMessage(UUID.randomUUID(), TeamColor.Red, TeamRole.Member,
                 3, lst, new Position(6, 9), new Board(9, 8, 7));
         JsonMessage jsonMessageStart = MessageFactory.messageFromString(startMessage.toString());
         Assert.assertEquals(startMessage.getClass(), jsonMessageStart.getClass());
@@ -87,7 +88,7 @@ public class MessageFactoryTest {
         Assert.assertEquals(pickupMessage, pm1);
 
         //test pickup result message
-        PickupResultMessage pickupResultMessage = new PickupResultMessage(UUID.randomUUID(), "DENIED");
+        PickupResultMessage pickupResultMessage = new PickupResultMessage(UUID.randomUUID(), Status.DENIED);
         JsonMessage jsonMessagePickupResult = MessageFactory.messageFromString(pickupResultMessage.toString());
         Assert.assertEquals(pickupResultMessage.getClass(), jsonMessagePickupResult.getClass());
         PickupResultMessage prm = (PickupResultMessage) jsonMessagePickupResult;

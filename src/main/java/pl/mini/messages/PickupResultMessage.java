@@ -15,17 +15,17 @@ public class PickupResultMessage implements JsonMessage {
     @Getter
     private final UUID playerGuid;
     @Getter
-    private final String result;
+    private final Status status;
 
-    public PickupResultMessage(UUID playerGuid, String result) {
+    public PickupResultMessage(UUID playerGuid, Status status) {
         this.playerGuid = playerGuid;
-        this.result = result;
+        this.status = status;
     }
 
     @Override
     public String toJsonString() {
         Map<String, String> jsonMap = new HashMap<>();
-        jsonMap.put("result", result);
+        jsonMap.put("status", status.name());
         jsonMap.put("playerGuid", playerGuid.toString());
         jsonMap.put("action", action.name());
         JSONObject json = new JSONObject(jsonMap);

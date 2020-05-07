@@ -9,7 +9,9 @@ import org.json.simple.parser.ParseException;
 import pl.mini.board.GameMasterBoard;
 import pl.mini.cell.Cell;
 import pl.mini.cell.CellState;
+import pl.mini.player.PlayerDTO;
 import pl.mini.position.Position;
+import pl.mini.team.TeamColor;
 import pl.mini.utils.ConsoleColors;
 
 import java.io.FileReader;
@@ -22,17 +24,31 @@ import java.util.Random;
 import java.util.UUID;
 
 public class GameMaster {
-    @Getter @Setter private int portNumber;
-    @Getter @Setter private InetAddress ipAddress;
-    @Getter @Setter private List<UUID> teamRedGuids;
-    @Getter @Setter private List<UUID> teamBlueGuids;
-    @Getter @Setter private GameMasterBoard board;
-    @Getter @Setter private GameMasterStatus status;
-    @Getter @Setter private GameMasterConfiguration configuration;
+    @Getter
+    @Setter
+    private int portNumber;
+    @Getter
+    @Setter
+    private InetAddress ipAddress;
+    @Getter
+    @Setter
+    private List<UUID> teamRedGuids = new ArrayList<>();
+    @Getter
+    @Setter
+    private List<UUID> teamBlueGuids = new ArrayList<>();
+    @Getter
+    @Setter
+    private GameMasterBoard board;
+    @Getter
+    @Setter
+    private GameMasterStatus status;
+    @Getter
+    @Setter
+    private GameMasterConfiguration configuration;
+    private GameMasterClient gmClient;
 
 
-    public GameMaster()
-    {
+    public GameMaster() {
 
     }
 
@@ -45,6 +61,7 @@ public class GameMaster {
     {
 
     }
+
 
     public GameMasterConfiguration loadConfigurationFromJson(String path)
     {
@@ -83,6 +100,9 @@ public class GameMaster {
             finalConf.delayTest = ((Long) arg.get("delayTest")).intValue();
             finalConf.delayPick = ((Long) arg.get("delayPick")).intValue();
             finalConf.delayPlace = ((Long) arg.get("delayPlace")).intValue();
+
+            // initialize board
+            initBoard(finalConf.boardWidth, finalConf.boardGoalHeight, finalConf.boardTaskHeight);
 
         } catch (IOException | ParseException e) {
             e.printStackTrace();
@@ -152,18 +172,19 @@ public class GameMaster {
     {
         this.board.getPiecesPosition().add(placed);
         this.board.getCellsGrid()[placed.getX()][placed.getY()].cellState = CellState.Piece;
-        for(int i = board.getGoalAreaHeight(); i < board.getGoalAreaHeight() + board.getTaskAreaHeight(); i++)
-        {
-            for(int j = 0; j < board.getBoardWidth(); j++)
-            {
+        for (int i = board.getGoalAreaHeight(); i < board.getGoalAreaHeight() + board.getTaskAreaHeight(); i++) {
+            for (int j = 0; j < board.getBoardWidth(); j++) {
                 Position pos = new Position(j, i);
                 this.board.getCellsGrid()[j][i].distance = this.board.manhattanDistanceToClosestPiece(pos);
             }
         }
     }
 
-    public void printBoard()
-    {
+    private void initBoard(int width, int height, int taskAreaHeight) {
+        board = new GameMasterBoard(width, height, taskAreaHeight);
+    }
+
+    public void printBoard() {
         int col = this.board.getBoardWidth();
         int row = this.board.getBoardHeight();
         int task = this.board.getTaskAreaHeight();
@@ -184,13 +205,13 @@ public class GameMaster {
             {
                 cll = this.board.getCellsGrid()[j][i];
                 cState = cll.cellState;
-                if(!cll.playerGuids.equals("")) {
+                if (!cll.playerGuid.equals("")) {
                     for (UUID teamBlueGuid : this.teamBlueGuids) {
-                        if (cll.playerGuids.equals(teamBlueGuid.toString()))
+                        if (cll.playerGuid.equals(teamBlueGuid.toString()))
                             fld.append("| " + ConsoleColors.BLUE + "B P " + ConsoleColors.RESET);
                     }
                     for (UUID teamRedGuid : this.teamRedGuids) {
-                        if (cll.playerGuids.equals(teamRedGuid.toString()))
+                        if (cll.playerGuid.equals(teamRedGuid.toString()))
                             fld.append("| " + ConsoleColors.RED + "R P " + ConsoleColors.RESET);
                     }
                 } else if (cState == CellState.Piece || cState == CellState.Sham)
@@ -211,8 +232,22 @@ public class GameMaster {
         System.out.println(" " + "######".repeat(col) + "#");
     }
 
-    public void messageHandler(String message)
-    {
+    public void messageHandler(String message) {
 
     }
+
+    public TeamColor assignPlayerToTeam(PlayerDTO playerDTO) {
+        int teamSize = configuration.maxTeamSize;
+        if (teamRedGuids.size() < teamSize) {
+            teamRedGuids.add(playerDTO.getPlayerUuid());
+            return TeamColor.Red;
+        } else if (teamBlueGuids.size() < teamSize) {
+            teamBlueGuids.add(playerDTO.getPlayerUuid());
+            return TeamColor.Blue;
+        }
+        // if both teams full
+        return null;
+    }
+
+
 }

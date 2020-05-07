@@ -9,17 +9,17 @@ import java.util.Map;
 import java.util.UUID;
 
 @EqualsAndHashCode
-public class TestStatusMessage implements JsonMessage{
+public class TestResultMessage implements JsonMessage {
     @Getter
     private final UUID playerGuid;
     @Getter
-    private final MessageAction action = MessageAction.test;
+    private final MessageAction action = MessageAction.testResult;
     @Getter
     private final Status status;
     @Getter
     private final Test test;
 
-    public TestStatusMessage(UUID pGUID, Status stat, Test tst){
+    public TestResultMessage(UUID pGUID, Status stat, Test tst) {
         this.playerGuid = pGUID;
         this.status = stat;
         this.test = tst;

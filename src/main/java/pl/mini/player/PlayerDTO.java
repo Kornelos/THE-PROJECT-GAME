@@ -10,6 +10,7 @@ import java.util.UUID;
 
 public class PlayerDTO {
     @Getter
+    @Setter
     protected UUID playerUuid;
     @Getter
     @Setter

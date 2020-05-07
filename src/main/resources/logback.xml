@@ -2,12 +2,12 @@
     <timestamp key="byDay" datePattern="yyyyMMdd'T'HHmmss"/>
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-        <filter class="ch.qos.logback.classic.filter.LevelFilter">
-            <!--      skip debug level      -->
-            <level>DEBUG</level>
-            <onMatch>DENY</onMatch>
-            <onMismatch>ACCEPT</onMismatch>
-        </filter>
+        <!--        <filter class="ch.qos.logback.classic.filter.LevelFilter">-->
+        <!--            &lt;!&ndash;      skip debug level      &ndash;&gt;-->
+        <!--            <level>DEBUG</level>-->
+        <!--            <onMatch>DENY</onMatch>-->
+        <!--            <onMismatch>ACCEPT</onMismatch>-->
+        <!--        </filter>-->
         <encoder>
             <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
         </encoder>
