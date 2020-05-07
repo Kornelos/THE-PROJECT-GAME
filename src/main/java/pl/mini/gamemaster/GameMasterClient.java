@@ -46,9 +46,9 @@ public class GameMasterClient {
 
 
             // wait for all players to connect
-//            synchronized (handler) {
-//                handler.wait();
-//            }
+            synchronized (handler) {
+                handler.wait();
+            }
             //start game after that
             log.info("All players connected, game is starting.");
             handler.startGame();
@@ -57,8 +57,11 @@ public class GameMasterClient {
             TimerTask placePieceTask = new TimerTask() {
                 @Override
                 public void run() {
-                    System.out.println("placing piece");
-                    gameMaster.putNewPiece();
+                    if (gameMaster.getBoard().getPiecesPosition().size() < gameMaster.getConfiguration().maxPieces) {
+                        System.out.println("placing piece");
+                        gameMaster.putNewPiece();
+                    }
+
 
                 }
             };
