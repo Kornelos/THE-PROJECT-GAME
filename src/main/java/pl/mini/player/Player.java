@@ -9,17 +9,13 @@ import pl.mini.board.PlacementResult;
 import pl.mini.cell.Cell;
 import pl.mini.cell.CellState;
 import pl.mini.cell.Field;
-import pl.mini.messages.ConnectMessage;
 import pl.mini.messages.*;
 import pl.mini.position.Direction;
 import pl.mini.position.Position;
 import pl.mini.team.Team;
 import pl.mini.team.TeamColor;
 
-import java.io.Console;
 import java.net.InetAddress;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -148,13 +144,12 @@ public class Player extends PlayerDTO {
             if (board.getCellsGrid()[position.getX()][position.getY()].distance == 0 ||
                     board.getCellsGrid()[position.getX()][position.getY()].getCellState() == CellState.Piece) {
                 msg = commServer.sendMessage( new TestMessage(playerUuid).toString());
-                TestStatusMessage tsm = (TestStatusMessage) MessageFactory.messageFromString(msg);
+                TestResultMessage tsm = (TestResultMessage) MessageFactory.messageFromString(msg);
                 if(tsm.getStatus().toString().equals("OK"))
                 {
                     msg = commServer.sendMessage(new PickupMessage(playerUuid).toString());
                     PickupResultMessage prm = (PickupResultMessage) MessageFactory.messageFromString(msg);
-                    if(prm.getResult().equals("OK"))
-                    {
+                    if (prm.getStatus().equals("OK")) {
                         board.getCellsGrid()[position.getX()][position.getY()].setCellState(CellState.Empty);
                         piece = true;
                     }

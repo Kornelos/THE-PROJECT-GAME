@@ -1,4 +1,4 @@
-package pl.mini.communication;
+package pl.mini.gamemaster;
 
 public class GameMasterClientRunner {
      public static void main(String[] args)

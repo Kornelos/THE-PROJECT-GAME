@@ -19,9 +19,9 @@ public class Cell {
         this.playerGuid = "";
     }
 
-    public Cell(CellState cellState, String playerGuids, int distance) {
+    public Cell(CellState cellState, String playerGuid, int distance) {
         this.cellState = cellState;
-        this.playerGuids = playerGuids;
+        this.playerGuid = playerGuid;
         this.distance = distance;
     }
 

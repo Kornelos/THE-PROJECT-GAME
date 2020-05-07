@@ -1,13 +1,9 @@
 package pl.mini;
 
 import lombok.extern.slf4j.Slf4j;
-import pl.mini.communication.GameMasterClientRunner;
 import pl.mini.communication.ServerRunner;
-
+import pl.mini.gamemaster.GameMasterClientRunner;
 import pl.mini.player.Player;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Hello world!

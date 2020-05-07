@@ -1,4 +1,4 @@
-package pl.mini.communication;
+package pl.mini.gamemaster;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
@@ -9,7 +9,6 @@ import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
 import lombok.extern.slf4j.Slf4j;
-import pl.mini.gamemaster.GameMaster;
 
 import java.util.Timer;
 import java.util.TimerTask;

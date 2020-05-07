@@ -9,7 +9,6 @@ import org.json.simple.parser.ParseException;
 import pl.mini.board.GameMasterBoard;
 import pl.mini.cell.Cell;
 import pl.mini.cell.CellState;
-import pl.mini.communication.GameMasterClient;
 import pl.mini.player.PlayerDTO;
 import pl.mini.position.Position;
 import pl.mini.team.TeamColor;

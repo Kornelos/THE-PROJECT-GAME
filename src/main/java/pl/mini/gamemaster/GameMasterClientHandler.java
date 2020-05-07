@@ -1,4 +1,4 @@
-package pl.mini.communication;
+package pl.mini.gamemaster;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler;
@@ -11,7 +11,6 @@ import pl.mini.board.Board;
 import pl.mini.board.PlacementResult;
 import pl.mini.cell.CellState;
 import pl.mini.cell.Field;
-import pl.mini.gamemaster.GameMaster;
 import pl.mini.messages.*;
 import pl.mini.player.PlayerDTO;
 import pl.mini.position.Position;
