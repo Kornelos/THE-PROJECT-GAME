@@ -68,9 +68,7 @@ public class GameMasterClientHandler extends ChannelInboundHandlerAdapter {
                         if (players.size() == 2 * gameMaster.getConfiguration().maxTeamSize)
                             this.notifyAll();
                     }
-
-
-
+                    break;
                 }
                 case discover: {
                     DiscoverMessage discoverMessage = (DiscoverMessage) jsonMessage;
