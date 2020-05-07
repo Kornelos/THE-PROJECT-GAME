@@ -10,8 +10,9 @@ public enum MessageAction {
     pickup,
     pickupResult,
     test,
-    testStatus,
     place,
     placeResult,
-    discoverResult, discover
+    discoverResult,
+    testResult,
+    discover
 }

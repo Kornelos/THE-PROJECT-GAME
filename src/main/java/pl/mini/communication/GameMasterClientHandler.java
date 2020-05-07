@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import pl.mini.board.Board;
 import pl.mini.board.PlacementResult;
 import pl.mini.cell.CellState;
+import pl.mini.cell.Field;
 import pl.mini.gamemaster.GameMaster;
 import pl.mini.messages.*;
 import pl.mini.player.PlayerDTO;
@@ -36,9 +37,7 @@ public class GameMasterClientHandler extends ChannelInboundHandlerAdapter {
     }
 
     @Override
-    public void channelActive(ChannelHandlerContext ctx) throws InterruptedException {
-        //gameMaster.loadConfigurationFromJson("src/main/resources/config.json");
-//        this.ctx = ctx;
+    public void channelActive(ChannelHandlerContext ctx) {
         serverChannel = ctx.channel();
         log.info("Client active");
         ctx.writeAndFlush(new GmConnectMessage().toJsonString());
@@ -72,10 +71,14 @@ public class GameMasterClientHandler extends ChannelInboundHandlerAdapter {
                     }
 
 
+
                 }
                 case discover: {
-                    //DiscoverMessage discoverMessage = (DiscoverMessage) jsonMessage;
-                    //TODO: implement
+                    DiscoverMessage discoverMessage = (DiscoverMessage) jsonMessage;
+                    List<Field> fields = gameMaster.getBoard().discover(discoverMessage.getPosition());
+
+                    DiscoverResultMessage discoverResultMessage = new DiscoverResultMessage(discoverMessage.getPlayerGuid(), discoverMessage.getPosition(), fields);
+                    ctx.writeAndFlush(discoverResultMessage.toString());
                     break;
                 }
                 case pickup: {
@@ -112,7 +115,9 @@ public class GameMasterClientHandler extends ChannelInboundHandlerAdapter {
                     break;
                 }
                 case test:
-                    //TODO: implement
+                    TestMessage testMessage = (TestMessage) jsonMessage;
+                    // TODO: @Reja no test in board
+
                     break;
 
                 case place: {

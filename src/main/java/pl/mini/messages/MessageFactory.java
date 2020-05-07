@@ -51,8 +51,8 @@ public class MessageFactory {
                         Status.valueOf((String) json.get("status")));
             case test:
                 return new TestMessage(UUID.fromString((String) json.get("playerGuid")));
-            case testStatus:
-                return new TestStatusMessage(UUID.fromString((String) json.get("playerGuid")),
+            case testResult:
+                return new TestResultMessage(UUID.fromString((String) json.get("playerGuid")),
                         Status.valueOf((String) json.get("status")),
                         Test.valueOf((String) json.get("test")));
             case place:
