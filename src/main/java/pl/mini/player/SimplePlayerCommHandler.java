@@ -23,10 +23,6 @@ public class SimplePlayerCommHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         log.info("Message received: " + msg.toString());
-        if(msg.equals("Game Over")) {
-            super.channelInactive(ctx);
-            return;
-        }
         message = msg.toString();
     }
 

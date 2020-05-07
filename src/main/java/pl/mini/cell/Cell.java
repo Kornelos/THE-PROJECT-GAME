@@ -19,6 +19,12 @@ public class Cell {
         this.playerGuid = "";
     }
 
+    public Cell(CellState cellState, String playerGuids, int distance) {
+        this.cellState = cellState;
+        this.playerGuids = playerGuids;
+        this.distance = distance;
+    }
+
 
     public  JSONObject toJSONObject() {
         JSONObject jsonObject = new JSONObject();
