@@ -15,7 +15,10 @@ import pl.mini.position.Position;
 import pl.mini.team.Team;
 import pl.mini.team.TeamColor;
 
+import java.io.Console;
 import java.net.InetAddress;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -52,7 +55,7 @@ public class Player extends PlayerDTO {
             if (jmsg.getClass() == StartMessage.class)
             {
                 this.board = ((StartMessage) jmsg).getBoard();
-                team.setColor(((StartMessage) jmsg).getTeamColor());
+                this.team.setColor(((StartMessage) jmsg).getTeamColor());
                 position = ((StartMessage) jmsg).getPosition();
                 playerGuids = ((StartMessage) jmsg).getTeamGuids();
                 playerTeamRole = ((StartMessage) jmsg).getTeamRole();
@@ -69,39 +72,33 @@ public class Player extends PlayerDTO {
     }
 
     public void makeAction() throws Exception {
-        //NOTE: this is a temporary player game logic
         String msg;
-        if (piece) {
-            // goes to base
-            // places piece in the base
-            int goalHeight = board.getGoalAreaHeight();
-            if (team.getColor() == TeamColor.Blue) {
-                if (position.getY() >= board.getBoardHeight() - goalHeight) {
-                    if (board.getCellsGrid()[position.getX()][position.getY()].cellState == CellState.Unknown) {
-                        placePiece();
-                        log.debug(playerName + " placing piece at: " + position.toString());
-                    }
-                    else {
-                        seekGoal();
-                    }
 
-                } else
-                    seekGoal();
+        if (piece)
+        {
+            if(board.getCellsGrid()[position.getX()][position.getY()].cellState == CellState.Unknown) {
+                msg = commServer.sendMessage(new PlaceMessage(playerUuid).toString());
+                PlaceResultMessage prm = (PlaceResultMessage) MessageFactory.messageFromString(msg);
+                if(prm.getStatus().toString().equals("OK"))
+                {
+                    if(prm.getResult().toString().equals("Correct"))
+                        board.getCellsGrid()[position.getX()][position.getY()].cellState = CellState.Goal;
+                    else
+                        board.getCellsGrid()[position.getX()][position.getY()].cellState = CellState.Empty;
+                    piece = false;
+                }
             } else {
-                if (position.getY() < goalHeight) {
-                    if (board.getCellsGrid()[position.getX()][position.getY()].cellState == CellState.Unknown) {
-                        placePiece();
-                        log.debug(playerName + " placing piece at: " + position.toString());
-                    }
-                    else {
-                        seekGoal();
-                    }
-                } else
-                    seekGoal();
-
+                Position goalPosition = seekGoal();
+                while(goalPosition != null)
+                {
+                    move(goalPosition);
+                    if(board.getCellsGrid()[position.getX()][position.getY()].getCellState() == CellState.Unknown)
+                        break;
+                }
             }
-
-        } else {
+        }
+        else
+        {
             msg = this.commServer.sendMessage((new DiscoverMessage(playerUuid, position)).toString());
             DiscoverResultMessage drm = (DiscoverResultMessage) MessageFactory.messageFromString(msg);
             List<Field> fieldList = drm.getFields();
@@ -111,36 +108,9 @@ public class Player extends PlayerDTO {
                 if(f.getCell().distance < minField.getCell().distance)
                     minField = f;
             }
-            int dirX = minField.getPosition().getX() - this.position.getX();
-            int dirY = minField.getPosition().getY() - this.position.getY();
 
-            if (dirX < 0) { left=true; right=false; }
-            else if (dirX > 0) { left = false; right = true; }
-            else { left = false; right = false; }
+            move(minField.getPosition());
 
-            if (dirY < 0) { down=true; up=false; }
-            else if (dirY > 0) { down = false; up = true; }
-            else { down = false; up = false; }
-
-            MoveResultMessage mrm;
-            if (down || up) {
-                if (down)
-                    msg = commServer.sendMessage(new MoveMessage(playerUuid, Direction.Down).toString());
-                else
-                    msg = commServer.sendMessage(new MoveMessage(playerUuid, Direction.Up).toString());
-                mrm = (MoveResultMessage) MessageFactory.messageFromString(msg);
-                if(mrm.getStatus().toString().equals("OK"))
-                    this.position = mrm.getPosition();
-            }
-            if (left || right) {
-                if (left)
-                    msg = commServer.sendMessage(new MoveMessage(playerUuid, Direction.Left).toString());
-                else
-                    msg = commServer.sendMessage(new MoveMessage(playerUuid, Direction.Right).toString());
-                mrm = (MoveResultMessage) MessageFactory.messageFromString(msg);
-                if(mrm.getStatus().toString().equals("OK"))
-                    this.position = mrm.getPosition();
-            }
             if (board.getCellsGrid()[position.getX()][position.getY()].distance == 0 ||
                     board.getCellsGrid()[position.getX()][position.getY()].getCellState() == CellState.Piece) {
                 msg = commServer.sendMessage( new TestMessage(playerUuid).toString());
@@ -149,129 +119,110 @@ public class Player extends PlayerDTO {
                 {
                     msg = commServer.sendMessage(new PickupMessage(playerUuid).toString());
                     PickupResultMessage prm = (PickupResultMessage) MessageFactory.messageFromString(msg);
-                    if (prm.getStatus().equals("OK")) {
+                    if(prm.getStatus().equals("TRUE"))
+                    {
                         board.getCellsGrid()[position.getX()][position.getY()].setCellState(CellState.Empty);
                         piece = true;
                     }
                 }
             }
         }
-
-        /*else if (askForMDist() != -1) {
-            int mDist = askForMDist();
-            // looks for piece
-            // ask for manhattan distance
-            if (!horizontal && !vertical) {
-                horizontal = true;
-                vertical = true;
-            }
-            if (vertical) {
-                move(Direction.Up);
-                if (askForMDist() > mDist) {
-                    move(Direction.Down);
-                    move(Direction.Down);
-                    if (askForMDist() > mDist) {
-                        move(Direction.Up);
-                        vertical = false;
-                    } else if (askForMDist() == mDist)
-                        vertical = false;
-                } else if (askForMDist() == mDist) {
-                    move(Direction.Down);
-                    if (askForMDist() > mDist) {
-                        move(Direction.Up);
-                        vertical = false;
-                    }
-                }
-            }
-
-            mDist = askForMDist();
-            if (horizontal) {
-                move(Direction.Right);
-                if (askForMDist() > mDist) {
-                    move(Direction.Left);
-                    move(Direction.Left);
-                    if (askForMDist() > mDist) {
-                        move(Direction.Right);
-                        horizontal = false;
-                    } else if (askForMDist() == mDist)
-                        horizontal = false;
-                } else if (askForMDist() == mDist) {
-                    move(Direction.Left);
-                    if (askForMDist() > mDist) {
-                        move(Direction.Right);
-                        horizontal = false;
-                    }
-                }
-            }
-            log.debug(playerName + " distance to piece: " + mDist);
-            // proceed to the target
-            if (askForMDist() == 0) {
-                log.debug(playerName + "taking piece at: " + position.toString());
-                piece = takePiece();
-                if (piece) {
-                    vertical = true;
-                    horizontal = true;
-                }
-            }
-
-
-        }*/
         log.debug("Player " + playerName + " location:" + position.toString());
     }
 
-    private List<Field> discover() {
-        // scan local area
-        return CommServerMockSingleton.INSTANCE.requestDiscover(this);
-    }
+    private void move(Position destination) throws Exception {
+        String msg;
+        int dirX = destination.getX() - this.position.getX();
+        int dirY = destination.getY() - this.position.getY();
 
-    private int askForMDist() {
-        // asks for manhattan distance
-        return CommServerMockSingleton.INSTANCE.requestClosestPieceManhattan(this);
-    }
+        if (dirX < 0) { left=true; right=false; }
+        else if (dirX > 0) { left = false; right = true; }
+        else { left = false; right = false; }
 
-    private int askForMDistToUnknown() {
-        return CommServerMockSingleton.INSTANCE.requestClosestUnknownManhattan(this);
-    }
+        if (dirY < 0) { down=true; up=false; }
+        else if (dirY > 0) { down = false; up = true; }
+        else { down = false; up = false; }
 
-    private void move(Direction direction) {
-        position = CommServerMockSingleton.INSTANCE.requestPlayerMove(this, direction);
-    }
-
-    private boolean takePiece() {
-        return CommServerMockSingleton.INSTANCE.requestPlayerPickPiece(this);
-    }
-
-    private boolean testPiece() {
-        return CommServerMockSingleton.INSTANCE.requestPieceTest(this) == CellState.Piece;
-    }
-
-    private void placePiece() {
-        PlacementResult placementResult = CommServerMockSingleton.INSTANCE.requestPlacePiece(this);
-        if (placementResult == PlacementResult.Correct) {
-            board.getCellsGrid()[position.getX()][position.getY()].cellState = CellState.Valid;
-        } else if (placementResult == PlacementResult.Pointless) {
-            board.getCellsGrid()[position.getX()][position.getY()].cellState = CellState.Empty;
+        MoveResultMessage mrm;
+        if (down || up) {
+            if (down)
+                msg = commServer.sendMessage(new MoveMessage(playerUuid, Direction.Down).toString());
+            else
+                msg = commServer.sendMessage(new MoveMessage(playerUuid, Direction.Up).toString());
+            mrm = (MoveResultMessage) MessageFactory.messageFromString(msg);
+            if(mrm.getStatus().toString().equals("OK"))
+                this.position = mrm.getPosition();
         }
-        piece = false;
+        if (left || right) {
+            if (left)
+                msg = commServer.sendMessage(new MoveMessage(playerUuid, Direction.Left).toString());
+            else
+                msg = commServer.sendMessage(new MoveMessage(playerUuid, Direction.Right).toString());
+            mrm = (MoveResultMessage) MessageFactory.messageFromString(msg);
+            if(mrm.getStatus().toString().equals("OK"))
+                this.position = mrm.getPosition();
+        }
     }
 
-    private void seekGoal() {
+    private Position seekGoal() {
+        int min = Integer.MAX_VALUE;
+        int mDist;
+        Position goalPosition = new Position(0,0);
+
+        try {
+            Cell[][] cll = this.board.getCellsGrid();
+
+            if(this.team.getColor() == TeamColor.Red)
+            {
+                for (int i = 0; i < this.board.getBoardWidth(); i++)
+                    for(int j = 0; j < this.board.getGoalAreaHeight(); j++) {
+                        if (cll[i][j].cellState == CellState.Unknown) {
+                            mDist = manhattanDistanceTwoPoints(position, new Position(i, j));
+                            if (mDist < min) {
+                                min = mDist;
+                                goalPosition = new Position(i,j);
+                            }
+                        }
+                    }
+            }
+            else if(this.team.getColor() == TeamColor.Blue)
+            {
+                for (int i = 0; i < this.board.getBoardWidth(); i++)
+                    for(int j = this.board.getGoalAreaHeight() + this.board.getTaskAreaHeight();
+                        j < this.board.getBoardHeight(); j++) {
+                        if (cll[i][j].cellState == CellState.Unknown) {
+                            mDist = manhattanDistanceTwoPoints(position, new Position(i, j));
+                            if (mDist < min) {
+                                min = mDist;
+                                goalPosition = new Position(i,j);
+                            }
+                        }
+                    }
+            }
+
+            if (min != Integer.MAX_VALUE)
+                return goalPosition;
+            else
+                return null;
+        } catch (NullPointerException | ArrayIndexOutOfBoundsException e) {
+            return null;
+        }
     }
 
-    private static void sendMessage(String jsonObject) {
-        String msg = jsonObject;
-
-
+    private int manhattanDistanceTwoPoints(Position pointA, Position pointB) {
+        return Math.abs(pointA.getX( ) - pointB.getX( )) + Math.abs(pointA.getY( ) - pointB.getY( ));
     }
 
     public static void main(String[] args) {
-        PlayerDTO playerDTO = new PlayerDTO();
+        Position p1 = new Position(5,8);
+        Position p2 = new Position(5,8);
+        System.out.println(p1.equals(p2));
         try {
             System.out.println("OK".equals(Status.OK.toString()));
             PlayerCommServer communicationServer = new PlayerCommServer();
             communicationServer.connect();
             Thread.sleep(5000);
-            String msg = communicationServer.sendMessage(new ConnectMessage(playerDTO.getPlayerUuid()).toString());
+            String msg = communicationServer.sendMessage("This is a message from external class");
             System.out.println("===================================" + msg + "========================================");
             Thread.sleep(5000);
             // communicationServer.closeConnection();
