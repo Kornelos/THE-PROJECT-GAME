@@ -8,7 +8,11 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
+import lombok.extern.slf4j.Slf4j;
+import pl.mini.messages.EndMessage;
+import pl.mini.messages.MessageFactory;
 
+@Slf4j
 public class PlayerCommServer {
     static final String HOST = System.getProperty("host", "127.0.0.1");
     static final int PORT = Integer.parseInt(System.getProperty("port", "2137"));
@@ -46,9 +50,19 @@ public class PlayerCommServer {
         String return_msg;
         System.out.println("-------------------------------Sending message------------------------------------------");
         channel.writeAndFlush(msg);
-        while((return_msg = handler.getMessage()) == (null));
-        if(return_msg.equals("Game Over"))
-            this.closeConnection();
+        synchronized (handler) {
+            handler.wait();
+        }
+        return_msg = handler.getMessage();
+        try {
+            if (MessageFactory.messageFromString(return_msg).getClass() == EndMessage.class) {
+                log.debug("Game Over.   Result: " +
+                        ((EndMessage) MessageFactory.messageFromString(return_msg)).getResult());
+                this.closeConnection();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         handler.setMessage(null);
         return return_msg;
     }

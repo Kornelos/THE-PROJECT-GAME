@@ -24,6 +24,9 @@ public class SimplePlayerCommHandler extends ChannelInboundHandlerAdapter {
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         log.info("Message received: " + msg.toString());
         message = msg.toString();
+        synchronized (this) {
+            this.notifyAll();
+        }
     }
 
     @Override
