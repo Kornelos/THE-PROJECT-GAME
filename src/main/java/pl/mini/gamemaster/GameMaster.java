@@ -51,8 +51,6 @@ public class GameMaster {
     private GameMasterConfiguration configuration;
     private GameMasterClient gmClient;
 
-    private final String FLASK_URL = "http://127.0.0.1:5000";
-
 
     public GameMaster() {
 
@@ -288,6 +286,7 @@ public class GameMaster {
 
         //post to html
         try {
+            String FLASK_URL = "http://127.0.0.1:5000/post_board";
             URL url = new URL(FLASK_URL);
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
             con.setRequestMethod("POST");
