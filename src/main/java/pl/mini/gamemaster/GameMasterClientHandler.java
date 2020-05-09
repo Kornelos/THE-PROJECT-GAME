@@ -125,6 +125,8 @@ public class GameMasterClientHandler extends ChannelInboundHandlerAdapter {
                     } else {
                         resultMessage = new MoveResultMessage(playerDTO.getPlayerUuid(),
                                 moveMessage.getDirection(), new Position(-1, -1), Status.DENIED);
+                        ctx.writeAndFlush(resultMessage.toString());
+                        gameMaster.sendBoardState();
                     }
                     long lEndTime = System.currentTimeMillis();
                     long diff = lEndTime - lStartTime;
