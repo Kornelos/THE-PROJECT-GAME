@@ -172,7 +172,7 @@ public class GameMaster {
     {
         this.board.getPiecesPosition().add(placed);
         this.board.getCellsGrid()[placed.getX()][placed.getY()].cellState = CellState.Piece;
-        for (int i = board.getGoalAreaHeight(); i < board.getGoalAreaHeight() + board.getTaskAreaHeight(); i++) {
+        for (int i = 0; i < 2*board.getGoalAreaHeight() + board.getTaskAreaHeight(); i++) {
             for (int j = 0; j < board.getBoardWidth(); j++) {
                 Position pos = new Position(j, i);
                 this.board.getCellsGrid()[j][i].distance = this.board.manhattanDistanceToClosestPiece(pos);

@@ -83,7 +83,7 @@ public class GameMasterBoard extends Board {
         CellState cs = getCellsGrid()[x][y].cellState;
         getCellsGrid()[x][y].cellState = CellState.Empty;
         piecesPosition.remove(position);
-        for(int i = getGoalAreaHeight(); i < getGoalAreaHeight() + getTaskAreaHeight(); i++)
+        for(int i = 0; i < 2*getGoalAreaHeight() + getTaskAreaHeight(); i++)
         {
             for(int j = 0; j < getBoardWidth(); j++)
             {
