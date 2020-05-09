@@ -100,7 +100,6 @@ public class GameMasterClientHandler extends ChannelInboundHandlerAdapter {
                     PlayerDTO playerDTO = new PlayerDTO();
                     playerDTO.setPlayerUuid(moveMessage.getPlayerGuid());
                     MoveResultMessage resultMessage;
-                    //todo: find error in this
                     Position playerPosition = gameMaster.getBoard().findPlayerPositionByGuid(playerDTO.getPlayerUuid().toString());
                     if (playerPosition != null) {
                         playerDTO.setPosition(playerPosition);
@@ -137,6 +136,15 @@ public class GameMasterClientHandler extends ChannelInboundHandlerAdapter {
                         double SHAM_PROB = 0.3;
                         PlacementResult placementResult = gameMaster.getBoard().placePiece(playerDTO, SHAM_PROB);
                         placeResultMessage = new PlaceResultMessage(playerDTO.getPlayerUuid(), placementResult, Status.OK);
+                        // check win condition
+                        if (gameMaster.getTeamRedGuids().contains(playerDTO.getPlayerUuid())) {
+                            if (gameMaster.getBoard().checkWinCondition(TeamColor.Red))
+                                ctx.writeAndFlush(new EndMessage("Red won").toString() + "\n");
+                        } else {
+                            if (gameMaster.getBoard().checkWinCondition(TeamColor.Blue))
+                                ctx.writeAndFlush(new EndMessage("Blue won").toString() + "\n");
+                        }
+
                         ctx.writeAndFlush(placeResultMessage.toString() + "\n");
                     }
                     break;
