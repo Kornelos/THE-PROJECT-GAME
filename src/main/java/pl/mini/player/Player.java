@@ -3,9 +3,7 @@ package pl.mini.player;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import pl.mini.CommServerMockSingleton;
 import pl.mini.board.Board;
-import pl.mini.board.PlacementResult;
 import pl.mini.cell.Cell;
 import pl.mini.cell.CellState;
 import pl.mini.cell.Field;
@@ -15,10 +13,7 @@ import pl.mini.position.Position;
 import pl.mini.team.Team;
 import pl.mini.team.TeamColor;
 
-import java.io.Console;
 import java.net.InetAddress;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -50,7 +45,7 @@ public class Player extends PlayerDTO {
         piece = false;
         try {
             commServer.connect();
-            String msg = commServer.sendMessage((new ConnectMessage(playerUuid)).toString());
+            String msg = commServer.sendMessage((new ConnectMessage(playerUuid)).toString() + "\n");
             JsonMessage jmsg = MessageFactory.messageFromString(msg);
             if (jmsg.getClass() == StartMessage.class)
             {
@@ -77,7 +72,7 @@ public class Player extends PlayerDTO {
         if (piece)
         {
             if(board.getCellsGrid()[position.getX()][position.getY()].cellState == CellState.Unknown) {
-                msg = commServer.sendMessage(new PlaceMessage(playerUuid).toString());
+                msg = commServer.sendMessage(new PlaceMessage(playerUuid).toString() + "\n");
                 PlaceResultMessage prm = (PlaceResultMessage) MessageFactory.messageFromString(msg);
                 if(prm.getStatus().toString().equals("OK"))
                 {
@@ -99,7 +94,7 @@ public class Player extends PlayerDTO {
         }
         else
         {
-            msg = this.commServer.sendMessage((new DiscoverMessage(playerUuid, position)).toString());
+            msg = this.commServer.sendMessage((new DiscoverMessage(playerUuid, position)).toString() + "\n");
             DiscoverResultMessage drm = (DiscoverResultMessage) MessageFactory.messageFromString(msg);
             List<Field> fieldList = drm.getFields();
             Field minField = new Field(new Position(0,0), new Cell(CellState.Empty, "", Integer.MAX_VALUE));
@@ -146,18 +141,18 @@ public class Player extends PlayerDTO {
         MoveResultMessage mrm;
         if (down || up) {
             if (down)
-                msg = commServer.sendMessage(new MoveMessage(playerUuid, Direction.Down).toString());
+                msg = commServer.sendMessage(new MoveMessage(playerUuid, Direction.Down).toString() + "\n");
             else
-                msg = commServer.sendMessage(new MoveMessage(playerUuid, Direction.Up).toString());
+                msg = commServer.sendMessage(new MoveMessage(playerUuid, Direction.Up).toString() + "\n");
             mrm = (MoveResultMessage) MessageFactory.messageFromString(msg);
             if(mrm.getStatus().toString().equals("OK"))
                 this.position = mrm.getPosition();
         }
         if (left || right) {
             if (left)
-                msg = commServer.sendMessage(new MoveMessage(playerUuid, Direction.Left).toString());
+                msg = commServer.sendMessage(new MoveMessage(playerUuid, Direction.Left).toString() + "\n");
             else
-                msg = commServer.sendMessage(new MoveMessage(playerUuid, Direction.Right).toString());
+                msg = commServer.sendMessage(new MoveMessage(playerUuid, Direction.Right).toString() + "\n");
             mrm = (MoveResultMessage) MessageFactory.messageFromString(msg);
             if(mrm.getStatus().toString().equals("OK"))
                 this.position = mrm.getPosition();

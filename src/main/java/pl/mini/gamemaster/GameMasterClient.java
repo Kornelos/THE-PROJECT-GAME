@@ -69,6 +69,8 @@ public class GameMasterClient {
             timer.scheduleAtFixedRate(placePieceTask, 0, gameMaster.getConfiguration().delayNextPiecePlace);
 
             log.debug("Piece placing started.");
+
+
             //f.channel().closeFuture().sync();
         } finally {
             //group.shutdownGracefully();

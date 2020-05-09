@@ -39,7 +39,7 @@ public class GameMasterClientHandler extends ChannelInboundHandlerAdapter {
     public void channelActive(ChannelHandlerContext ctx) {
         serverChannel = ctx.channel();
         log.info("Client active");
-        ctx.writeAndFlush(new GmConnectMessage().toJsonString());
+        ctx.writeAndFlush(new GmConnectMessage().toJsonString() + "\n");
 
 
     }
@@ -47,7 +47,7 @@ public class GameMasterClientHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
-        log.debug(msg.toString());
+        log.info(msg.toString());
         try {
             JsonMessage jsonMessage = MessageFactory.messageFromString(msg.toString());
             switch (jsonMessage.getAction()) {
@@ -65,7 +65,7 @@ public class GameMasterClientHandler extends ChannelInboundHandlerAdapter {
                         log.info("player connected: " + playerDTO.getPlayerUuid().toString());
                     }
                     synchronized (this) {
-                        if (players.size() == 2 * gameMaster.getConfiguration().maxTeamSize)
+                        if (players.size() == gameMaster.getConfiguration().maxTeamSize)
                             this.notifyAll();
                     }
                     break;
@@ -75,7 +75,7 @@ public class GameMasterClientHandler extends ChannelInboundHandlerAdapter {
                     List<Field> fields = gameMaster.getBoard().discover(discoverMessage.getPosition());
 
                     DiscoverResultMessage discoverResultMessage = new DiscoverResultMessage(discoverMessage.getPlayerGuid(), discoverMessage.getPosition(), fields);
-                    ctx.writeAndFlush(discoverResultMessage.toString());
+                    ctx.writeAndFlush(discoverResultMessage.toString() + "\n");
                     break;
                 }
                 case pickup: {
@@ -90,7 +90,7 @@ public class GameMasterClientHandler extends ChannelInboundHandlerAdapter {
                         } else {
                             resultMessage = new PickupResultMessage(pickupMessage.getPlayerGuid(), Status.DENIED);
                         }
-                        ctx.writeAndFlush(resultMessage.toString());
+                        ctx.writeAndFlush(resultMessage.toString() + "\n");
 
                     }
                     break;
@@ -99,24 +99,32 @@ public class GameMasterClientHandler extends ChannelInboundHandlerAdapter {
                     MoveMessage moveMessage = (MoveMessage) jsonMessage;
                     PlayerDTO playerDTO = new PlayerDTO();
                     playerDTO.setPlayerUuid(moveMessage.getPlayerGuid());
+                    MoveResultMessage resultMessage;
+                    //todo: find error in this
                     Position playerPosition = gameMaster.getBoard().findPlayerPositionByGuid(playerDTO.getPlayerUuid().toString());
                     if (playerPosition != null) {
                         playerDTO.setPosition(playerPosition);
                         Position newPosition = gameMaster.getBoard().playerMove(playerDTO, moveMessage.getDirection());
                         // send response
-                        MoveResultMessage resultMessage = new MoveResultMessage(playerDTO.getPlayerUuid(),
+                        resultMessage = new MoveResultMessage(playerDTO.getPlayerUuid(),
                                 moveMessage.getDirection(), newPosition, Status.OK);
-                        ctx.writeAndFlush(resultMessage.toString());
+
+                    } else {
+                        resultMessage = new MoveResultMessage(playerDTO.getPlayerUuid(),
+                                moveMessage.getDirection(), playerPosition, Status.DENIED);
                     }
+                    ctx.writeAndFlush(resultMessage.toString() + "\n");
 
                     break;
                 }
-                case test:
+                case test: {
                     TestMessage testMessage = (TestMessage) jsonMessage;
                     // TODO: @Reja no test in board
+                    TestResultMessage testResultMessage = new TestResultMessage(testMessage.getPlayerGuid(), Status.OK, Test.TRUE);
+                    ctx.writeAndFlush(testResultMessage.toString() + "\n");
 
                     break;
-
+                }
                 case place: {
                     PlaceMessage placeMessage = (PlaceMessage) jsonMessage;
                     PlayerDTO playerDTO = new PlayerDTO();
@@ -129,7 +137,7 @@ public class GameMasterClientHandler extends ChannelInboundHandlerAdapter {
                         double SHAM_PROB = 0.3;
                         PlacementResult placementResult = gameMaster.getBoard().placePiece(playerDTO, SHAM_PROB);
                         placeResultMessage = new PlaceResultMessage(playerDTO.getPlayerUuid(), placementResult, Status.OK);
-                        ctx.writeAndFlush(placeResultMessage.toString());
+                        ctx.writeAndFlush(placeResultMessage.toString() + "\n");
                     }
                     break;
                 }
@@ -156,7 +164,7 @@ public class GameMasterClientHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) {
-        log.info("closing program..");
+        log.info("Channel inactive, quitting");
         System.exit(0);
     }
 
@@ -173,7 +181,7 @@ public class GameMasterClientHandler extends ChannelInboundHandlerAdapter {
             startMessage = new StartMessage(p.getPlayerUuid(), p.getPlayerTeamColor(), p.getPlayerTeamRole(),
                     gameMaster.getTeamRedGuids().size(), teamList, p.getPosition(),
                     new Board(gameMaster.getBoard().getBoardWidth(), gameMaster.getBoard().getGoalAreaHeight(), gameMaster.getBoard().getTaskAreaHeight()));
-            serverChannel.writeAndFlush(startMessage.toString());
+            serverChannel.writeAndFlush(startMessage.toString() + "\n");
         }
     }
 

@@ -203,7 +203,7 @@ public class GameMasterBoard extends Board {
                 int localY = i;
                 if(localX < 0 || localY < 0 || localX > getBoardWidth() - 1 || localY > getBoardHeight() - 1)
                 {
-                    list.add(null);
+                 //   list.add(null);
                 }
 
                 else {
