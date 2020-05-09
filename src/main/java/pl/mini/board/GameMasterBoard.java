@@ -25,7 +25,7 @@ public class GameMasterBoard extends Board {
     }
 
 
-    public Position playerMove(PlayerDTO player, Direction direction) {
+    synchronized public Position playerMove(PlayerDTO player, Direction direction) {
         Position position = player.getPosition( );
         int x_old = position.getX();
         int y_old = position.getY();
@@ -77,13 +77,13 @@ public class GameMasterBoard extends Board {
     }
 
 
-    public CellState takePiece(Position position) {
+    synchronized public CellState takePiece(Position position) {
         int x = position.getX();
         int y = position.getY();
         CellState cs = getCellsGrid()[x][y].cellState;
         getCellsGrid()[x][y].cellState = CellState.Empty;
         piecesPosition.remove(position);
-        for(int i = getGoalAreaHeight(); i < getGoalAreaHeight() + getTaskAreaHeight(); i++)
+        for(int i = 0; i < 2 * getGoalAreaHeight() + getTaskAreaHeight(); i++)
         {
             for(int j = 0; j < getBoardWidth(); j++)
             {
@@ -114,7 +114,7 @@ public class GameMasterBoard extends Board {
     }
 
 
-    public PlacementResult placePiece(PlayerDTO player, double probab) {
+    synchronized public PlacementResult placePiece(PlayerDTO player, double probab) {
         Position position = player.getPosition( );
         int x = position.getX( );
         int y = position.getY( );
@@ -133,7 +133,7 @@ public class GameMasterBoard extends Board {
     }
 
 
-    public Position placePlayer(PlayerDTO player) {
+    synchronized public Position placePlayer(PlayerDTO player) {
         Random randomX = new Random();
         Random randomY = new Random();
         Cell[][] cll = this.getCellsGrid();
@@ -193,7 +193,7 @@ public class GameMasterBoard extends Board {
     }
 
 
-    public List<Field> discover(Position position) {
+    synchronized public List<Field> discover(Position position) {
         int x = position.getX( );
         int y = position.getY( );
         List<Field> list = new ArrayList<>( );
@@ -201,16 +201,19 @@ public class GameMasterBoard extends Board {
             for (int j = x - 1; j <= x + 1; j++) {
                 int localX = j;
                 int localY = i;
-                if(localX < 0 || localY < 0 || localX > getBoardWidth() - 1 || localY > getBoardHeight() - 1)
+                if(!(localX < 0 || localY < 0 || localX > getBoardWidth() - 1 || localY > getBoardHeight() - 1))
                 {
-                    list.add(null);
-                }
-
-                else {
                     Position position1 = new Position(localX, localY);
-                    Field field = new Field(position1, getCellsGrid()[position1.getX()][position1.getY()]);
+                    Cell cell = new Cell(getCellsGrid()[position1.getX()][position1.getY()].cellState,
+                            getCellsGrid()[position1.getX()][position1.getY()].playerGuid, getCellsGrid()[position1.getX()][position1.getY()].distance);
+                    Field field = new Field(position1, cell);
+
+                    if (field.getCell().cellState == CellState.Goal)
+                        field.getCell().cellState = CellState.Unknown;
                     list.add(field);
                 }
+
+
             }
         }
         return list;
@@ -221,7 +224,7 @@ public class GameMasterBoard extends Board {
         return Math.abs(pointA.getX( ) - pointB.getX( )) + Math.abs(pointA.getY( ) - pointB.getY( ));
     }
 
-    public int manhattanDistanceToClosestPiece(Position position) {
+    synchronized public int manhattanDistanceToClosestPiece(Position position) {
         int min = Integer.MAX_VALUE;
         int id = 0;
         try {
@@ -241,7 +244,7 @@ public class GameMasterBoard extends Board {
         }
     }
 
-    public int manhattanDistanceToClosestUnknown(Position position, TeamColor teamColor) {
+    synchronized public int manhattanDistanceToClosestUnknown(Position position, TeamColor teamColor) {
         int min = Integer.MAX_VALUE;
         int mDist;
 
@@ -281,8 +284,8 @@ public class GameMasterBoard extends Board {
         }
     }
 
-    public Position findPlayerPositionByGuid(String guid) {
-        for (int i = 0; i < getGoalAreaHeight(); i++)
+    synchronized public Position findPlayerPositionByGuid(String guid) {
+        for (int i = 0; i < getBoardHeight(); i++)
             for (int j = 0; j < getBoardWidth(); j++)
                 if (getCellsGrid()[j][i].playerGuid.equals(guid))
                     return new Position(j, i);

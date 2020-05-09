@@ -28,7 +28,6 @@ public class DiscoverMessage implements JsonMessage {
         Map<String, String> jsonMap = new HashMap<>();
         jsonMap.put("playerGuid", playerGuid.toString());
         jsonMap.put("action", action.name());
-        jsonMap.put("position", position.toString());
         JSONObject point = new JSONObject();
         JSONObject json = new JSONObject(jsonMap);
         point.put("x", this.position.getX());

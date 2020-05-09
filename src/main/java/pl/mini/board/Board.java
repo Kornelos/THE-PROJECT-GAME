@@ -44,14 +44,14 @@ public class Board {
     }
 
 
-    public void updateField(Field field)
+    synchronized public void updateField(Field field)
     {
         updateCell(field.getCell(), field.getPosition());
     }
 
 
 
-    private void updateCell(Cell cell, Position position)
+    synchronized private void updateCell(Cell cell, Position position)
     {
         cellsGrid[position.getX()][position.getY()] = cell;
     }

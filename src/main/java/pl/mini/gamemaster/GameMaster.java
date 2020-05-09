@@ -155,13 +155,38 @@ public class GameMaster {
         }
     }
 
+    public void setRandomGoals(int number)
+    {
+        for(int i = 0; i < number; i++)
+        {
+            Random randomX = new Random();
+            Random randomY = new Random();
+            int x = randomX.nextInt(board.getBoardWidth());
+            int y = randomY.nextInt(board.getGoalAreaHeight());
+            board.setGoal(new Position(x,y));
+            randomX = new Random();
+            randomY = new Random();
+            x = randomX.nextInt(board.getBoardWidth());
+            y = board.getBoardHeight() - board.getGoalAreaHeight() + randomY.nextInt(board.getGoalAreaHeight());
+            board.setGoal(new Position(x,y));
+        }
+    }
+
+    public void setPredefinedGoals(Position[] positions)
+    {
+        for (var elem : positions)
+        {
+            board.setGoal(elem);
+        }
+    }
+
     public void putNewPiece()
     {
         Random r = new Random();
         Position placed = this.board.generatePiece();
         this.board.getPiecesPosition().add(placed);
         this.board.getCellsGrid()[placed.getX()][placed.getY()].cellState = CellState.Piece;
-        for(int i = board.getGoalAreaHeight(); i < board.getGoalAreaHeight() + board.getTaskAreaHeight(); i++)
+        for(int i = 0; i < 2 * board.getGoalAreaHeight() + board.getTaskAreaHeight(); i++)
         {
             for(int j = 0; j < board.getBoardWidth(); j++)
             {
@@ -175,7 +200,7 @@ public class GameMaster {
     {
         this.board.getPiecesPosition().add(placed);
         this.board.getCellsGrid()[placed.getX()][placed.getY()].cellState = CellState.Piece;
-        for (int i = board.getGoalAreaHeight(); i < board.getGoalAreaHeight() + board.getTaskAreaHeight(); i++) {
+        for (int i = 0; i < 2*board.getGoalAreaHeight() + board.getTaskAreaHeight(); i++) {
             for (int j = 0; j < board.getBoardWidth(); j++) {
                 Position pos = new Position(j, i);
                 this.board.getCellsGrid()[j][i].distance = this.board.manhattanDistanceToClosestPiece(pos);

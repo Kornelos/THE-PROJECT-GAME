@@ -69,7 +69,7 @@ public class StartMessage implements JsonMessage {
 
     @Override
     public String getTarget() {
-        return "all";
+        return playerGuid.toString();
     }
 
     @Override

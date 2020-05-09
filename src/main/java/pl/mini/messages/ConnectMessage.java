@@ -30,7 +30,7 @@ public class ConnectMessage implements JsonMessage {
 
     @Override
     public String getTarget() {
-        return "server";
+        return "gm";
     }
 
     @Override
