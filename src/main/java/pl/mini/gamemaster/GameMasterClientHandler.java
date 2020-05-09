@@ -31,9 +31,7 @@ public class GameMasterClientHandler extends ChannelInboundHandlerAdapter {
     //    private ChannelHandlerContext ctx;
     private Channel serverChannel;
 
-    public GameMasterClientHandler(GameMaster gm) {
-        gameMaster = gm;
-    }
+    public GameMasterClientHandler(GameMaster gm) { gameMaster = gm; }
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) {
@@ -65,7 +63,7 @@ public class GameMasterClientHandler extends ChannelInboundHandlerAdapter {
                         log.info("player connected: " + playerDTO.getPlayerUuid().toString());
                     }
                     synchronized (this) {
-                        if (players.size() == gameMaster.getConfiguration().maxTeamSize)
+                        if (players.size() == 2*gameMaster.getConfiguration().maxTeamSize)
                             this.notifyAll();
                     }
                     break;

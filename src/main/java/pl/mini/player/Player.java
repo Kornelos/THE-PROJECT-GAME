@@ -133,8 +133,8 @@ public class Player extends PlayerDTO {
         else if (dirX > 0) { left = false; right = true; }
         else { left = false; right = false; }
 
-        if (dirY < 0) { down=true; up=false; }
-        else if (dirY > 0) { down = false; up = true; }
+        if (dirY > 0) { down=true; up=false; }
+        else if (dirY < 0) { down = false; up = true; }
         else { down = false; up = false; }
 
         MoveResultMessage mrm;

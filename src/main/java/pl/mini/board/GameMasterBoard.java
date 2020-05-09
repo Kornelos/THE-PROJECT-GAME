@@ -280,7 +280,7 @@ public class GameMasterBoard extends Board {
     }
 
     synchronized public Position findPlayerPositionByGuid(String guid) {
-        for (int i = 0; i < getGoalAreaHeight(); i++)
+        for (int i = 0; i < getBoardHeight(); i++)
             for (int j = 0; j < getBoardWidth(); j++)
                 if (getCellsGrid()[j][i].playerGuid.equals(guid))
                     return new Position(j, i);
