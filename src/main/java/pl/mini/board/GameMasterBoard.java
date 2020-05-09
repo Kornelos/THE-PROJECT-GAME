@@ -208,6 +208,8 @@ public class GameMasterBoard extends Board {
                 {
                     Position position1 = new Position(localX, localY);
                     Field field = new Field(position1, getCellsGrid()[position1.getX()][position1.getY()]);
+                    if(field.getCell().cellState == CellState.Goal)
+                        field.getCell().cellState = CellState.Unknown;
                     list.add(field);
                 }
 
