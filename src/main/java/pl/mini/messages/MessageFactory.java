@@ -81,8 +81,9 @@ public class MessageFactory {
             case pickupResult:
                 return new PickupResultMessage(UUID.fromString((String) json.get("playerGuid")), Status.valueOf((String) json.get("status")));
             case discover:
-                int x = (int) json.get("x");
-                int y = (int) json.get("y");
+                JSONObject position1 = (JSONObject) json.get("position");
+                int x = (int) position1.get("x");
+                int y = (int) position1.get("y");
                 Position discoverPosition = new Position(x, y);
                 return new DiscoverMessage(UUID.fromString((String) json.get("playerGuid")), discoverPosition);
             case discoverResult:
