@@ -10,6 +10,7 @@ import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
 import lombok.extern.slf4j.Slf4j;
+import pl.mini.position.Position;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -27,6 +28,9 @@ public class GameMasterClient {
 
         GameMaster gameMaster = new GameMaster();
         gameMaster.loadConfigurationFromJson("src/main/resources/config.json");
+        for (Position p : gameMaster.getConfiguration().predefinedGoalPositions) {
+            gameMaster.getBoard().setGoal(p);
+        }
         final GameMasterClientHandler handler = new GameMasterClientHandler(gameMaster);
         try {
             Bootstrap b = new Bootstrap();

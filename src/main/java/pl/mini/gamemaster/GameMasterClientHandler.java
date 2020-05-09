@@ -111,7 +111,7 @@ public class GameMasterClientHandler extends ChannelInboundHandlerAdapter {
                                 moveMessage.getDirection(), new Position(-1, -1), Status.DENIED);
                     }
                     ctx.writeAndFlush(resultMessage.toString() + "\n");
-
+                    gameMaster.printBoard();
                     break;
                 }
                 case test: {
