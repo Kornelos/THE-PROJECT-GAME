@@ -47,7 +47,7 @@ public class MessageFactory {
                 JSONObject position = (JSONObject) json.get("position");
                 return new MoveResultMessage(UUID.fromString((String) json.get("playerGuid")),
                         Direction.valueOf((String) json.get("direction")),
-                        new Position((int) position.get("x"), (int) position.get("y")),
+                        new Position(((Long) position.get("x")).intValue(), ((Long) position.get("y")).intValue()),
                         Status.valueOf((String) json.get("status")));
             case test:
                 return new TestMessage(UUID.fromString((String) json.get("playerGuid")));
@@ -81,8 +81,9 @@ public class MessageFactory {
             case pickupResult:
                 return new PickupResultMessage(UUID.fromString((String) json.get("playerGuid")), Status.valueOf((String) json.get("status")));
             case discover:
-                int x = (int) json.get("x");
-                int y = (int) json.get("y");
+                JSONObject position1 = (JSONObject) json.get("position");
+                int x = ((Long) position1.get("x")).intValue();
+                int y = ((Long) position1.get("y")).intValue();
                 Position discoverPosition = new Position(x, y);
                 return new DiscoverMessage(UUID.fromString((String) json.get("playerGuid")), discoverPosition);
             case discoverResult:

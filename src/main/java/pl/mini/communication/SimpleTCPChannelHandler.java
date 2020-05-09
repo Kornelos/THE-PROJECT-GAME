@@ -22,9 +22,10 @@ public class SimpleTCPChannelHandler extends SimpleChannelInboundHandler<String>
             new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
     Map<UUID, Channel> playerChannels = new HashMap<>();
     Channel gmChannel;
-
+    final int numOfBytes = 1024;
     @Override
     public void channelActive(ChannelHandlerContext ctx) {
+        //ctx.channel().config().setOption( ChannelOption.SO_RCVBUF, numOfBytes );
         allChannels.add(ctx.channel());
         log.info(ctx.channel().remoteAddress() + " Channel Active");
 
@@ -39,9 +40,8 @@ public class SimpleTCPChannelHandler extends SimpleChannelInboundHandler<String>
                 case "server":
                     // add players and game master to prop. structures
                     if (jsonMessage.getAction() == MessageAction.connect && gmChannel != null) {
-                        ConnectMessage playerConnect = (ConnectMessage) jsonMessage;
-                        playerChannels.put(playerConnect.getPlayerGuid(), ctx.channel());
-                        gmChannel.writeAndFlush(s);
+
+                        gmChannel.writeAndFlush(s + "\n");
 
                     } else if (jsonMessage.getAction() == MessageAction.gmConnect) {
                         gmChannel = ctx.channel();
@@ -50,21 +50,27 @@ public class SimpleTCPChannelHandler extends SimpleChannelInboundHandler<String>
                 case "all":
                     // send message to all players and game master
                     for (Channel c : allChannels) {
-                        c.writeAndFlush(s);
+                        c.writeAndFlush(s + "\n");
                     }
                     break;
                 case "gm":
                     // send message to gm
-                    gmChannel.writeAndFlush(s);
+                    if (jsonMessage instanceof ConnectMessage) {
+                        ConnectMessage playerConnect = (ConnectMessage) jsonMessage;
+                        playerChannels.put(playerConnect.getPlayerGuid(), ctx.channel());
+                    }
+
+                    gmChannel.writeAndFlush(s + "\n");
                     break;
                 default:
                     UUID targetUUID = UUID.fromString(jsonMessage.getTarget());
-                    playerChannels.get(targetUUID).writeAndFlush(s);
+                    playerChannels.get(targetUUID).writeAndFlush(s + "\n");
                     break;
             }
 
         } catch (Exception e) {
             log.error("Server got corrupted message! " + s + " Exception: " + e.getMessage());
+            e.printStackTrace();
         }
 
     }

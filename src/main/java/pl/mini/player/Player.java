@@ -3,9 +3,7 @@ package pl.mini.player;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import pl.mini.CommServerMockSingleton;
 import pl.mini.board.Board;
-import pl.mini.board.PlacementResult;
 import pl.mini.cell.Cell;
 import pl.mini.cell.CellState;
 import pl.mini.cell.Field;
@@ -15,10 +13,7 @@ import pl.mini.position.Position;
 import pl.mini.team.Team;
 import pl.mini.team.TeamColor;
 
-import java.io.Console;
 import java.net.InetAddress;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -50,7 +45,7 @@ public class Player extends PlayerDTO {
         piece = false;
         try {
             commServer.connect();
-            String msg = commServer.sendMessage((new ConnectMessage(playerUuid)).toString());
+            String msg = commServer.sendMessage((new ConnectMessage(playerUuid)).toString() + "\n");
             JsonMessage jmsg = MessageFactory.messageFromString(msg);
             if (jmsg.getClass() == StartMessage.class)
             {
@@ -77,7 +72,7 @@ public class Player extends PlayerDTO {
         if (piece)
         {
             if(board.getCellsGrid()[position.getX()][position.getY()].cellState == CellState.Unknown) {
-                msg = commServer.sendMessage(new PlaceMessage(playerUuid).toString());
+                msg = commServer.sendMessage(new PlaceMessage(playerUuid).toString() + "\n");
                 PlaceResultMessage prm = (PlaceResultMessage) MessageFactory.messageFromString(msg);
                 if(prm.getStatus().toString().equals("OK"))
                 {
@@ -99,7 +94,7 @@ public class Player extends PlayerDTO {
         }
         else
         {
-            msg = this.commServer.sendMessage((new DiscoverMessage(playerUuid, position)).toString());
+            msg = this.commServer.sendMessage((new DiscoverMessage(playerUuid, position)).toString() + "\n");
             DiscoverResultMessage drm = (DiscoverResultMessage) MessageFactory.messageFromString(msg);
             List<Field> fieldList = drm.getFields();
             Field minField = new Field(new Position(0,0), new Cell(CellState.Empty, "", Integer.MAX_VALUE));
@@ -113,14 +108,13 @@ public class Player extends PlayerDTO {
 
             if (board.getCellsGrid()[position.getX()][position.getY()].distance == 0 ||
                     board.getCellsGrid()[position.getX()][position.getY()].getCellState() == CellState.Piece) {
-                msg = commServer.sendMessage( new TestMessage(playerUuid).toString());
+                msg = commServer.sendMessage(new TestMessage(playerUuid).toString() + "\n");
                 TestResultMessage tsm = (TestResultMessage) MessageFactory.messageFromString(msg);
                 if(tsm.getStatus().toString().equals("OK"))
                 {
-                    msg = commServer.sendMessage(new PickupMessage(playerUuid).toString());
+                    msg = commServer.sendMessage(new PickupMessage(playerUuid).toString() + "\n");
                     PickupResultMessage prm = (PickupResultMessage) MessageFactory.messageFromString(msg);
-                    if(prm.getStatus().equals("TRUE"))
-                    {
+                    if (prm.getStatus().toString().equals("OK")) {
                         board.getCellsGrid()[position.getX()][position.getY()].setCellState(CellState.Empty);
                         piece = true;
                     }
@@ -146,18 +140,18 @@ public class Player extends PlayerDTO {
         MoveResultMessage mrm;
         if (down || up) {
             if (down)
-                msg = commServer.sendMessage(new MoveMessage(playerUuid, Direction.Down).toString());
+                msg = commServer.sendMessage(new MoveMessage(playerUuid, Direction.Down).toString() + "\n");
             else
-                msg = commServer.sendMessage(new MoveMessage(playerUuid, Direction.Up).toString());
+                msg = commServer.sendMessage(new MoveMessage(playerUuid, Direction.Up).toString() + "\n");
             mrm = (MoveResultMessage) MessageFactory.messageFromString(msg);
             if(mrm.getStatus().toString().equals("OK"))
                 this.position = mrm.getPosition();
         }
         if (left || right) {
             if (left)
-                msg = commServer.sendMessage(new MoveMessage(playerUuid, Direction.Left).toString());
+                msg = commServer.sendMessage(new MoveMessage(playerUuid, Direction.Left).toString() + "\n");
             else
-                msg = commServer.sendMessage(new MoveMessage(playerUuid, Direction.Right).toString());
+                msg = commServer.sendMessage(new MoveMessage(playerUuid, Direction.Right).toString() + "\n");
             mrm = (MoveResultMessage) MessageFactory.messageFromString(msg);
             if(mrm.getStatus().toString().equals("OK"))
                 this.position = mrm.getPosition();
@@ -214,18 +208,24 @@ public class Player extends PlayerDTO {
     }
 
     public static void main(String[] args) {
-        Position p1 = new Position(5,8);
-        Position p2 = new Position(5,8);
-        System.out.println(p1.equals(p2));
         try {
-            System.out.println("OK".equals(Status.OK.toString()));
+            /*System.out.println("OK".equals(Status.OK.toString()));
             PlayerCommServer communicationServer = new PlayerCommServer();
             communicationServer.connect();
             Thread.sleep(5000);
-            String msg = communicationServer.sendMessage("This is a message from external class");
+            String msg = communicationServer.sendMessage(new ConnectMessage(UUID.randomUUID()).toString());
             System.out.println("===================================" + msg + "========================================");
-            Thread.sleep(5000);
+            Thread.sleep(5000);*/
+
+
             // communicationServer.closeConnection();
+            //String msg = "{\"action\":\"discoverResult\",\"position\":{\"x\":3,\"y\":1},\"playerGuid\":\"f6d0d621-3524-4e91-b05e-3036de26473d\",\"fields\":[{\"x\":2,\"y\":0,\"cell\":{\"distance\":0,\"playerGuid\":\"\",\"cellState\":\"Unknown\"}},{\"x\":3,\"y\":0,\"cell\":{\"distance\":0,\"playerGuid\":\"\",\"cellState\":\"Unknown\"}},{\"x\":4,\"y\":0,\"cell\":{\"distance\":0,\"playerGuid\":\"\",\"cellState\":\"Unknown\"}},{\"x\":2,\"y\":1,\"cell\":{\"distance\":0,\"playerGuid\":\"\",\"cellState\":\"Unknown\"}},{\"x\":3,\"y\":1,\"cell\":{\"distance\":0,\"playerGuid\":\"f6d0d621-3524-4e91-b05e-3036de26473d\",\"cellState\":\"Unknown\"}},{\"x\":4,\"y\":1,\"cell\":{\"distance\":0,\"playerGuid\":\"\",\"cellState\":\"Unknown\"}},{\"x\":2,\"y\":2,\"cell\":{\"distance\":0,\"playerGuid\":\"\",\"cellState\":\"Piece\"}},{\"x\":3,\"y\":2,\"cell\":{\"distance\":1,\"playerGuid\":\"\",\"cellState\":\"Empty\"}},{\"x\":4,\"y\":2,\"cell\":{\"distance\":2,\"playerGuid\":\"\",\"cellState\":\"Empty\"}}]}";
+            //MessageFactory.messageFromString(msg);
+            Player player = new Player("Player", new Board(1,1,1),new Team("Team", TeamColor.Red));
+            while(true)
+            {
+                player.makeAction();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

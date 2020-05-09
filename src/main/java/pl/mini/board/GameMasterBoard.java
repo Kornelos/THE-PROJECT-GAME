@@ -83,7 +83,7 @@ public class GameMasterBoard extends Board {
         CellState cs = getCellsGrid()[x][y].cellState;
         getCellsGrid()[x][y].cellState = CellState.Empty;
         piecesPosition.remove(position);
-        for(int i = 0; i < 2*getGoalAreaHeight() + getTaskAreaHeight(); i++)
+        for(int i = getGoalAreaHeight(); i < getGoalAreaHeight() + getTaskAreaHeight(); i++)
         {
             for(int j = 0; j < getBoardWidth(); j++)
             {
@@ -201,13 +201,16 @@ public class GameMasterBoard extends Board {
             for (int j = x - 1; j <= x + 1; j++) {
                 int localX = j;
                 int localY = i;
-                if(!(localX < 0 || localY < 0 || localX > getBoardWidth() - 1 || localY > getBoardHeight() - 1))
+                if(localX < 0 || localY < 0 || localX > getBoardWidth() - 1 || localY > getBoardHeight() - 1)
                 {
+                    list.add(null);
+                }
+
+                else {
                     Position position1 = new Position(localX, localY);
                     Field field = new Field(position1, getCellsGrid()[position1.getX()][position1.getY()]);
                     list.add(field);
                 }
-
             }
         }
         return list;
