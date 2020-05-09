@@ -204,8 +204,11 @@ public class GameMasterBoard extends Board {
                 if(!(localX < 0 || localY < 0 || localX > getBoardWidth() - 1 || localY > getBoardHeight() - 1))
                 {
                     Position position1 = new Position(localX, localY);
-                    Field field = new Field(position1, getCellsGrid()[position1.getX()][position1.getY()]);
-                    if(field.getCell().cellState == CellState.Goal)
+                    Cell cell = new Cell(getCellsGrid()[position1.getX()][position1.getY()].cellState,
+                            getCellsGrid()[position1.getX()][position1.getY()].playerGuid, getCellsGrid()[position1.getX()][position1.getY()].distance);
+                    Field field = new Field(position1, cell);
+
+                    if (field.getCell().cellState == CellState.Goal)
                         field.getCell().cellState = CellState.Unknown;
                     list.add(field);
                 }
