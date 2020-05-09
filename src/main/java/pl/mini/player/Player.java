@@ -114,7 +114,7 @@ public class Player extends PlayerDTO {
                 {
                     msg = commServer.sendMessage(new PickupMessage(playerUuid).toString() + "\n");
                     PickupResultMessage prm = (PickupResultMessage) MessageFactory.messageFromString(msg);
-                    if(prm.getStatus().equals("TRUE"))
+                    if(prm.getStatus().toString().equals("TRUE"))
                     {
                         board.getCellsGrid()[position.getX()][position.getY()].setCellState(CellState.Empty);
                         piece = true;
