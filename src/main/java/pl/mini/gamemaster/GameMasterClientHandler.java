@@ -69,14 +69,25 @@ public class GameMasterClientHandler extends ChannelInboundHandlerAdapter {
                     break;
                 }
                 case discover: {
+                    //start
+                    long lStartTime = System.currentTimeMillis();
+
                     DiscoverMessage discoverMessage = (DiscoverMessage) jsonMessage;
                     List<Field> fields = gameMaster.getBoard().discover(discoverMessage.getPosition());
 
                     DiscoverResultMessage discoverResultMessage = new DiscoverResultMessage(discoverMessage.getPlayerGuid(), discoverMessage.getPosition(), fields);
+                    //end
+                    long lEndTime = System.currentTimeMillis();
+                    //time elapsed
+                    long diff = lEndTime - lStartTime;
+                    if (gameMaster.getConfiguration().delayDiscover - diff > 0)
+                        Thread.sleep(gameMaster.getConfiguration().delayDiscover - diff);
+
                     ctx.writeAndFlush(discoverResultMessage.toString() + "\n");
                     break;
                 }
                 case pickup: {
+                    long lStartTime = System.currentTimeMillis();
                     PickupMessage pickupMessage = (PickupMessage) jsonMessage;
                     Position playerPosition = gameMaster.getBoard().findPlayerPositionByGuid(pickupMessage.getPlayerGuid().toString());
                     PickupResultMessage resultMessage;
@@ -88,12 +99,17 @@ public class GameMasterClientHandler extends ChannelInboundHandlerAdapter {
                         } else {
                             resultMessage = new PickupResultMessage(pickupMessage.getPlayerGuid(), Status.DENIED);
                         }
+                        long lEndTime = System.currentTimeMillis();
+                        long diff = lEndTime - lStartTime;
+                        if (gameMaster.getConfiguration().delayPick - diff > 0)
+                            Thread.sleep(gameMaster.getConfiguration().delayPick - diff);
                         ctx.writeAndFlush(resultMessage.toString() + "\n");
 
                     }
                     break;
                 }
                 case move: {
+                    long lStartTime = System.currentTimeMillis();
                     MoveMessage moveMessage = (MoveMessage) jsonMessage;
                     PlayerDTO playerDTO = new PlayerDTO();
                     playerDTO.setPlayerUuid(moveMessage.getPlayerGuid());
@@ -110,19 +126,29 @@ public class GameMasterClientHandler extends ChannelInboundHandlerAdapter {
                         resultMessage = new MoveResultMessage(playerDTO.getPlayerUuid(),
                                 moveMessage.getDirection(), new Position(-1, -1), Status.DENIED);
                     }
+                    long lEndTime = System.currentTimeMillis();
+                    long diff = lEndTime - lStartTime;
+                    if (gameMaster.getConfiguration().delayMove - diff > 0)
+                        Thread.sleep(gameMaster.getConfiguration().delayMove - diff);
+
                     ctx.writeAndFlush(resultMessage.toString() + "\n");
                     gameMaster.printBoard();
                     break;
                 }
                 case test: {
+                    long lStartTime = System.currentTimeMillis();
                     TestMessage testMessage = (TestMessage) jsonMessage;
-                    // TODO: @Reja no test in board
                     TestResultMessage testResultMessage = new TestResultMessage(testMessage.getPlayerGuid(), Status.OK, Test.TRUE);
+                    long lEndTime = System.currentTimeMillis();
+                    long diff = lEndTime - lStartTime;
+                    if (gameMaster.getConfiguration().delayPlace - diff > 0)
+                        Thread.sleep(gameMaster.getConfiguration().delayPlace - diff);
                     ctx.writeAndFlush(testResultMessage.toString() + "\n");
 
                     break;
                 }
                 case place: {
+                    long lStartTime = System.currentTimeMillis();
                     PlaceMessage placeMessage = (PlaceMessage) jsonMessage;
                     PlayerDTO playerDTO = new PlayerDTO();
                     playerDTO.setPlayerUuid(placeMessage.getPlayerGuid());
@@ -142,6 +168,11 @@ public class GameMasterClientHandler extends ChannelInboundHandlerAdapter {
                             if (gameMaster.getBoard().checkWinCondition(TeamColor.Blue))
                                 ctx.writeAndFlush(new EndMessage("Blue won").toString() + "\n");
                         }
+
+                        long lEndTime = System.currentTimeMillis();
+                        long diff = lEndTime - lStartTime;
+                        if (gameMaster.getConfiguration().delayPlace - diff > 0)
+                            Thread.sleep(gameMaster.getConfiguration().delayPlace - diff);
 
                         ctx.writeAndFlush(placeResultMessage.toString() + "\n");
                     }

@@ -205,6 +205,7 @@ public class GameMasterBoard extends Board {
                 {
                     Position position1 = new Position(localX, localY);
                     Field field = new Field(position1, getCellsGrid()[position1.getX()][position1.getY()]);
+
                     list.add(field);
                 }
 
