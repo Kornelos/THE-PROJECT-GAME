@@ -49,11 +49,13 @@ public class PlayerCommServer {
     public String sendMessage(String msg) throws InterruptedException {
         String return_msg;
         System.out.println("-------------------------------Sending message------------------------------------------");
+        System.out.println(msg);
         channel.writeAndFlush(msg);
         synchronized (handler) {
             handler.wait();
         }
         return_msg = handler.getMessage();
+        System.out.println("Got a message :" + return_msg);
         try {
             if (MessageFactory.messageFromString(return_msg).getClass() == EndMessage.class) {
                 log.debug("Game Over.   Result: " +
