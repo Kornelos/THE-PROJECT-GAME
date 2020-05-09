@@ -114,9 +114,6 @@ public class GameMasterBoard extends Board {
     }
 
 
-
-
-
     synchronized public PlacementResult placePiece(PlayerDTO player, double probab) {
         Position position = player.getPosition( );
         int x = position.getX( );
