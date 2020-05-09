@@ -201,16 +201,13 @@ public class GameMasterBoard extends Board {
             for (int j = x - 1; j <= x + 1; j++) {
                 int localX = j;
                 int localY = i;
-                if(localX < 0 || localY < 0 || localX > getBoardWidth() - 1 || localY > getBoardHeight() - 1)
+                if(!(localX < 0 || localY < 0 || localX > getBoardWidth() - 1 || localY > getBoardHeight() - 1))
                 {
-                 //   list.add(null);
-                }
-
-                else {
                     Position position1 = new Position(localX, localY);
                     Field field = new Field(position1, getCellsGrid()[position1.getX()][position1.getY()]);
                     list.add(field);
                 }
+
             }
         }
         return list;
