@@ -107,6 +107,7 @@ public class GameMasterClientHandler extends ChannelInboundHandlerAdapter {
                         MoveResultMessage resultMessage = new MoveResultMessage(playerDTO.getPlayerUuid(),
                                 moveMessage.getDirection(), newPosition, Status.OK);
                         ctx.writeAndFlush(resultMessage.toString());
+                        gameMaster.sendBoardState();
                     }
 
                     break;

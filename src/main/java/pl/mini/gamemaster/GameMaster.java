@@ -17,7 +17,11 @@ import pl.mini.utils.ConsoleColors;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
 import java.net.InetAddress;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -52,8 +56,7 @@ public class GameMaster {
 
     }
 
-    public void StartGame()
-    {
+    public void StartGame() {
 
     }
 
@@ -230,6 +233,73 @@ public class GameMaster {
             System.out.println(" " + "|     ".repeat(col) + "|");
         }
         System.out.println(" " + "######".repeat(col) + "#");
+    }
+
+    public void sendBoardState() {
+        JSONArray jsonArray = new JSONArray();
+        for (int i = 0; i < board.getBoardWidth(); i++) {
+            for (int j = 0; j < board.getBoardHeight(); j++) {
+                String boardContent = null;
+                if (board.getCellsGrid()[i][j].playerGuid.equals("")) {
+                    switch (board.getCellsGrid()[i][j].cellState) {
+                        case Empty:
+                            boardContent = "Empty";
+                            break;
+                        case Piece:
+                        case Sham:
+                            boardContent = "Piece";
+                            break;
+                        case Goal:
+                            boardContent = "Goal";
+                            break;
+                        case Unknown:
+                            boardContent = "Unknown";
+                            break;
+                        case Valid:
+                            boardContent = "Valid";
+                            break;
+                    }
+                } else {
+                    for (UUID teamBlueGuid : this.teamBlueGuids) {
+                        if (board.getCellsGrid()[j][i].playerGuid.equals(teamBlueGuid.toString())) {
+                            boardContent = "BluePlayer";
+                            break;
+                        }
+                    }
+                    if (boardContent == null)
+                        for (UUID teamRedGuid : this.teamRedGuids) {
+                            if (board.getCellsGrid()[j][i].playerGuid.equals(teamRedGuid.toString())) {
+                                boardContent = "RedPlayer";
+                                break;
+                            }
+                        }
+                }
+                jsonArray.add(boardContent);
+            }
+        }
+        // create new JSON
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("boardWidth", board.getBoardWidth());
+        jsonObject.put("taskAreaHeight", board.getTaskAreaHeight());
+        jsonObject.put("goalAreaHeight", board.getGoalAreaHeight());
+        jsonObject.put("board", jsonArray);
+
+        //post to html
+        try {
+            String FLASK_URL = "http://127.0.0.1:5000/post_board";
+            URL url = new URL(FLASK_URL);
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            con.setRequestMethod("POST");
+            con.setRequestProperty("Content-Type", "application/json; utf-8");
+            con.setDoOutput(true);
+            try (OutputStream os = con.getOutputStream()) {
+                byte[] input = jsonObject.toString().getBytes(StandardCharsets.UTF_8);
+                os.write(input, 0, input.length);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void messageHandler(String message) {
