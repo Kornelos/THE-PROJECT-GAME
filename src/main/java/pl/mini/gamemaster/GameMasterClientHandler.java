@@ -111,7 +111,7 @@ public class GameMasterClientHandler extends ChannelInboundHandlerAdapter {
 
                     } else {
                         resultMessage = new MoveResultMessage(playerDTO.getPlayerUuid(),
-                                moveMessage.getDirection(), playerPosition, Status.DENIED);
+                                moveMessage.getDirection(), new Position(-1, -1), Status.DENIED);
                     }
                     ctx.writeAndFlush(resultMessage.toString() + "\n");
 
