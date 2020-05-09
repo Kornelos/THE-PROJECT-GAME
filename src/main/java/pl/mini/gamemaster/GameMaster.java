@@ -288,7 +288,6 @@ public class GameMaster {
 
         //post to html
         try {
-            //todo: parametrize url
             URL url = new URL(FLASK_URL);
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
             con.setRequestMethod("POST");
@@ -302,7 +301,6 @@ public class GameMaster {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        //return jsonObject.toString();
     }
 
     public void messageHandler(String message) {
