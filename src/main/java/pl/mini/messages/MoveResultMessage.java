@@ -36,6 +36,7 @@ public class MoveResultMessage implements JsonMessage {
         jsonMap.put("playerGuid", this.playerGuid.toString());
         jsonMap.put("action", this.action.name());
         jsonMap.put("direction", this.direction.name());
+        jsonMap.put("status", this.status.name());
         JSONObject point = new JSONObject();
         point.put("x", this.position.getX());
         point.put("y", this.position.getY());
