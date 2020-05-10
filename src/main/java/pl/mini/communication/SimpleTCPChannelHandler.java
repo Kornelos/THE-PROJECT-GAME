@@ -69,7 +69,7 @@ public class SimpleTCPChannelHandler extends SimpleChannelInboundHandler<String>
             }
 
         } catch (Exception e) {
-            log.error("Server got corrupted message! " + s + " Exception: " + e.getMessage());
+            log.error("Server got corrupted message! " + s + " Exception: " + e.getClass());
             e.printStackTrace();
         }
 

@@ -126,7 +126,6 @@ public class GameMasterClientHandler extends ChannelInboundHandlerAdapter {
                         resultMessage = new MoveResultMessage(playerDTO.getPlayerUuid(),
                                 moveMessage.getDirection(), new Position(-1, -1), Status.DENIED);
                         ctx.writeAndFlush(resultMessage.toString());
-                        gameMaster.sendBoardState();
                     }
                     long lEndTime = System.currentTimeMillis();
                     long diff = lEndTime - lStartTime;
@@ -135,6 +134,8 @@ public class GameMasterClientHandler extends ChannelInboundHandlerAdapter {
 
                     ctx.writeAndFlush(resultMessage.toString() + "\n");
                     gameMaster.printBoard();
+                    // post to flask ui
+                    gameMaster.sendBoardState();
                     break;
                 }
                 case test: {
