@@ -181,6 +181,10 @@ public class GameMasterClientHandler extends ChannelInboundHandlerAdapter {
                     }
                     break;
                 }
+                case end: {
+                    log.info("Game finished");
+                    System.exit(0);
+                }
             }
 
         } catch (Exception e) {
