@@ -5,10 +5,12 @@ import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.codec.LineBasedFrameDecoder;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
 import lombok.extern.slf4j.Slf4j;
+import pl.mini.position.Position;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -26,6 +28,9 @@ public class GameMasterClient {
 
         GameMaster gameMaster = new GameMaster();
         gameMaster.loadConfigurationFromJson("src/main/resources/config.json");
+        for (Position p : gameMaster.getConfiguration().predefinedGoalPositions) {
+            gameMaster.getBoard().setGoal(p);
+        }
         final GameMasterClientHandler handler = new GameMasterClientHandler(gameMaster);
         try {
             Bootstrap b = new Bootstrap();
@@ -36,6 +41,7 @@ public class GameMasterClient {
                         @Override
                         public void initChannel(SocketChannel ch) {
                             ChannelPipeline p = ch.pipeline();
+                            p.addLast(new LineBasedFrameDecoder(1024));
                             p.addLast(new StringDecoder());
                             p.addLast(new StringEncoder());
                             p.addLast(handler);
@@ -69,6 +75,8 @@ public class GameMasterClient {
             timer.scheduleAtFixedRate(placePieceTask, 0, gameMaster.getConfiguration().delayNextPiecePlace);
 
             log.debug("Piece placing started.");
+
+
             //f.channel().closeFuture().sync();
         } finally {
             //group.shutdownGracefully();

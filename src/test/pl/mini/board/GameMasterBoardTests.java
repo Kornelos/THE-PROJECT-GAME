@@ -98,13 +98,9 @@ public class GameMasterBoardTests {
         Position position = new Position(0,0);
         List<Field> actual = board.discover(position);
         List<Field> expected = new ArrayList<>();
-        expected.add(null);
-        expected.add(null);
-        expected.add(null);
-        expected.add(null);
+
         expected.add(new Field(new Position(0,0), board.getCellsGrid()[0][0]));
         expected.add(new Field(new Position(1,0), board.getCellsGrid()[1][0]));
-        expected.add(null);
         expected.add(new Field(new Position(0,1), board.getCellsGrid()[0][1]));
         expected.add(new Field(new Position(1,1), board.getCellsGrid()[1][1]));
         Assert.assertEquals(expected, actual);
