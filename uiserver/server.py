@@ -26,7 +26,9 @@ def show_board():
 @app.route('/post_board', methods=['POST', 'GET'])
 def update_board():
     if request.method == 'POST':
-        boards.append(request['board'])
+#         boards.append(request['board'])
+        content = request.get_json(silent=True)
+        print(content)
     return str(len(boards))
 
 
