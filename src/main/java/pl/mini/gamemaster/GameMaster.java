@@ -286,14 +286,14 @@ public class GameMaster {
                     }
                 } else {
                     for (UUID teamBlueGuid : this.teamBlueGuids) {
-                        if (board.getCellsGrid()[j][i].playerGuid.equals(teamBlueGuid.toString())) {
+                        if (board.getCellsGrid()[i][j].playerGuid.equals(teamBlueGuid.toString())) {
                             boardContent = "BluePlayer";
                             break;
                         }
                     }
                     if (boardContent == null)
                         for (UUID teamRedGuid : this.teamRedGuids) {
-                            if (board.getCellsGrid()[j][i].playerGuid.equals(teamRedGuid.toString())) {
+                            if (board.getCellsGrid()[i][j].playerGuid.equals(teamRedGuid.toString())) {
                                 boardContent = "RedPlayer";
                                 break;
                             }
@@ -323,7 +323,8 @@ public class GameMaster {
             }
 
         } catch (IOException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
+            System.out.println("Flask UI error: " + e.getClass());
         }
     }
 
