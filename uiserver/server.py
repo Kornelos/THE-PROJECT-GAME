@@ -5,12 +5,12 @@ from flask import redirect, url_for, render_template
 app = Flask(__name__)
 app.secret_key = b'bruh'
 
-boards = ["Test1", "Test2", "Test3"]
+boards = []
 
 
 @app.route('/show_board', methods=['GET', 'POST'])
 def show_board():
-    if 'current' not in session:
+    if 'current' not in session or ('current' in session and session['current'] > (len(boards) -1)):
         session['current'] = 0
 
     if 'next' in request.form and session['current'] < (len(boards) - 1):
@@ -26,9 +26,8 @@ def show_board():
 @app.route('/post_board', methods=['POST', 'GET'])
 def update_board():
     if request.method == 'POST':
-#         boards.append(request['board'])
-        content = request.get_json(silent=True)
-        print(content)
+        boards.append(request.get_json(silent=True))
+        # print(request.get_json(silent=True), flush=True)
     return str(len(boards))
 
 

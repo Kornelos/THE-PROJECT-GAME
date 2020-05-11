@@ -7,21 +7,9 @@
     <style type="text/css">
 
         .chessboard {
-            width: 640px;
-            height: 640px;
+
             margin: 20px;
             border: 25px solid #333;
-        }
-
-        .black {
-            float: left;
-            width: 80px;
-            height: 80px;
-            background-color: #999;
-            font-size: 50px;
-            text-align: center;
-            display: table-cell;
-            vertical-align: middle;
         }
 
         .white {
@@ -29,6 +17,28 @@
             width: 80px;
             height: 80px;
             background-color: #fff;
+            font-size: 50px;
+            text-align: center;
+            display: table-cell;
+            vertical-align: middle;
+        }
+
+        .blue-task {
+            float: left;
+            width: 80px;
+            height: 80px;
+            background-color: #B0E0E6;
+            font-size: 50px;
+            text-align: center;
+            display: table-cell;
+            vertical-align: middle;
+        }
+
+        .red-task {
+            float: left;
+            width: 80px;
+            height: 80px;
+            background-color: #ffcccb;
             font-size: 50px;
             text-align: center;
             display: table-cell;
@@ -47,93 +57,94 @@
 
     {% if auto_turn %}
 
-    <input id="auto-turn" name="auto-turn" type="checkbox" checked>
+      <input onchange="checkChange();" id="auto-turn" name="auto-turn" type="checkbox" checked>
 
     {% else %}
 
-    <input id="auto-turn" name="auto-turn" type="checkbox">
+      <input onchange="checkChange();" id="auto-turn" name="auto-turn" type="checkbox">
 
     {% endif %}
     <label for="auto-turn">Auto turn</label>
 </form>
 
 {{ board }}
-<div class="chessboard">
-    <!-- 1st -->
-    <div class="white">&#9820;</div>
-    <div class="black">&#9822;</div>
-    <div class="white">&#9821;</div>
-    <div class="black">&#9819;</div>
-    <div class="white">&#9818;</div>
-    <div class="black">&#9821;</div>
-    <div class="white">&#9822;</div>
-    <div class="black">&#9820;</div>
-    <!-- 2nd -->
-    <div class="black">&#9821;</div>
-    <div class="white">&#9821;</div>
-    <div class="black">&#9821;</div>
-    <div class="white">&#9821;</div>
-    <div class="black">&#9821;</div>
-    <div class="white">&#9821;</div>
-    <div class="black">&#9821;</div>
-    <div class="white">&#9821;</div>
-    <!-- 3th -->
-    <div class="white"></div>
-    <div class="black"></div>
-    <div class="white"></div>
-    <div class="black"></div>
-    <div class="white"></div>
-    <div class="black"></div>
-    <div class="white"></div>
-    <div class="black"></div>
-    <!-- 4st -->
-    <div class="black"></div>
-    <div class="white"></div>
-    <div class="black"></div>
-    <div class="white"></div>
-    <div class="black"></div>
-    <div class="white"></div>
-    <div class="black"></div>
-    <div class="white"></div>
-    <!-- 5th -->
-    <div class="white"></div>
-    <div class="black"></div>
-    <div class="white"></div>
-    <div class="black"></div>
-    <div class="white"></div>
-    <div class="black"></div>
-    <div class="white"></div>
-    <div class="black"></div>
-    <!-- 6th -->
-    <div class="black"></div>
-    <div class="white"></div>
-    <div class="black"></div>
-    <div class="white"></div>
-    <div class="black"></div>
-    <div class="white"></div>
-    <div class="black"></div>
-    <div class="white"></div>
-    <!-- 7th -->
-    <div class="white">&#9817;</div>
-    <div class="black">&#9817;</div>
-    <div class="white">&#9817;</div>
-    <div class="black">&#9817;</div>
-    <div class="white">&#9817;</div>
-    <div class="black">&#9817;</div>
-    <div class="white">&#9817;</div>
-    <div class="black">&#9817;</div>
-    <!-- 8th -->
-    <div class="black">&#9814;</div>
-    <div class="white">&#9816;</div>
-    <div class="black">&#9815;</div>
-    <div class="white">&#9813;</div>
-    <div class="black">&#9812;</div>
-    <div class="white">&#9815;</div>
-    <div class="black">&#9816;</div>
-    <div class="white">&#9814;</div>
-</div>
+
+{% if board is mapping %}
+
+  <div class="chessboard" style="width: {{ board['boardWidth'] * 80 }}px; height: {{ 2 * board['goalAreaHeight'] * 80 + board['taskAreaHeight'] * 80 }}px;">
+
+  {% for item in board['board'][0:board['boardWidth']*board['goalAreaHeight']] %}
+
+    <div class="red-task">
+
+      {% if item == "RedPlayer" %}
+        <span style="color: #8b0000">&#9817;</span>
+      {% elif item == "BluePlayer" %}
+        <span style="color: #1a5276">&#9817;</span>
+      {% elif item == "Piece" %}
+        <span style="color: #037d50">&#8505;</span>
+      {% elif item == "Unknown" %}
+        <span style="color: #670067">&#63;</span>
+      {% elif item == "Valid" %}
+        <span style="color: #ffa500">&#10004;</span>
+      {% elif item == "Goal" %}
+        <span style="color: #a7a7a7">&#9733;</span>
+      {% endif %}
+
+    </div>
+
+  {% endfor %}
+
+  {% for item in board['board'][board['boardWidth']*board['goalAreaHeight']:(board['boardWidth']*board['goalAreaHeight'] + board['boardWidth']*board['taskAreaHeight'])] %}
+
+    <div class="white">
+
+      {% if item == "RedPlayer" %}
+        <span style="color: #8b0000">&#9817;</span>
+      {% elif item == "BluePlayer" %}
+        <span style="color: #1a5276">&#9817;</span>
+      {% elif item == "Piece" %}
+        <span style="color: #037d50">&#8505;</span>
+      {% elif item == "Unknown" %}
+        <span style="color: #670067">&#63;</span>
+      {% elif item == "Valid" %}
+        <span style="color: #ffa500">&#10004;</span>
+      {% elif item == "Goal" %}
+        <span style="color: #a7a7a7">&#9733;</span>
+      {% endif %}
+    </div>
+
+  {% endfor %}
+
+  {% for item in board['board'][(board['boardWidth']*board['goalAreaHeight'] + board['boardWidth']*board['taskAreaHeight']):] %}
+
+    <div class="blue-task">
+      {% if item == "RedPlayer" %}
+        <span style="color: #8b0000">&#9817;</span>
+      {% elif item == "BluePlayer" %}
+        <span style="color: #1a5276">&#9817;</span>
+      {% elif item == "Piece" %}
+        <span style="color: #037d50">&#8505;</span>
+      {% elif item == "Unknown" %}
+        <span style="color: #670067">&#63;</span>
+      {% elif item == "Valid" %}
+        <span style="color: #ffa500">&#10004;</span>
+      {% elif item == "Goal" %}
+        <span style="color: #a7a7a7">&#9733;</span>
+      {% endif %}
+    </div>
+
+  {% endfor %}
+
+  </div>
+
+{% endif %}
 
 <script>
+
+    function checkChange() {
+      document.getElementById('next').click();
+    }
 
     function checkReload() {
         const checkBox = document.getElementById("auto-turn");
@@ -144,7 +155,7 @@
 
                 document.getElementById('next').click();
 
-            }, 3000);
+            }, 1500);
         }
     }
 
