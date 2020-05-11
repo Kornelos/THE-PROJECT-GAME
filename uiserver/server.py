@@ -20,7 +20,11 @@ def show_board():
 
     auto_turn = True if 'auto-turn' in request.form and request.form['auto-turn'] == 'on' else False
 
-    return render_template('board.html', board=boards[session['current']], auto_turn=auto_turn)
+    board = ''
+    if len(boards) > 0:
+        board = boards[session['current']]
+
+    return render_template('board.html', board=board, auto_turn=auto_turn, step=session['current'])
 
 
 @app.route('/post_board', methods=['POST', 'GET'])

@@ -2,7 +2,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Chessboard using Pure CSS and HTML</title>
+    <title>The Game - SE2</title>
 
     <style type="text/css">
 
@@ -21,6 +21,7 @@
             text-align: center;
             display: table-cell;
             vertical-align: middle;
+            outline: thin solid #A9A9A9;
         }
 
         .blue-task {
@@ -32,6 +33,7 @@
             text-align: center;
             display: table-cell;
             vertical-align: middle;
+            outline: thin solid #A9A9A9;
         }
 
         .red-task {
@@ -43,6 +45,7 @@
             text-align: center;
             display: table-cell;
             vertical-align: middle;
+            outline: thin solid #A9A9A9;
         }
 
     </style>
@@ -67,7 +70,7 @@
     <label for="auto-turn">Auto turn</label>
 </form>
 
-{{ board }}
+<div><span>Current step: {{ step }}</span></div>
 
 {% if board is mapping %}
 
@@ -143,7 +146,11 @@
 <script>
 
     function checkChange() {
-      document.getElementById('next').click();
+      const checkBox = document.getElementById("auto-turn");
+
+      if (checkBox.checked === true) {
+        document.getElementById('next').click();
+      }
     }
 
     function checkReload() {
@@ -152,10 +159,10 @@
         if (checkBox.checked === true) {
 
             setTimeout(function () {
-
-                document.getElementById('next').click();
-
-            }, 1500);
+                if (checkBox.checked === true) {
+                  document.getElementById('next').click();
+                }
+            }, 700);
         }
     }
 
