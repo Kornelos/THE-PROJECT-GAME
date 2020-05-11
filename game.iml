@@ -7,6 +7,9 @@
       <sourceFolder url="file://$MODULE_DIR$/game/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/game/src/main" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/game/src/test" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/main/resources" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/test" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
     <orderEntry type="inheritedJdk" />
@@ -25,5 +28,8 @@
     <orderEntry type="library" scope="RUNTIME" name="Maven: com.sun.mail:javax.mail:1.6.2" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Maven: javax.activation:activation:1.1" level="project" />
     <orderEntry type="library" name="Maven: edu.washington.cs.types.checker:checker-framework:1.7.0" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.mina:mina-core:2.1.3" level="project" />
+    <orderEntry type="library" name="Maven: io.netty:netty-all:4.1.48.Final" level="project" />
+    <orderEntry type="library" name="Maven: com.carrotsearch:junit-benchmarks:0.7.2" level="project" />
   </component>
 </module>
