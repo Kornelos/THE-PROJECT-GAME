@@ -2,3 +2,5 @@
 /.idea/
 
 game.iml
+
+.venv/

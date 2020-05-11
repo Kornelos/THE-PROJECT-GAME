@@ -17,11 +17,11 @@ import pl.mini.utils.ConsoleColors;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
 import java.net.InetAddress;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -49,6 +49,12 @@ public class GameMaster {
     @Getter
     @Setter
     private GameMasterConfiguration configuration;
+    private GameMasterClient gmClient;
+
+    // class used for Flask UI
+    final HttpClient httpClient = HttpClient.newBuilder()
+            .version(HttpClient.Version.HTTP_2)
+            .build();
 
     public GameMaster() {
 
@@ -250,8 +256,8 @@ public class GameMaster {
 
     public void sendBoardState() {
         JSONArray jsonArray = new JSONArray();
-        for (int i = 0; i < board.getBoardWidth(); i++) {
-            for (int j = 0; j < board.getBoardHeight(); j++) {
+        for (int j = 0; j < board.getBoardHeight(); j++) {
+            for (int i = 0; i < board.getBoardWidth(); i++) {
                 String boardContent = null;
                 if (board.getCellsGrid()[i][j].playerGuid.equals("")) {
                     switch (board.getCellsGrid()[i][j].cellState) {
@@ -300,18 +306,18 @@ public class GameMaster {
         //post to html
         try {
             String FLASK_URL = "http://127.0.0.1:5000/post_board";
-            URL url = new URL(FLASK_URL);
-            HttpURLConnection con = (HttpURLConnection) url.openConnection();
-            con.setRequestMethod("POST");
-            con.setRequestProperty("Content-Type", "application/json; utf-8");
-            con.setDoOutput(true);
-            try (OutputStream os = con.getOutputStream()) {
-                byte[] input = jsonObject.toString().getBytes(StandardCharsets.UTF_8);
-                os.write(input, 0, input.length);
-            }
+            HttpRequest request = HttpRequest.newBuilder()
+                    .POST(HttpRequest.BodyPublishers.ofString(jsonObject.toString()))
+                    .uri(URI.create(FLASK_URL))
+                    .setHeader("User-Agent", "Java 11 HttpClient Bot") // add request header
+                    .header("Content-Type", "application/json")
+                    .build();
 
-        } catch (IOException e) {
-            //e.printStackTrace();
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+
+        } catch (IOException | InterruptedException e) {
+//            e.printStackTrace();
             System.out.println("Flask UI error: " + e.getClass());
         }
     }

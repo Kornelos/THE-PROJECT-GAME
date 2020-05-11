@@ -1,0 +1,186 @@
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>The Game - SE2</title>
+
+    <style type="text/css">
+
+        .chessboard {
+
+            margin: 20px;
+            border: 25px solid #333;
+        }
+
+        .white {
+            float: left;
+            width: 80px;
+            height: 80px;
+            background-color: #fff;
+            font-size: 50px;
+            text-align: center;
+            display: table-cell;
+            vertical-align: middle;
+            outline: thin solid #A9A9A9;
+        }
+
+        .blue-task {
+            float: left;
+            width: 80px;
+            height: 80px;
+            background-color: #B0E0E6;
+            font-size: 50px;
+            text-align: center;
+            display: table-cell;
+            vertical-align: middle;
+            outline: thin solid #A9A9A9;
+        }
+
+        .red-task {
+            float: left;
+            width: 80px;
+            height: 80px;
+            background-color: #ffcccb;
+            font-size: 50px;
+            text-align: center;
+            display: table-cell;
+            vertical-align: middle;
+            outline: thin solid #A9A9A9;
+        }
+
+    </style>
+
+</head>
+
+<body onload="checkReload()">
+
+<form id="board-control" method="post">
+    <button name="prev" type="submit">Previous</button>
+    <button id="next" name="next" type="submit">Next</button>
+
+    {% if auto_turn %}
+
+      <input onchange="checkChange();" id="auto-turn" name="auto-turn" type="checkbox" checked>
+
+    {% else %}
+
+      <input onchange="checkChange();" id="auto-turn" name="auto-turn" type="checkbox">
+
+    {% endif %}
+    <label for="auto-turn">Auto turn</label>
+</form>
+
+<div><span>Current step: {{ step }}</span></div>
+
+{% if board is mapping %}
+
+  {% if 'won' in board %}
+    <h1> Team
+
+    {% if board['won'] == 'blue' %}
+      <span style="color: #0000A0; font-weight: bold;">BLUE</span>
+    {% elif board['won'] == 'red' %}
+      <span style="color: #800000; font-weight: bold;">RED</span>
+    {% endif %}
+
+    won the game! </h1>
+  {% else %}
+
+  <div class="chessboard" style="width: {{ board['boardWidth'] * 80 }}px; height: {{ 2 * board['goalAreaHeight'] * 80 + board['taskAreaHeight'] * 80 }}px;">
+
+  {% for item in board['board'][0:board['boardWidth']*board['goalAreaHeight']] %}
+
+    <div class="red-task">
+
+      {% if item == "RedPlayer" %}
+        <span style="color: #8b0000">&#9817;</span>
+      {% elif item == "BluePlayer" %}
+        <span style="color: #1a5276">&#9817;</span>
+      {% elif item == "Piece" %}
+        <span style="color: #037d50">&#8505;</span>
+      {% elif item == "Unknown" %}
+        <span style="color: #670067">&#63;</span>
+      {% elif item == "Valid" %}
+        <span style="color: #ffa500">&#10004;</span>
+      {% elif item == "Goal" %}
+        <span style="color: #a7a7a7">&#9733;</span>
+      {% endif %}
+
+    </div>
+
+  {% endfor %}
+
+  {% for item in board['board'][board['boardWidth']*board['goalAreaHeight']:(board['boardWidth']*board['goalAreaHeight'] + board['boardWidth']*board['taskAreaHeight'])] %}
+
+    <div class="white">
+
+      {% if item == "RedPlayer" %}
+        <span style="color: #8b0000">&#9817;</span>
+      {% elif item == "BluePlayer" %}
+        <span style="color: #1a5276">&#9817;</span>
+      {% elif item == "Piece" %}
+        <span style="color: #037d50">&#8505;</span>
+      {% elif item == "Unknown" %}
+        <span style="color: #670067">&#63;</span>
+      {% elif item == "Valid" %}
+        <span style="color: #ffa500">&#10004;</span>
+      {% elif item == "Goal" %}
+        <span style="color: #a7a7a7">&#9733;</span>
+      {% endif %}
+    </div>
+
+  {% endfor %}
+
+  {% for item in board['board'][(board['boardWidth']*board['goalAreaHeight'] + board['boardWidth']*board['taskAreaHeight']):] %}
+
+    <div class="blue-task">
+      {% if item == "RedPlayer" %}
+        <span style="color: #8b0000">&#9817;</span>
+      {% elif item == "BluePlayer" %}
+        <span style="color: #1a5276">&#9817;</span>
+      {% elif item == "Piece" %}
+        <span style="color: #037d50">&#8505;</span>
+      {% elif item == "Unknown" %}
+        <span style="color: #670067">&#63;</span>
+      {% elif item == "Valid" %}
+        <span style="color: #ffa500">&#10004;</span>
+      {% elif item == "Goal" %}
+        <span style="color: #a7a7a7">&#9733;</span>
+      {% endif %}
+    </div>
+
+  {% endfor %}
+
+  </div>
+
+  {% endif %}
+{% endif %}
+
+<script>
+
+    function checkChange() {
+      const checkBox = document.getElementById("auto-turn");
+
+      if (checkBox.checked === true) {
+        document.getElementById('next').click();
+      }
+    }
+
+    function checkReload() {
+        const checkBox = document.getElementById("auto-turn");
+
+        if (checkBox.checked === true) {
+
+            setTimeout(function () {
+                if (checkBox.checked === true) {
+                  document.getElementById('next').click();
+                }
+            }, 700);
+        }
+    }
+
+
+</script>
+
+</body>
+</html>
