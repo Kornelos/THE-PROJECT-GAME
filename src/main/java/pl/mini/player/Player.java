@@ -209,18 +209,6 @@ public class Player extends PlayerDTO {
 
     public static void main(String[] args) {
         try {
-            /*System.out.println("OK".equals(Status.OK.toString()));
-            PlayerCommServer communicationServer = new PlayerCommServer();
-            communicationServer.connect();
-            Thread.sleep(5000);
-            String msg = communicationServer.sendMessage(new ConnectMessage(UUID.randomUUID()).toString());
-            System.out.println("===================================" + msg + "========================================");
-            Thread.sleep(5000);*/
-
-
-            // communicationServer.closeConnection();
-            //String msg = "{\"action\":\"discoverResult\",\"position\":{\"x\":3,\"y\":1},\"playerGuid\":\"f6d0d621-3524-4e91-b05e-3036de26473d\",\"fields\":[{\"x\":2,\"y\":0,\"cell\":{\"distance\":0,\"playerGuid\":\"\",\"cellState\":\"Unknown\"}},{\"x\":3,\"y\":0,\"cell\":{\"distance\":0,\"playerGuid\":\"\",\"cellState\":\"Unknown\"}},{\"x\":4,\"y\":0,\"cell\":{\"distance\":0,\"playerGuid\":\"\",\"cellState\":\"Unknown\"}},{\"x\":2,\"y\":1,\"cell\":{\"distance\":0,\"playerGuid\":\"\",\"cellState\":\"Unknown\"}},{\"x\":3,\"y\":1,\"cell\":{\"distance\":0,\"playerGuid\":\"f6d0d621-3524-4e91-b05e-3036de26473d\",\"cellState\":\"Unknown\"}},{\"x\":4,\"y\":1,\"cell\":{\"distance\":0,\"playerGuid\":\"\",\"cellState\":\"Unknown\"}},{\"x\":2,\"y\":2,\"cell\":{\"distance\":0,\"playerGuid\":\"\",\"cellState\":\"Piece\"}},{\"x\":3,\"y\":2,\"cell\":{\"distance\":1,\"playerGuid\":\"\",\"cellState\":\"Empty\"}},{\"x\":4,\"y\":2,\"cell\":{\"distance\":2,\"playerGuid\":\"\",\"cellState\":\"Empty\"}}]}";
-            //MessageFactory.messageFromString(msg);
             Player player = new Player("Player", new Board(1,1,1),new Team("Team", TeamColor.Red));
             while(true)
             {

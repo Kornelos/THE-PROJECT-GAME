@@ -10,7 +10,6 @@ import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
 import lombok.extern.slf4j.Slf4j;
-import pl.mini.position.Position;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -28,62 +27,52 @@ public class GameMasterClient {
 
         GameMaster gameMaster = new GameMaster();
         gameMaster.loadConfigurationFromJson("src/main/resources/config.json");
-        for (Position p : gameMaster.getConfiguration().predefinedGoalPositions) {
-            gameMaster.getBoard().setGoal(p);
-        }
+        gameMaster.setRandomGoals(1);
+
         final GameMasterClientHandler handler = new GameMasterClientHandler(gameMaster);
-        try {
-            Bootstrap b = new Bootstrap();
-            b.group(group)
-                    .channel(NioSocketChannel.class)
-                    .option(ChannelOption.TCP_NODELAY, true)
-                    .handler(new ChannelInitializer<SocketChannel>() {
-                        @Override
-                        public void initChannel(SocketChannel ch) {
-                            ChannelPipeline p = ch.pipeline();
-                            p.addLast(new LineBasedFrameDecoder(1024));
-                            p.addLast(new StringDecoder());
-                            p.addLast(new StringEncoder());
-                            p.addLast(handler);
-                        }
-                    });
-
-            channel = b.connect(HOST, port).sync().channel();
-
-
-            // wait for all players to connect
-            synchronized (handler) {
-                handler.wait();
-            }
-            //start game after that
-            log.info("All players connected, game is starting.");
-            handler.startGame();
-            // start placing pieces
-            Timer timer = new Timer();
-            TimerTask placePieceTask = new TimerTask() {
-                @Override
-                public void run() {
-                    if (gameMaster.getBoard().getPiecesPosition().size() < gameMaster.getConfiguration().maxPieces) {
-                        System.out.println("placing piece");
-                        gameMaster.putNewPiece();
+        Bootstrap b = new Bootstrap();
+        b.group(group)
+                .channel(NioSocketChannel.class)
+                .option(ChannelOption.TCP_NODELAY, true)
+                .handler(new ChannelInitializer<SocketChannel>() {
+                    @Override
+                    public void initChannel(SocketChannel ch) {
+                        ChannelPipeline p = ch.pipeline();
+                        p.addLast(new LineBasedFrameDecoder(1024));
+                        p.addLast(new StringDecoder());
+                        p.addLast(new StringEncoder());
+                        p.addLast(handler);
                     }
+                });
+
+        channel = b.connect(HOST, port).sync().channel();
 
 
-                }
-            };
-
-            timer.scheduleAtFixedRate(placePieceTask, 0, gameMaster.getConfiguration().delayNextPiecePlace);
-
-            log.debug("Piece placing started.");
-
-
-            //f.channel().closeFuture().sync();
-        } finally {
-            //group.shutdownGracefully();
+        // wait for all players to connect
+        synchronized (handler) {
+            handler.wait();
         }
-    }
+        //start game after that
+        log.info("All players connected, game is starting.");
+        handler.startGame();
+        // start placing pieces
+        Timer timer = new Timer();
+        TimerTask placePieceTask = new TimerTask() {
+            @Override
+            public void run() {
+                if (gameMaster.getBoard().getPiecesPosition().size() < gameMaster.getConfiguration().maxPieces) {
+                    System.out.println("placing piece");
+                    gameMaster.putNewPiece();
+                }
 
-    private static final class Lock {
+
+            }
+        };
+
+        timer.scheduleAtFixedRate(placePieceTask, 0, gameMaster.getConfiguration().delayNextPiecePlace);
+
+        log.debug("Piece placing started.");
+
     }
 
 

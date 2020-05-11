@@ -199,11 +199,8 @@ public class GameMasterBoard extends Board {
         List<Field> list = new ArrayList<>( );
         for (int i = y - 1; i <= y + 1; i++) {
             for (int j = x - 1; j <= x + 1; j++) {
-                int localX = j;
-                int localY = i;
-                if(!(localX < 0 || localY < 0 || localX > getBoardWidth() - 1 || localY > getBoardHeight() - 1))
-                {
-                    Position position1 = new Position(localX, localY);
+                if (!(j < 0 || i < 0 || j > getBoardWidth() - 1 || i > getBoardHeight() - 1)) {
+                    Position position1 = new Position(j, i);
                     Cell cell = new Cell(getCellsGrid()[position1.getX()][position1.getY()].cellState,
                             getCellsGrid()[position1.getX()][position1.getY()].playerGuid, getCellsGrid()[position1.getX()][position1.getY()].distance);
                     Field field = new Field(position1, cell);
@@ -226,59 +223,16 @@ public class GameMasterBoard extends Board {
 
     synchronized public int manhattanDistanceToClosestPiece(Position position) {
         int min = Integer.MAX_VALUE;
-        int id = 0;
         try {
-            Position[] positions = piecesPosition.toArray(new Position[piecesPosition.size()]);
+            Position[] positions = piecesPosition.toArray(new Position[0]);
 
 
-            for (int i = 0; i < positions.length; i++) {
-                if (manhattanDistanceTwoPoints(position, positions[i]) < min) {
-                    min = manhattanDistanceTwoPoints(position, positions[i]);
-                    id = i;
+            for (Position value : positions) {
+                if (manhattanDistanceTwoPoints(position, value) < min) {
+                    min = manhattanDistanceTwoPoints(position, value);
                 }
             }
-            //System.out.println("Closest piece position: " + positions[id].toString());
             return min;
-        } catch (NullPointerException | ArrayIndexOutOfBoundsException e) {
-            return -1;
-        }
-    }
-
-    synchronized public int manhattanDistanceToClosestUnknown(Position position, TeamColor teamColor) {
-        int min = Integer.MAX_VALUE;
-        int mDist;
-
-        try {
-            Cell[][] cll = this.getCellsGrid();
-
-            if(teamColor == TeamColor.Red)
-            {
-                for (int i = 0; i < this.getBoardWidth(); i++)
-                    for(int j = 0; j < this.getGoalAreaHeight(); j++) {
-                        if (cll[i][j].cellState == CellState.Unknown || cll[i][j].cellState == CellState.Goal) {
-                            mDist = manhattanDistanceTwoPoints(position, new Position(i, j));
-                            if (mDist < min)
-                                min = mDist;
-                        }
-                    }
-            }
-            else if(teamColor == TeamColor.Blue)
-            {
-                for (int i = 0; i < this.getBoardWidth(); i++)
-                    for(int j = this.getGoalAreaHeight() + this.getTaskAreaHeight();
-                        j < this.getBoardHeight(); j++) {
-                        if (cll[i][j].cellState == CellState.Unknown || cll[i][j].cellState == CellState.Goal) {
-                            mDist = manhattanDistanceTwoPoints(position, new Position(i, j));
-                            if (mDist < min)
-                                min = mDist;
-                        }
-                    }
-            }
-
-            if (min != Integer.MAX_VALUE)
-                return min;
-            else
-                return -1;
         } catch (NullPointerException | ArrayIndexOutOfBoundsException e) {
             return -1;
         }

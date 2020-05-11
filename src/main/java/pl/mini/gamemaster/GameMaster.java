@@ -60,16 +60,6 @@ public class GameMaster {
 
     }
 
-    public void StartGame() {
-
-    }
-
-    public void listen()
-    {
-
-    }
-
-
     public GameMasterConfiguration loadConfigurationFromJson(String path)
     {
         GameMasterConfiguration finalConf = new GameMasterConfiguration();
@@ -312,7 +302,7 @@ public class GameMaster {
         jsonObject.put("taskAreaHeight", board.getTaskAreaHeight());
         jsonObject.put("goalAreaHeight", board.getGoalAreaHeight());
         jsonObject.put("board", jsonArray);
-        System.out.println(jsonArray.toString());
+
         //post to html
         try {
             String FLASK_URL = "http://127.0.0.1:5000/post_board";
@@ -330,10 +320,6 @@ public class GameMaster {
 //            e.printStackTrace();
             System.out.println("Flask UI error: " + e.getClass());
         }
-    }
-
-    public void messageHandler(String message) {
-
     }
 
     public TeamColor assignPlayerToTeam(PlayerDTO playerDTO) {
