@@ -74,6 +74,18 @@
 
 {% if board is mapping %}
 
+  {% if 'won' in board %}
+    <h1> Team
+
+    {% if board['won'] == 'blue' %}
+      <span style="color: #0000A0; font-weight: bold;">BLUE</span>
+    {% elif board['won'] == 'red' %}
+      <span style="color: #800000; font-weight: bold;">RED</span>
+    {% endif %}
+
+    won the game! </h1>
+  {% else %}
+
   <div class="chessboard" style="width: {{ board['boardWidth'] * 80 }}px; height: {{ 2 * board['goalAreaHeight'] * 80 + board['taskAreaHeight'] * 80 }}px;">
 
   {% for item in board['board'][0:board['boardWidth']*board['goalAreaHeight']] %}
@@ -141,6 +153,7 @@
 
   </div>
 
+  {% endif %}
 {% endif %}
 
 <script>

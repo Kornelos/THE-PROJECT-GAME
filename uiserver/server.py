@@ -18,19 +18,29 @@ def show_board():
     elif 'prev' in request.form and session['current'] > 0:
         session['current'] = session['current'] - 1
 
-    auto_turn = True if 'auto-turn' in request.form and request.form['auto-turn'] == 'on' else False
-
     board = ''
     if len(boards) > 0:
         board = boards[session['current']]
 
-    return render_template('board.html', board=board, auto_turn=auto_turn, step=session['current'])
+    auto_turn = True if 'auto-turn' in request.form and request.form['auto-turn'] == 'on' and 'won' not in board else False
+
+    return render_template('board.html', board=board, auto_turn=auto_turn, step=f"{session['current']} / {len(boards) - 1}")
 
 
 @app.route('/post_board', methods=['POST', 'GET'])
 def update_board():
     if request.method == 'POST':
-        boards.append(request.get_json(silent=True))
+        if len(boards) > 0 and 'won' in boards[-1]:
+            boards.pop()
+
+        next = request.get_json(silent=True)
+        boards.append(next)
+
+        if 'Goal' not in next['board'][:(next['boardWidth']*next['goalAreaHeight'])]:
+            boards.append({'won': 'red'})
+        if 'Goal' not in next['board'][(next['boardWidth']*(next['goalAreaHeight']+next['taskAreaHeight'])):]:
+            boards.append({'won': 'blue'})
+
         # print(request.get_json(silent=True), flush=True)
     return str(len(boards))
 
