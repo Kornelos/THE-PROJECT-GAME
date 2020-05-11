@@ -266,8 +266,8 @@ public class GameMaster {
 
     public void sendBoardState() {
         JSONArray jsonArray = new JSONArray();
-        for (int i = 0; i < board.getBoardWidth(); i++) {
-            for (int j = 0; j < board.getBoardHeight(); j++) {
+        for (int j = 0; j < board.getBoardHeight(); j++) {
+            for (int i = 0; i < board.getBoardWidth(); i++) {
                 String boardContent = null;
                 if (board.getCellsGrid()[i][j].playerGuid.equals("")) {
                     switch (board.getCellsGrid()[i][j].cellState) {
@@ -312,7 +312,7 @@ public class GameMaster {
         jsonObject.put("taskAreaHeight", board.getTaskAreaHeight());
         jsonObject.put("goalAreaHeight", board.getGoalAreaHeight());
         jsonObject.put("board", jsonArray);
-
+        System.out.println(jsonArray.toString());
         //post to html
         try {
             String FLASK_URL = "http://127.0.0.1:5000/post_board";
