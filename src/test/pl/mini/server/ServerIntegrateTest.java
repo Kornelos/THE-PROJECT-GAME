@@ -18,9 +18,7 @@
 //
 //import pl.mini.player.*;
 //
-//@AxisRange(min = 0, max = 1)
-//@BenchmarkMethodChart(filePrefix = "server")
-//@BenchmarkHistoryChart(labelWith = LabelType.CUSTOM_KEY,maxRuns = 20,filePrefix = "hx-server")
+//
 //public class ServerIntegrateTest{
 //
 //    public final static int BENCHMARK_ROUNDS = 50;
@@ -30,10 +28,10 @@
 //
 //    private static Thread trd;
 //
-//    @Rule
+//
 //    public TestRule benchmarkRun = new BenchmarkRule();
 //
-//    @BeforeClass
+//
 //    public static void setUp() throws InterruptedException {
 //        trd = new Thread(() -> {
 //            ServerRunner.main(new String[]{"server"});
@@ -42,17 +40,14 @@
 //        Thread.sleep(10000);
 //    }
 //
-//    @BenchmarkOptions(benchmarkRounds = BENCHMARK_ROUNDS, warmupRounds = WARMUP_ROUNDS,
-//                      concurrency = BenchmarkOptions.CONCURRENCY_SEQUENTIAL)
-//    @Test
+//
+//
 //    public void playerSequential() throws InterruptedException {
 //        tryPlayer();
 //        Assert.assertTrue(true);
 //    }
 //
-//    @BenchmarkOptions(benchmarkRounds = CONCURRENT_BENCHMARK_ROUNDS, warmupRounds = CONCURRENT_WARMUP_ROUNDS,
-//                      concurrency = BenchmarkOptions.CONCURRENCY_AVAILABLE_CORES)
-//    @Test
+//
 //    public void playerConcurrent() throws InterruptedException {
 //        tryPlayer();
 //        Assert.assertTrue(true);
@@ -66,7 +61,7 @@
 //        serv.closeConnection();
 //    }
 //
-//    @AfterClass
+//
 //    public static void kill() throws InterruptedException {
 //        Thread.sleep(1000);
 //        trd.interrupt();

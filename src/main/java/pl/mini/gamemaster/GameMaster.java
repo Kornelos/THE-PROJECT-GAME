@@ -49,22 +49,10 @@ public class GameMaster {
     @Getter
     @Setter
     private GameMasterConfiguration configuration;
-    private GameMasterClient gmClient;
-
 
     public GameMaster() {
 
     }
-
-    public void StartGame() {
-
-    }
-
-    public void listen()
-    {
-
-    }
-
 
     public GameMasterConfiguration loadConfigurationFromJson(String path)
     {
@@ -326,10 +314,6 @@ public class GameMaster {
             //e.printStackTrace();
             System.out.println("Flask UI error: " + e.getClass());
         }
-    }
-
-    public void messageHandler(String message) {
-
     }
 
     public TeamColor assignPlayerToTeam(PlayerDTO playerDTO) {

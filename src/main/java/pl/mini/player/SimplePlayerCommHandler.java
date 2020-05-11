@@ -17,11 +17,10 @@ public class SimplePlayerCommHandler extends ChannelInboundHandlerAdapter {
     public void channelActive(ChannelHandlerContext ctx) {
         this.ctx = ctx;
         log.info("Connected to: " + ctx.channel().remoteAddress());
-        // ctx.writeAndFlush("Player");
     }
 
     @Override
-    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+    public void channelRead(ChannelHandlerContext ctx, Object msg) {
         log.info("Message received: " + msg.toString());
         message = msg.toString();
         synchronized (this) {

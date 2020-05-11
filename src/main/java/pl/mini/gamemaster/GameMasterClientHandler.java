@@ -28,8 +28,9 @@ public class GameMasterClientHandler extends ChannelInboundHandlerAdapter {
     @Setter
     private String message = null;
     private final List<PlayerDTO> players = new ArrayList<>();
-    //    private ChannelHandlerContext ctx;
+
     private Channel serverChannel;
+    private boolean gameStarted = false;
 
     public GameMasterClientHandler(GameMaster gm) { gameMaster = gm; }
 
@@ -63,8 +64,11 @@ public class GameMasterClientHandler extends ChannelInboundHandlerAdapter {
                         log.info("player connected: " + playerDTO.getPlayerUuid().toString());
                     }
                     synchronized (this) {
-                        if (players.size() == 2*gameMaster.getConfiguration().maxTeamSize)
+                        if (players.size() == 2 * gameMaster.getConfiguration().maxTeamSize && !gameStarted) {
                             this.notifyAll();
+                            gameStarted = true;
+                        }
+
                     }
                     break;
                 }
