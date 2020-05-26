@@ -139,7 +139,8 @@ public class GameMasterClientHandler extends ChannelInboundHandlerAdapter {
                     ctx.writeAndFlush(resultMessage.toString() + "\n");
                     gameMaster.printBoard();
                     // post to flask ui
-                    gameMaster.sendBoardState();
+                    // TODO: checking if flask is online
+                    //gameMaster.sendBoardState();
                     break;
                 }
                 case test: {
