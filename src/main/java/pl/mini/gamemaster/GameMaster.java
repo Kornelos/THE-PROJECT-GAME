@@ -14,6 +14,7 @@ import pl.mini.position.Position;
 import pl.mini.team.TeamColor;
 import pl.mini.utils.ConsoleColors;
 
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -67,17 +68,16 @@ public class GameMaster {
         Position tmp;
         List<Position> positions = new ArrayList<Position>();
 
-        try (FileReader reader = new FileReader(path))
-        {
+        try (FileReader reader = new FileReader(new File(path))) {
             JSONObject conf = (JSONObject) jsonParser.parse(reader);
-            JSONObject arg = (JSONObject)conf.get("GameMasterConfiguration");
-            finalConf.shamProbability = (double)arg.get("shamProbability");
-            finalConf.maxTeamSize = ((Long)arg.get("maxTeamSize")).intValue();
-            finalConf.maxPieces = ((Long)arg.get("maxPieces")).intValue();
+            JSONObject arg = (JSONObject) conf.get("GameMasterConfiguration");
+            finalConf.shamProbability = (double) arg.get("shamProbability");
+            finalConf.maxTeamSize = ((Long) arg.get("maxTeamSize")).intValue();
+            finalConf.maxPieces = ((Long) arg.get("maxPieces")).intValue();
 
             JSONArray pointList = (JSONArray) arg.get("predefinedGoalPositions");
-            for(Object obj : pointList){
-                if(obj instanceof JSONObject){
+            for (Object obj : pointList) {
+                if (obj instanceof JSONObject) {
                     int x = ((Long)((JSONObject) obj).get("x")).intValue();
                     int y = ((Long)((JSONObject) obj).get("y")).intValue();
                     tmp = new Position(x,y);
