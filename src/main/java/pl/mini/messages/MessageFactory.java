@@ -65,7 +65,7 @@ public class MessageFactory {
                 JSONArray pointList = (JSONArray) json.get("teamGuids");
                 List<UUID> guids = new ArrayList<>();
                 JSONObject pos = (JSONObject) json.get("position");
-                JSONObject brd = (JSONObject) json.get("board");
+//                JSONObject brd = (JSONObject) json.get("board");
                 for (Object o : pointList)
                     guids.add(UUID.fromString(o.toString()));
                 return new StartMessage(UUID.fromString((String) json.get("playerGuid")),
@@ -74,8 +74,8 @@ public class MessageFactory {
                         ((Long) json.get("teamSize")).intValue(),
                         guids,
                         new Position(((Long) pos.get("x")).intValue(), ((Long) pos.get("y")).intValue()),
-                        new Board(((Long) brd.get("boardWidth")).intValue(), ((Long) brd.get("goalAreaHeight")).intValue(),
-                                ((Long) brd.get("taskAreaHeight")).intValue()));
+                        new Board(((Long) json.get("boardWidth")).intValue(), ((Long) json.get("goalAreaHeight")).intValue(),
+                                ((Long) json.get("taskAreaHeight")).intValue()));
             case pickup:
                 return new PickupMessage(UUID.fromString((String) json.get("playerGuid")));
             case pickupResult:
