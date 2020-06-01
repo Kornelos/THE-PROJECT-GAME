@@ -97,9 +97,9 @@ public class MessageFactory {
                     if (obj instanceof JSONObject) {
                         //int xField = ((Long) ((JSONObject) obj).get("x")).intValue();
                         //int yField = ((Long) ((JSONObject) obj).get("y")).intValue();
-                        JSONObject posit = (JSONObject)((JSONObject) obj).get("position");
-                        int xField = ((int) ((JSONObject) posit).get("x")).intValue();
-                        int yField = ((int) ((JSONObject) posit).get("y")).intValue();
+                        JSONObject posit = (JSONObject) ((JSONObject) obj).get("position");
+                        int xField = Integer.parseInt(posit.get("x").toString());
+                        int yField = Integer.parseInt(posit.get("y").toString());
                         JSONObject cellJson = (JSONObject) ((JSONObject) obj).get("cell");
                         Cell cll = new Cell((CellState.valueOf((String) cellJson.get("cellState"))));
                         cll.playerGuid = (String) cellJson.get("playerGuid");
