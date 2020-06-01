@@ -54,7 +54,8 @@ public class MessageFactory {
             case testResult:
                 return new TestResultMessage(UUID.fromString((String) json.get("playerGuid")),
                         Status.valueOf((String) json.get("status")),
-                        Test.valueOf((String) json.get("test")));
+                        //Test.valueOf((String) json.get("test"))
+                        Test.TRUE);
             case place:
                 return new PlaceMessage(UUID.fromString((String) json.get("playerGuid")));
             case placeResult:
@@ -94,8 +95,11 @@ public class MessageFactory {
                 JSONArray fieldList = (JSONArray) json.get("fields");
                 for (Object obj : fieldList) {
                     if (obj instanceof JSONObject) {
-                        int xField = ((Long) ((JSONObject) obj).get("x")).intValue();
-                        int yField = ((Long) ((JSONObject) obj).get("y")).intValue();
+                        //int xField = ((Long) ((JSONObject) obj).get("x")).intValue();
+                        //int yField = ((Long) ((JSONObject) obj).get("y")).intValue();
+                        JSONObject posit = (JSONObject)((JSONObject) obj).get("position");
+                        int xField = ((int) ((JSONObject) posit).get("x")).intValue();
+                        int yField = ((int) ((JSONObject) posit).get("y")).intValue();
                         JSONObject cellJson = (JSONObject) ((JSONObject) obj).get("cell");
                         Cell cll = new Cell((CellState.valueOf((String) cellJson.get("cellState"))));
                         cll.playerGuid = (String) cellJson.get("playerGuid");

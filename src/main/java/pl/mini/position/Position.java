@@ -28,6 +28,12 @@ public class Position {
         JSONObject json = new JSONObject(jsonMap);
         return json.toString();
     }
+    public  JSONObject toJSONObject() {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("x", String.valueOf(x));
+        jsonObject.put("y", String.valueOf(y));
+        return jsonObject;
+    }
 
     @Override
     public String toString() {

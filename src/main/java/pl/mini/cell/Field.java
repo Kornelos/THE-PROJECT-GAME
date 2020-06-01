@@ -27,8 +27,8 @@ public class Field {
 
     public JSONObject toJSONObject() {
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("x", position.getX());
-        jsonObject.put("y", position.getY());
+        jsonObject.put("position", position.toJSONObject());
+        //jsonObject.put("y", position.getY());
         jsonObject.put("cell", cell.toJSONObject());
 
         return  jsonObject;

@@ -26,7 +26,8 @@ public class GameMasterClient {
     public void start(int port) throws InterruptedException {
 
         GameMaster gameMaster = new GameMaster();
-        gameMaster.loadConfigurationFromJson("src/main/resources/config.json");
+        gameMaster.loadConfigurationFromJson("src\\main\\resources\\config.json");
+        
         gameMaster.setRandomGoals(1);
 
         final GameMasterClientHandler handler = new GameMasterClientHandler(gameMaster);

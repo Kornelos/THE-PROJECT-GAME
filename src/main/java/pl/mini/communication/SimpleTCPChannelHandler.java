@@ -35,7 +35,8 @@ public class SimpleTCPChannelHandler extends SimpleChannelInboundHandler<String>
     protected void channelRead0(ChannelHandlerContext ctx, String s) {
 
         try {
-            JsonMessage jsonMessage = MessageFactory.messageFromString(s);
+            log.info("TEXT RECEIVED: " + s);
+            JsonMessage jsonMessage = MessageFactory.messageFromString(s.trim());
             switch (jsonMessage.getTarget()) {
                 case "server":
                     // add players and game master to prop. structures
