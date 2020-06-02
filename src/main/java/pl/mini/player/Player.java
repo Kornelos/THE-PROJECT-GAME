@@ -99,6 +99,19 @@ public class Player extends PlayerDTO {
         }
         else
         {
+            switch(this.team.getColor()) {
+                case Red:
+                    while(this.position.getY() < this.board.getGoalAreaHeight())
+                        move(new Position(this.position.getX(), this.position.getY() + 1));
+                    break;
+                case Blue:
+                    while(this.position.getY() >= this.board.getGoalAreaHeight() + this.board.getTaskAreaHeight())
+                        move(new Position(this.position.getX(), this.position.getY() - 1));
+                    break;
+                default:
+                    break;
+            }
+
             msg = this.commServer.sendMessage((new DiscoverMessage(playerUuid, position)).toString() + "\n");
             DiscoverResultMessage drm = (DiscoverResultMessage) MessageFactory.messageFromString(msg);
             List<Field> fieldList = drm.getFields();
