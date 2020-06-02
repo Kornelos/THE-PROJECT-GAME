@@ -22,10 +22,10 @@ public class SimpleTCPChannelHandler extends SimpleChannelInboundHandler<String>
             new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
     Map<UUID, Channel> playerChannels = new HashMap<>();
     Channel gmChannel;
-    final int numOfBytes = 1024;
+    final int numOfBytes = 10240;
     @Override
     public void channelActive(ChannelHandlerContext ctx) {
-        //ctx.channel().config().setOption( ChannelOption.SO_RCVBUF, numOfBytes );
+        ctx.channel().config().setOption( ChannelOption.SO_RCVBUF, numOfBytes );
         allChannels.add(ctx.channel());
         log.info(ctx.channel().remoteAddress() + " Channel Active");
 

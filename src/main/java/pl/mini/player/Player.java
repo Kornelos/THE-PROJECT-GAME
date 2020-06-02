@@ -51,6 +51,11 @@ public class Player extends PlayerDTO {
             {
                 this.board = ((StartMessage) jmsg).getBoard();
                 this.team.setColor(((StartMessage) jmsg).getTeamColor());
+                if(team.getColor() == TeamColor.Blue)
+                    team.setColor(TeamColor.Red);
+                else
+                    team.setColor(TeamColor.Blue);
+                
                 position = ((StartMessage) jmsg).getPosition();
                 playerGuids = ((StartMessage) jmsg).getTeamGuids();
                 playerTeamRole = ((StartMessage) jmsg).getTeamRole();

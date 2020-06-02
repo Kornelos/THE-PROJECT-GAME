@@ -39,7 +39,7 @@ public class GameMasterClient {
                     @Override
                     public void initChannel(SocketChannel ch) {
                         ChannelPipeline p = ch.pipeline();
-                        p.addLast(new LineBasedFrameDecoder(1024));
+                        p.addLast(new LineBasedFrameDecoder(10240));
                         p.addLast(new StringDecoder());
                         p.addLast(new StringEncoder());
                         p.addLast(handler);

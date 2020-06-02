@@ -83,27 +83,27 @@ public class MessageFactory {
                 return new PickupResultMessage(UUID.fromString((String) json.get("playerGuid")), Status.valueOf((String) json.get("status")));
             case discover:
                 JSONObject position1 = (JSONObject) json.get("position");
-                int x = ((Long) position1.get("x")).intValue();
-                int y = ((Long) position1.get("y")).intValue();
+                int x = ((Long)(position1.get("x"))).intValue();
+                int y = ((Long)(position1.get("y"))).intValue();
                 Position discoverPosition = new Position(x, y);
                 return new DiscoverMessage(UUID.fromString((String) json.get("playerGuid")), discoverPosition);
             case discoverResult:
                 JSONObject pos1 = (JSONObject) json.get("position");
-                Position discoverResultPosition = new Position(((Long) pos1.get("x")).intValue(),
+                Position discoverResultPosition = new Position(((Long)pos1.get("x")).intValue(),
                         ((Long) pos1.get("y")).intValue());
                 List<Field> fields = new ArrayList<>();
                 JSONArray fieldList = (JSONArray) json.get("fields");
                 for (Object obj : fieldList) {
                     if (obj instanceof JSONObject) {
-                        //int xField = ((Long) ((JSONObject) obj).get("x")).intValue();
-                        //int yField = ((Long) ((JSONObject) obj).get("y")).intValue();
-                        JSONObject posit = (JSONObject) ((JSONObject) obj).get("position");
+                        JSONObject posit = (JSONObject)((JSONObject) obj).get("position");
+                        //int xField = ((Long)(posit.get("x"))).intValue();
+                        //int yField = ((Long)(posit.get("y"))).intValue();
                         int xField = Integer.parseInt(posit.get("x").toString());
                         int yField = Integer.parseInt(posit.get("y").toString());
                         JSONObject cellJson = (JSONObject) ((JSONObject) obj).get("cell");
                         Cell cll = new Cell((CellState.valueOf((String) cellJson.get("cellState"))));
                         cll.playerGuid = (String) cellJson.get("playerGuid");
-                        cll.distance = ((Long) cellJson.get("distance")).intValue();
+                        cll.distance = ((Long)(cellJson.get("distance"))).intValue();;
                         fields.add(new Field(new Position(xField, yField), cll));
                     }
                 }
