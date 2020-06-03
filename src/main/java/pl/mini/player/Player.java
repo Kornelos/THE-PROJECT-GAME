@@ -126,17 +126,12 @@ public class Player extends PlayerDTO {
 
             if (board.getCellsGrid()[position.getX()][position.getY()].distance == 0 ||
                     board.getCellsGrid()[position.getX()][position.getY()].getCellState() == CellState.Piece) {
-                msg = commServer.sendMessage(new TestMessage(playerUuid).toString() + "\n");
-                TestResultMessage tsm = (TestResultMessage) MessageFactory.messageFromString(msg);
-                if(tsm.getStatus().toString().equals("OK"))
-                {
                     msg = commServer.sendMessage(new PickupMessage(playerUuid).toString() + "\n");
                     PickupResultMessage prm = (PickupResultMessage) MessageFactory.messageFromString(msg);
                     if (prm.getStatus().toString().equals("OK")) {
                         board.getCellsGrid()[position.getX()][position.getY()].setCellState(CellState.Empty);
                         piece = true;
                     }
-                }
             }
         }
         log.debug("Player " + playerName + " location:" + position.toString());
