@@ -46,7 +46,7 @@ public class StartMessage implements JsonMessage {
     @Override
     public String toJsonString() {
         JSONObject obj = new JSONObject();
-        JSONObject brd = new JSONObject();
+//        JSONObject brd = new JSONObject();
         JSONObject pos = new JSONObject();
         JSONArray guids = new JSONArray();
         obj.put("playerGuid", playerGuid.toString());
@@ -60,10 +60,10 @@ public class StartMessage implements JsonMessage {
         pos.put("x", position.getX());
         pos.put("y", position.getY());
         obj.put("position", pos);
-        brd.put("boardWidth", board.getBoardWidth());
-        brd.put("taskAreaHeight", board.getTaskAreaHeight());
-        brd.put("goalAreaHeight", board.getGoalAreaHeight());
-        obj.put("board", brd);
+        obj.put("boardWidth", board.getBoardWidth());
+        obj.put("taskAreaHeight", board.getTaskAreaHeight());
+        obj.put("goalAreaHeight", board.getGoalAreaHeight());
+//        obj.put("board", brd);
         return obj.toString();
     }
 

@@ -26,7 +26,8 @@ public class GameMasterClient {
     public void start(int port) throws InterruptedException {
 
         GameMaster gameMaster = new GameMaster();
-        gameMaster.loadConfigurationFromJson("src/main/resources/config.json");
+        gameMaster.loadConfigurationFromJson("src\\main\\resources\\config.json");
+        
         gameMaster.setRandomGoals(1);
 
         final GameMasterClientHandler handler = new GameMasterClientHandler(gameMaster);
@@ -38,7 +39,7 @@ public class GameMasterClient {
                     @Override
                     public void initChannel(SocketChannel ch) {
                         ChannelPipeline p = ch.pipeline();
-                        p.addLast(new LineBasedFrameDecoder(1024));
+                        p.addLast(new LineBasedFrameDecoder(10240));
                         p.addLast(new StringDecoder());
                         p.addLast(new StringEncoder());
                         p.addLast(handler);
