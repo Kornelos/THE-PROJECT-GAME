@@ -46,11 +46,16 @@ public class Player extends PlayerDTO {
         try {
             commServer.connect();
             String msg = commServer.sendMessage((new ConnectMessage(playerUuid)).toString() + "\n");
-            JsonMessage jmsg = MessageFactory.messageFromString(msg);
+            JsonMessage jmsg = MessageFactory.messageFromString(msg.trim());
             if (jmsg.getClass() == StartMessage.class)
             {
                 this.board = ((StartMessage) jmsg).getBoard();
                 this.team.setColor(((StartMessage) jmsg).getTeamColor());
+                // if(team.getColor() == TeamColor.Blue)
+                //     team.setColor(TeamColor.Red);
+                // else
+                //     team.setColor(TeamColor.Blue);
+                
                 position = ((StartMessage) jmsg).getPosition();
                 playerGuids = ((StartMessage) jmsg).getTeamGuids();
                 playerTeamRole = ((StartMessage) jmsg).getTeamRole();
@@ -58,6 +63,7 @@ public class Player extends PlayerDTO {
             else
                 throw new ClassCastException();
         } catch (Exception e) {
+            log.error(e.getMessage());
             e.printStackTrace();
         }
     }
@@ -94,6 +100,19 @@ public class Player extends PlayerDTO {
         }
         else
         {
+            switch(this.team.getColor()) {
+                case Red:
+                    while(this.position.getY() < this.board.getGoalAreaHeight())
+                        move(new Position(this.position.getX(), this.position.getY() + 1));
+                    break;
+                case Blue:
+                    while(this.position.getY() >= this.board.getGoalAreaHeight() + this.board.getTaskAreaHeight())
+                        move(new Position(this.position.getX(), this.position.getY() - 1));
+                    break;
+                default:
+                    break;
+            }
+
             msg = this.commServer.sendMessage((new DiscoverMessage(playerUuid, position)).toString() + "\n");
             DiscoverResultMessage drm = (DiscoverResultMessage) MessageFactory.messageFromString(msg);
             List<Field> fieldList = drm.getFields();
@@ -108,17 +127,12 @@ public class Player extends PlayerDTO {
 
             if (board.getCellsGrid()[position.getX()][position.getY()].distance == 0 ||
                     board.getCellsGrid()[position.getX()][position.getY()].getCellState() == CellState.Piece) {
-                msg = commServer.sendMessage(new TestMessage(playerUuid).toString() + "\n");
-                TestResultMessage tsm = (TestResultMessage) MessageFactory.messageFromString(msg);
-                if(tsm.getStatus().toString().equals("OK"))
-                {
                     msg = commServer.sendMessage(new PickupMessage(playerUuid).toString() + "\n");
                     PickupResultMessage prm = (PickupResultMessage) MessageFactory.messageFromString(msg);
                     if (prm.getStatus().toString().equals("OK")) {
                         board.getCellsGrid()[position.getX()][position.getY()].setCellState(CellState.Empty);
                         piece = true;
                     }
-                }
             }
         }
         log.debug("Player " + playerName + " location:" + position.toString());

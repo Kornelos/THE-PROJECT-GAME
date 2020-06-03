@@ -16,7 +16,7 @@ import pl.mini.messages.MessageFactory;
 @Slf4j
 public class PlayerCommServer {
     static final String HOST = System.getProperty("host", "127.0.0.1");
-    static final int PORT = Integer.parseInt(System.getProperty("port", "2137"));
+    static final int PORT = Integer.parseInt(System.getProperty("port", "13000"));
     private final EventLoopGroup group = new NioEventLoopGroup();
     private Channel channel;
     SimplePlayerCommHandler handler;
@@ -31,7 +31,7 @@ public class PlayerCommServer {
                         @Override
                         public void initChannel(SocketChannel ch) throws Exception {
                             ChannelPipeline p = ch.pipeline();
-                            p.addLast(new LineBasedFrameDecoder(1024));
+                            p.addLast(new LineBasedFrameDecoder(10240));
                             p.addLast(new StringDecoder());
                             p.addLast(new StringEncoder());
                             p.addLast(new SimplePlayerCommHandler());
@@ -68,7 +68,8 @@ public class PlayerCommServer {
             e.printStackTrace();
         }
         handler.setMessage(null);
-        return return_msg;
+        
+        return return_msg.trim();
     }
 
     public void closeConnection() {
