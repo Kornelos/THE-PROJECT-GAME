@@ -19,7 +19,7 @@ public class SimpleTCPChannelInitializer extends ChannelInitializer<SocketChanne
     protected void initChannel(SocketChannel socketChannel) {
         ChannelPipeline pipeline = socketChannel.pipeline();
         // the encoder and decoder are static as these are sharable
-        pipeline.addLast("frameDecoder", new LineBasedFrameDecoder(1024));
+        pipeline.addLast("frameDecoder", new LineBasedFrameDecoder(10240));
         pipeline.addLast("stringDecoder", new StringDecoder(CharsetUtil.UTF_8));
         pipeline.addLast("stringEncoder", new StringEncoder(CharsetUtil.UTF_8));
 

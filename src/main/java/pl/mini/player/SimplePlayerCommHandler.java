@@ -21,8 +21,8 @@ public class SimplePlayerCommHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
-        log.info("Message received: " + msg.toString());
-        message = msg.toString();
+        log.info("Message received: " + msg.toString().trim());
+        message = msg.toString().trim();
         synchronized (this) {
             this.notifyAll();
         }

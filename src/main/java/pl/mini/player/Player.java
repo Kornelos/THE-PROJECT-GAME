@@ -46,15 +46,15 @@ public class Player extends PlayerDTO {
         try {
             commServer.connect();
             String msg = commServer.sendMessage((new ConnectMessage(playerUuid)).toString() + "\n");
-            JsonMessage jmsg = MessageFactory.messageFromString(msg);
+            JsonMessage jmsg = MessageFactory.messageFromString(msg.trim());
             if (jmsg.getClass() == StartMessage.class)
             {
                 this.board = ((StartMessage) jmsg).getBoard();
                 this.team.setColor(((StartMessage) jmsg).getTeamColor());
-                if(team.getColor() == TeamColor.Blue)
-                    team.setColor(TeamColor.Red);
-                else
-                    team.setColor(TeamColor.Blue);
+                // if(team.getColor() == TeamColor.Blue)
+                //     team.setColor(TeamColor.Red);
+                // else
+                //     team.setColor(TeamColor.Blue);
                 
                 position = ((StartMessage) jmsg).getPosition();
                 playerGuids = ((StartMessage) jmsg).getTeamGuids();
@@ -63,6 +63,7 @@ public class Player extends PlayerDTO {
             else
                 throw new ClassCastException();
         } catch (Exception e) {
+            log.error(e.getMessage());
             e.printStackTrace();
         }
     }

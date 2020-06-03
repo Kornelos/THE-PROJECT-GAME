@@ -48,7 +48,7 @@ public class GameMasterClientHandler extends ChannelInboundHandlerAdapter {
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
         log.info(msg.toString());
         try {
-            JsonMessage jsonMessage = MessageFactory.messageFromString(msg.toString());
+            JsonMessage jsonMessage = MessageFactory.messageFromString(msg.toString().trim());
             switch (jsonMessage.getAction()) {
                 case connect: {
                     // add player to team and place him on board
