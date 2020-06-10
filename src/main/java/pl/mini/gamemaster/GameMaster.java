@@ -190,6 +190,19 @@ public class GameMaster {
         }
     }
 
+    public void removeOldPiece()
+    {
+        this.board.deleteOldestPiece();
+        for(int i = 0; i < 2 * board.getGoalAreaHeight() + board.getTaskAreaHeight(); i++)
+        {
+            for(int j = 0; j < board.getBoardWidth(); j++)
+            {
+                Position pos = new Position(j, i);
+                this.board.getCellsGrid()[j][i].distance = this.board.manhattanDistanceToClosestPiece(pos);
+            }
+        }
+    }
+
     public void putNewPiece(Position placed)
     {
         this.board.getPiecesPosition().add(placed);

@@ -247,4 +247,10 @@ public class GameMasterBoard extends Board {
         // if not found
         return null;
     }
+
+    synchronized public void deleteOldestPiece() {
+        Position tmp = this.piecesPosition.iterator().next();
+        this.piecesPosition.remove(tmp);
+        this.getCellsGrid()[tmp.getX()][tmp.getY()].cellState = CellState.Empty;
+    }
 }

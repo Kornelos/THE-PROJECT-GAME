@@ -65,6 +65,12 @@ public class GameMasterClient {
                     System.out.println("placing piece");
                     gameMaster.putNewPiece();
                 }
+                else {
+                    System.out.println("removing oldest piece");
+                    gameMaster.removeOldPiece();
+                    System.out.println("placing piece");
+                    gameMaster.putNewPiece();
+                }
 
 
             }
